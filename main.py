@@ -1,7 +1,7 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.2.1"
+version = "0.2.3"
 
 with open("postIDs.json", "r+") as f:
     post_ids = json.loads(f.read())
@@ -14,6 +14,7 @@ for h in post_ids:
     thread_ids.append(int(h))
 
 cookies = None
+uptime = datetime.datetime.now()
 
 mainSession = requests.session()
 headers = {'User-Agent': 'Chrome/91.0.4472.77'}
@@ -81,6 +82,12 @@ def parse_command(command):
         for i in range(int(shards[1])):
             hold.append(random.randint(1, int(shards[2])))
         output += "\nYou roll " + shards[1] + "d" + shards[2] + ", and get: [code]" + str(hold)[1:-1] + "[/code]"
+    elif shards[0] ==  "uinfo":
+        output = ""
+    elif shards[0] ==  "tinfo":
+        output = ""
+    elif shards[0] ==  "bot":
+        output += "\nBot Statistics:\n  Uptime: " + str(datetime.datetime.now() - uptime)
     else:
         output = ""
     return output
@@ -123,6 +130,7 @@ def main_loop(tID, row):
             k["author"] = html.tostring(z[0]).decode("utf-8").split(">")[1][0:-3]
             if k["contents"].startswith("<p>nh!"):
                 need_to_parse.append(k)
+                writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
             j += 1
         i += 1
     post_ids[str(tID)] = j + ((i-1)*25)
@@ -140,6 +148,7 @@ def main_loop(tID, row):
             output += output2
             output += "\n"
         parsed += 1
+        writeText(26, 5+(row*2), str(len(need_to_parse)).rjust(4) + " parsed.  ")
     writeText(26, 5+(row*2), str(len(need_to_parse)).rjust(4) + " parsed.  ")
     writeText(41, 5+(row*2), "    OK ", 10)
     if output == "":
