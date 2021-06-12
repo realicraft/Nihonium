@@ -1,7 +1,7 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.2.3"
+version = "0.2.4"
 
 with open("postIDs.json", "r+") as f:
     post_ids = json.loads(f.read())
@@ -77,16 +77,16 @@ def parse_command(command):
     output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]"
     if shards[0] == "coin":
         output += "\nYou flip a coin, and get " + random.choice(["heads", "tails"]) + "."
-    elif shards[0] ==  "dice":
+    elif (shards[0] == "dice") or (shards[0] == "roll"):
         hold = []
         for i in range(int(shards[1])):
             hold.append(random.randint(1, int(shards[2])))
         output += "\nYou roll " + shards[1] + "d" + shards[2] + ", and get: [code]" + str(hold)[1:-1] + "[/code]"
-    elif shards[0] ==  "uinfo":
+    elif shards[0] == "uinfo":
         output = ""
-    elif shards[0] ==  "tinfo":
+    elif shards[0] == "tinfo":
         output = ""
-    elif shards[0] ==  "bot":
+    elif shards[0] == "bot":
         output += "\nBot Statistics:\n  Uptime: " + str(datetime.datetime.now() - uptime)
     else:
         output = ""
