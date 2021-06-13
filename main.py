@@ -187,17 +187,20 @@ os.system("cls")
 
 writeText(0, 1, "Nihonium - A TBGs Bot")
 writeText(23, 1, "(Version " + version + ")", 14)
+writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
 
 writeText(0, 2, "Logging in...")
 login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
 writeText(0, 2, "Logged in successfully.")
 time.sleep(1.5)
+writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
 clearLine(2)
 
 for m in range(4, 5+(2*len(thread_ids))):
     writeText(0, m, "█"*48)
 
 while True:
+    writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
     thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
     writeText(0, 2, "Running loop...")
     for i in range(len(thread_ids)):
@@ -207,23 +210,26 @@ while True:
         writeText(41, 5+(i*2), "  WAIT ", 3)
     for j in range(len(thread_ids)):
         writeText(0, 2, "Running loop...")
-        sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
         do_sixsec = main_loop(thread_ids[j], j)
+        sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
         if (j+1 == len(thread_ids)) or (do_sixsec == False):
             pass
         else:
             writeText(0, 2, "Waiting for 60-second rule...")
             pause.until(sixtyseconds)
+        writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
     data["parse_cycles"] += 1
     with open("data.json", "w") as datafile:
         datafile.write(json.dumps(data))
     clearLine(2)
     writeText(0, 2, "Sleeping...")
+    writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
     for l in range(5, 0, -1):
         sleeptime = thirtyminutes - datetime.datetime.now()
         sleeptime = sleeptime.total_seconds()
         for k in range(int(sleeptime/l)):
             writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
+            writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
             time.sleep(1)
     writeText(0, 2, "Logging in...")
     login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
