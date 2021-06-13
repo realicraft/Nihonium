@@ -172,8 +172,8 @@ def main_loop(tID, row):
             output += output2
             output += "\n"
         parsed += 1
-        writeText(26, 5+(row*2), str(len(parsed)).rjust(4) + " parsed.  ")
-    writeText(26, 5+(row*2), str(len(parsed)).rjust(4) + " parsed.  ")
+        writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
+    writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(41, 5+(row*2), "    OK ", 10)
     if output == "":
         return False
