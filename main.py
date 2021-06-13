@@ -77,6 +77,7 @@ def validCommand():
         datafile.write(json.dumps(data))
 
 def parse_command(command):
+    global data
     with open("data.json", "r+") as datafile:
         data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
@@ -107,7 +108,6 @@ def parse_command(command):
         output += "\n  Valid Commands: " + str(data["valid_commands"])
     else:
         output = ""
-    global data
     data["commands_parsed"] += 1
     with open("data.json", "w") as datafile:
         datafile.write(json.dumps(data))
