@@ -77,7 +77,7 @@ def validCommand():
         datafile.write(json.dumps(data))
 
 def parse_command(command):
-    with open("postIDs.json", "r+") as datafile:
+    with open("data.json", "r+") as datafile:
         data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
     if command2.endswith("</p>"):
