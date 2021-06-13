@@ -1,7 +1,7 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.3.0"
+version = "0.3.1"
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
@@ -107,6 +107,7 @@ def parse_command(command):
         output += "\n  Valid Commands: " + str(data["valid_commands"])
     else:
         output = ""
+    global data
     data["commands_parsed"] += 1
     with open("data.json", "w") as datafile:
         datafile.write(json.dumps(data))
@@ -171,8 +172,8 @@ def main_loop(tID, row):
             output += output2
             output += "\n"
         parsed += 1
-        writeText(26, 5+(row*2), str(len(need_to_parse)).rjust(4) + " parsed.  ")
-    writeText(26, 5+(row*2), str(len(need_to_parse)).rjust(4) + " parsed.  ")
+        writeText(26, 5+(row*2), str(len(parsed)).rjust(4) + " parsed.  ")
+    writeText(26, 5+(row*2), str(len(parsed)).rjust(4) + " parsed.  ")
     writeText(41, 5+(row*2), "    OK ", 10)
     if output == "":
         return False
