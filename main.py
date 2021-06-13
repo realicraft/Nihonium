@@ -77,6 +77,8 @@ def validCommand():
         datafile.write(json.dumps(data))
 
 def parse_command(command):
+    with open("postIDs.json", "r+") as datafile:
+        data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
     if command2.endswith("</p>"):
         command2 = command2[:-4]
@@ -98,8 +100,6 @@ def parse_command(command):
         output = ""
     elif shards[0] == "bot":
         validCommand()
-        with open("postIDs.json", "r+") as datafile:
-            data = json.loads(datafile.read())
         output += "\nBot Statistics:\n  Uptime: " + str(datetime.datetime.now() - uptime)
         output += "\n  Parse Cycles: " + str(data["parse_cycles"])
         output += "\n  Commands Found: " + str(data["commands_found"])
