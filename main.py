@@ -3,8 +3,11 @@ from lxml import html
 
 version = "0.2.4"
 
-with open("postIDs.json", "r+") as f:
-    post_ids = json.loads(f.read())
+with open("postIDs.json", "r+") as postidfile:
+    post_ids = json.loads(postidfile.read())
+
+with open("postIDs.json", "r+") as datafile:
+    data = json.loads(datafile.read())
 
 with open("pass.txt", "r") as passfile:
     password = passfile.read()
@@ -68,6 +71,11 @@ def clearLine(line):
     sys.stdout.write(" "*120)
     sys.stdout.flush()
 
+def validCommand():
+    data["valid_commands"] += 1
+    with open("data.json", "w") as datafile:
+        datafile.write(json.dumps(data))
+
 def parse_command(command):
     command2 = command["contents"].split("<br>")[0][6:]
     if command2.endswith("</p>"):
@@ -76,8 +84,10 @@ def parse_command(command):
     hold = None
     output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]"
     if shards[0] == "coin":
+        validCommand()
         output += "\nYou flip a coin, and get " + random.choice(["heads", "tails"]) + "."
     elif (shards[0] == "dice") or (shards[0] == "roll"):
+        validCommand()
         hold = []
         for i in range(int(shards[1])):
             hold.append(random.randint(1, int(shards[2])))
@@ -87,9 +97,19 @@ def parse_command(command):
     elif shards[0] == "tinfo":
         output = ""
     elif shards[0] == "bot":
+        validCommand()
+        with open("postIDs.json", "r+") as datafile:
+            data = json.loads(datafile.read())
         output += "\nBot Statistics:\n  Uptime: " + str(datetime.datetime.now() - uptime)
+        output += "\n  Parse Cycles: " + str(data["parse_cycles"])
+        output += "\n  Commands Found: " + str(data["commands_found"])
+        output += "\n  Commands Parsed: " + str(data["commands_parsed"])
+        output += "\n  Valid Commands: " + str(data["valid_commands"])
     else:
         output = ""
+    data["commands_parsed"] += 1
+    with open("data.json", "w") as datafile:
+        datafile.write(json.dumps(data))
     return output
 
 def main_loop(tID, row):
@@ -130,6 +150,9 @@ def main_loop(tID, row):
             k["author"] = html.tostring(z[0]).decode("utf-8").split(">")[1][0:-3]
             if k["contents"].startswith("<p>nh!"):
                 need_to_parse.append(k)
+                data["commands_found"] += 1
+                with open("data.json", "w") as datafile:
+                    datafile.write(json.dumps(data))
                 writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
             j += 1
         i += 1
@@ -190,6 +213,9 @@ while True:
         else:
             writeText(0, 2, "Waiting for 60-second rule...")
             pause.until(sixtyseconds)
+    data["parse_cycles"] += 1
+    with open("data.json", "w") as datafile:
+        datafile.write(json.dumps(data))
     clearLine(2)
     writeText(0, 2, "Sleeping...")
     for l in range(5, 0, -1):
@@ -198,3 +224,7 @@ while True:
         for k in range(int(sleeptime/l)):
             writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
             time.sleep(1)
+    writeText(0, 2, "Logging in...")
+    login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
+    writeText(0, 2, "Logged in successfully.")
+    time.sleep(1.5)
