@@ -1,12 +1,12 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.2.4"
+version = "0.3.0"
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
 
-with open("postIDs.json", "r+") as datafile:
+with open("data.json", "r+") as datafile:
     data = json.loads(datafile.read())
 
 with open("pass.txt", "r") as passfile:
