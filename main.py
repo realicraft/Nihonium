@@ -96,8 +96,7 @@ def parse_command(command):
     with open("data.json", "r+") as datafile:
         data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
-    if command2.endswith("</p>"):
-        command2 = command2[:-4]
+    command2 = command2.split("</p>")[0]
     shards = command2.split(" ")
     hold = None
     output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]"
