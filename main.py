@@ -74,6 +74,10 @@ def writeText(x, y, text, fcolor=None, bcolor=None):
     sys.stdout.write("\u001b[0m")
     sys.stdout.flush()
 
+def bell():
+    sys.stdout.write("\007")
+    sys.stdout.flush()
+
 def clearLine(line):
     moveCursor(0, line)
     sys.stdout.write(" "*120)
