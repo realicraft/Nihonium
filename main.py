@@ -1,7 +1,7 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.3.2"
+version = "0.3.3"
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
@@ -172,8 +172,6 @@ def main_loop(tID, row):
             j += 1
         i += 1
     post_ids[str(tID)] = j + ((i-1)*25)
-    with open("postIDs.json", "w") as l:
-        l.write(json.dumps(post_ids))
     writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
     writeText(26, 5+(row*2), "  Working...  ")
     parsed = 0
@@ -189,6 +187,8 @@ def main_loop(tID, row):
         writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(41, 5+(row*2), "    OK ", 10)
+    with open("postIDs.json", "w") as l:
+        l.write(json.dumps(post_ids))
     if output == "":
         return False
     else:
