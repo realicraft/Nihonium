@@ -1,7 +1,7 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.3.1"
+version = "0.3.2"
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
@@ -50,17 +50,25 @@ def moveCursor(x, y):
 # cyan    |   6  |   14   |
 # white   |   7  |   15   |
 
-def writeText(x, y, text, color=None):
-    if color == None:
+def writeText(x, y, text, fcolor=None, bcolor=None):
+    if fcolor == None:
         pass
-    elif type(color) != int:
-        raise TypeError("writeText()'s 'color' attribute must be an Int or None.")
-    elif (color > -1) and (color < 8):
-        sys.stdout.write("\033[" + str(color+30) + "m")
-    elif (color > 7) and (color < 16):
-        sys.stdout.write("\033[" + str(color+22) + ";1m")
+    elif type(fcolor) != int:
+        raise TypeError("writeText()'s 'fcolor' attribute must be an Int or None.")
+    elif (fcolor > -1) and (fcolor < 8):
+        sys.stdout.write("\033[" + str(fcolor+30) + "m")
+    elif (fcolor > 7) and (fcolor < 16):
+        sys.stdout.write("\033[" + str(fcolor+22) + ";1m")
     else:
-        raise ValueError("writeText()'s 'color' attribute must be between 0 and 15.")
+        raise ValueError("writeText()'s 'fcolor' attribute must be between 0 and 15.")
+    if bcolor == None:
+        pass
+    elif type(bcolor) != int:
+        raise TypeError("writeText()'s 'bcolor' attribute must be an Int or None.")
+    elif (bcolor > -1) and (bcolor < 8):
+        sys.stdout.write("\033[" + str(bcolor+40) + "m")
+    else:
+        raise ValueError("writeText()'s 'bcolor' attribute must be between 0 and 7.")
     moveCursor(x, y)
     sys.stdout.write(text)
     sys.stdout.write("\u001b[0m")
@@ -70,6 +78,9 @@ def clearLine(line):
     moveCursor(0, line)
     sys.stdout.write(" "*120)
     sys.stdout.flush()
+
+def clock():
+    writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12, 7)
 
 def validCommand():
     data["valid_commands"] += 1
@@ -187,20 +198,20 @@ os.system("cls")
 
 writeText(0, 1, "Nihonium - A TBGs Bot")
 writeText(23, 1, "(Version " + version + ")", 14)
-writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
+clock()
 
 writeText(0, 2, "Logging in...")
 login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
 writeText(0, 2, "Logged in successfully.")
 time.sleep(1.5)
-writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
+clock()
 clearLine(2)
 
 for m in range(4, 5+(2*len(thread_ids))):
     writeText(0, m, "█"*48)
 
 while True:
-    writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
+    clock()
     thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
     writeText(0, 2, "Running loop...")
     for i in range(len(thread_ids)):
@@ -217,19 +228,19 @@ while True:
         else:
             writeText(0, 2, "Waiting for 60-second rule...")
             pause.until(sixtyseconds)
-        writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
+        clock()
     data["parse_cycles"] += 1
     with open("data.json", "w") as datafile:
         datafile.write(json.dumps(data))
     clearLine(2)
     writeText(0, 2, "Sleeping...")
-    writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
+    clock()
     for l in range(5, 0, -1):
         sleeptime = thirtyminutes - datetime.datetime.now()
         sleeptime = sleeptime.total_seconds()
         for k in range(int(sleeptime/l)):
             writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
-            writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12)
+            clock()
             time.sleep(1)
     writeText(0, 2, "Logging in...")
     login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
