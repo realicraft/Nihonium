@@ -120,6 +120,7 @@ def parse_command(command):
         output += "\n  Commands Found: " + str(data["commands_found"])
         output += "\n  Commands Parsed: " + str(data["commands_parsed"])
         output += "\n  Valid Commands: " + str(data["valid_commands"])
+        output += "\n  Threads Parsed: " + str(thread_ids)
     else:
         output = ""
     data["commands_parsed"] += 1
