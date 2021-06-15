@@ -1,7 +1,7 @@
 import sys, math, random, os, time, json, requests, pause, datetime
 from lxml import html
 
-version = "0.3.3"
+version = "0.3.4"
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
@@ -131,7 +131,7 @@ def main_loop(tID, row):
     global cookies
     writeText(11, 5+(row*2), "  Working...  ")
     writeText(26, 5+(row*2), "  Waiting...  ")
-    writeText(41, 5+(row*2), "  WORK ", 11)
+    writeText(43, 5+(row*2), "  WORK ", 11)
     apage = getReq('https://tbgforums.com/forums/viewtopic.php?id=' + str(tID), headers=headers, cookies=cookies)
     atree = html.fromstring(apage.content)
     pageCountEl = atree.xpath('//*[@id="brdmain"]/div[1]/div/div[1]/p[1]/a')
@@ -143,7 +143,7 @@ def main_loop(tID, row):
     pageCount = int(pageCount.split("=")[-1])
     if post_ids[str(tID)] > (pageCount+1)*25:
         #raise ValueError("Page count for thread with ID " + str(tID) + " too low for known last parsed post")
-        writeText(41, 5+(row*2), " ERROR ", 9)
+        writeText(43, 5+(row*2), " ERROR ", 9)
         return None
     else:
         pass
@@ -186,14 +186,23 @@ def main_loop(tID, row):
         parsed += 1
         writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
-    writeText(41, 5+(row*2), "    OK ", 10)
+    writeText(43, 5+(row*2), "    OK ", 10)
+    writeText(41, 5+(row*2), "≈", 6)
     with open("postIDs.json", "w") as l:
         l.write(json.dumps(post_ids))
     if output == "":
+        writeText(41, 5+(row*2), "-")
         return False
     else:
         post_req = postReq("https://tbgforums.com/forums/post.php?tid=" + str(tID), data={"req_message": output, "form_sent": 1}, headers=headers, cookies=cookies)
-        post_req.raise_for_status()
+        try:
+            post_req.raise_for_status()
+        except:
+            writeText(41, 5+(row*2), "X", 9)
+            writeText(43, 5+(row*2), " ERROR ", 9)
+            raise
+        else:
+            writeText(41, 5+(row*2), "√", 10)
         return True
     
 
@@ -211,7 +220,7 @@ clock()
 clearLine(2)
 
 for m in range(4, 5+(2*len(thread_ids))):
-    writeText(0, m, "█"*48)
+    writeText(0, m, "█"*50)
 
 while True:
     clock()
@@ -221,7 +230,8 @@ while True:
         writeText(2, 5+(i*2), str(thread_ids[i]).center(8))
         writeText(11, 5+(i*2), "  Waiting...  ")
         writeText(26, 5+(i*2), "  Waiting...  ")
-        writeText(41, 5+(i*2), "  WAIT ", 3)
+        writeText(43, 5+(i*2), "  WAIT ", 3)
+        writeText(41, 5+(i*2), "W", 3)
     for j in range(len(thread_ids)):
         writeText(0, 2, "Running loop...")
         do_sixsec = main_loop(thread_ids[j], j)
