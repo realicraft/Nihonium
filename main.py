@@ -207,6 +207,7 @@ def main_loop(tID, row):
     
 
 os.system("cls")
+os.system("title Nihonium (Version " + version + ")")
 
 writeText(0, 1, "Nihonium - A TBGs Bot")
 writeText(23, 1, "(Version " + version + ")", 14)
