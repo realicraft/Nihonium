@@ -2,3 +2,4 @@ LICENSE
 postIDs.json
 data.json
 pass.txt
+__pycache__/
