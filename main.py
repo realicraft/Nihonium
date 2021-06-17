@@ -1,7 +1,7 @@
-import sys, math, random, os, time, json, requests, pause, datetime
+import sys, math, random, os, time, json, requests, pause, datetime, versions
 from lxml import html
 
-version = "0.3.4"
+version = Version(0, 3, 4)
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
