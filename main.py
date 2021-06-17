@@ -208,10 +208,10 @@ def main_loop(tID, row):
     
 
 os.system("cls")
-os.system("title Nihonium (Version " + version + ")")
+os.system("title Nihonium (Version " + str(version) + ")")
 
 writeText(0, 1, "Nihonium - A TBGs Bot")
-writeText(23, 1, "(Version " + version + ")", 14)
+writeText(23, 1, "(Version " + str(version) + ")", 14)
 clock()
 
 writeText(0, 2, "Logging in...")
