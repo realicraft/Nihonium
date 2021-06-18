@@ -1,7 +1,11 @@
-import sys, math, random, os, time, json, requests, pause, datetime, versions
+import sys, math, random, os, time, json, requests, pause, datetime, traceback
+import versions, commands
 from lxml import html
 
-version = versions.Version(0, 3, 4)
+version = versions.Version(0, 4, 0)
+
+if (commands.nihonium_minver > version):
+    raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
 
 with open("postIDs.json", "r+") as postidfile:
     post_ids = json.loads(postidfile.read())
@@ -91,6 +95,16 @@ def validCommand():
     with open("data.json", "w") as datafile:
         datafile.write(json.dumps(data))
 
+def assemble_botdata():
+    return {"uptime": uptime,
+    "data": data,
+    "thread_ids": thread_ids,
+    "post_ids": post_ids,
+    "cookies": cookies,
+    "session": mainSession,
+    "headers": headers,
+    "version": version}
+
 def parse_command(command):
     global data
     with open("data.json", "r+") as datafile:
@@ -98,29 +112,17 @@ def parse_command(command):
     command2 = command["contents"].split("<br>")[0][6:]
     command2 = command2.split("</p>")[0]
     shards = command2.split(" ")
+    shards2 = shards[1:]
     hold = None
-    output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]"
-    if shards[0] == "coin":
+    if shards[0] in commands.commands:
         validCommand()
-        output += "\nYou flip a coin, and get " + random.choice(["heads", "tails"]) + "."
-    elif (shards[0] == "dice") or (shards[0] == "roll"):
-        validCommand()
-        hold = []
-        for i in range(int(shards[1])):
-            hold.append(random.randint(1, int(shards[2])))
-        output += "\nYou roll " + shards[1] + "d" + shards[2] + ", and get: [code]" + str(hold)[1:-1] + "[/code]"
-    elif shards[0] == "uinfo":
-        output = ""
-    elif shards[0] == "tinfo":
-        output = ""
-    elif shards[0] == "bot":
-        validCommand()
-        output += "\nBot Statistics:\n  Uptime: " + str(datetime.datetime.now() - uptime)
-        output += "\n  Parse Cycles: " + str(data["parse_cycles"])
-        output += "\n  Commands Found: " + str(data["commands_found"])
-        output += "\n  Commands Parsed: " + str(data["commands_parsed"])
-        output += "\n  Valid Commands: " + str(data["valid_commands"])
-        output += "\n  Threads Parsed: " + str(thread_ids)
+        output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
+        try:
+            output += commands.commands[shards[0]](assemble_botdata(), *shards2)
+        except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
+            output += "While parsing that command, an error occured: [code]"
+            output += traceback.format_exc().splitlines()[-1]
+            output += "[/code]"
     else:
         output = ""
     data["commands_parsed"] += 1
