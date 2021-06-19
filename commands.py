@@ -16,7 +16,9 @@ nihonium_minver = versions.Version(0, 3, 5) # This defines the minimum version o
 def coin(bot_data):
     return "You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
-def dice(bot_data, num: int=1, size: int=20):
+def dice(bot_data, num=1, size=20):
+    num = int(num)
+    size = int(size)
     hold = []
     for i in range(num):
         hold.append(random.randint(1, size))
