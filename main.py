@@ -22,6 +22,7 @@ for h in post_ids:
 
 cookies = None
 uptime = datetime.datetime.now()
+loopNo = 0
 
 mainSession = requests.session()
 headers = {'User-Agent': 'Chrome/91.0.4472.77'}
@@ -29,12 +30,19 @@ headers = {'User-Agent': 'Chrome/91.0.4472.77'}
 login_req = mainSession.get("https://tbgforums.com/forums/login.php", headers=headers)
 cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(mainSession.cookies))
 
+def logEntry(entry: str, timestamp=None):
+    if timestamp is None: timestamp = datetime.datetime.now()
+    with open("log.log", "a") as logfile:
+        logfile.write("[" + timestamp.strftime("%b %d, %Y @ %I:%M:%S.%f %p") + "] " + entry + "\n")
+
 def getReq(*args, **kwargs):
+    logEntry("Requesting URL: " + args[0])
     output = mainSession.get(*args, **kwargs)
     cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(mainSession.cookies))
     return output
 
 def postReq(*args, **kwargs):
+    logEntry("Posting to URL: " + args[0])
     output = mainSession.post(*args, **kwargs)
     cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(mainSession.cookies))
     return output
@@ -111,6 +119,7 @@ def parse_command(command):
         data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
     command2 = command2.split("</p>")[0]
+    logEntry("Parsing command: " + str(command2))
     shards = command2.split(" ")
     shards2 = shards[1:]
     hold = None
@@ -120,6 +129,7 @@ def parse_command(command):
         try:
             output += commands.commands[shards[0]](assemble_botdata(), *shards2)
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
+            logEntry("Failed to parse command: " + str(command2))
             output += "While parsing that command, an error occured: [code]"
             output += traceback.format_exc().splitlines()[-1]
             output += "[/code]"
@@ -145,6 +155,7 @@ def main_loop(tID, row):
         pageCount = "?p=1"
     pageCount = int(pageCount.split("=")[-1])
     if post_ids[str(tID)] > (pageCount+1)*25:
+        logEntry("Error: Page count for thread with ID " + str(tID) + " too low for known last parsed post")
         #raise ValueError("Page count for thread with ID " + str(tID) + " too low for known last parsed post")
         writeText(43, 5+(row*2), " ERROR ", 9)
         return None
@@ -212,13 +223,16 @@ def main_loop(tID, row):
 os.system("cls")
 os.system("title Nihonium (Version " + str(version) + ")")
 
+logEntry("Starting up...")
 writeText(0, 1, "Nihonium - A TBGs Bot")
 writeText(23, 1, "(Version " + str(version) + ")", 14)
 clock()
 
 writeText(0, 2, "Logging in...")
+logEntry("Logging in...")
 login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
 writeText(0, 2, "Logged in successfully.")
+logEntry("Logged in successfully.")
 time.sleep(1.5)
 clock()
 clearLine(2)
@@ -227,9 +241,11 @@ for m in range(4, 5+(2*len(thread_ids))):
     writeText(0, m, "█"*50)
 
 while True:
+    loopNo += 1
     clock()
     thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
     writeText(0, 2, "Running loop...")
+    logEntry("Running parse cycle " + str(loopNo) + "...")
     for i in range(len(thread_ids)):
         writeText(2, 5+(i*2), str(thread_ids[i]).center(8))
         writeText(11, 5+(i*2), "  Waiting...  ")
@@ -238,6 +254,7 @@ while True:
         writeText(41, 5+(i*2), "W", 3)
     for j in range(len(thread_ids)):
         writeText(0, 2, "Running loop...")
+        logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
         do_sixsec = main_loop(thread_ids[j], j)
         sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
         if (j+1 == len(thread_ids)) or (do_sixsec == False):
@@ -251,15 +268,19 @@ while True:
         datafile.write(json.dumps(data))
     clearLine(2)
     writeText(0, 2, "Sleeping...")
+    logEntry("Sleeping...")
     clock()
     for l in range(5, 0, -1):
         sleeptime = thirtyminutes - datetime.datetime.now()
         sleeptime = sleeptime.total_seconds()
+        logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
         for k in range(int(sleeptime/l)):
             writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
             clock()
             time.sleep(1)
     writeText(0, 2, "Logging in...")
+    logEntry("Logging in...")
     login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
     writeText(0, 2, "Logged in successfully.")
+    logEntry("Logged in successfully.")
     time.sleep(1.5)
