@@ -2,7 +2,7 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 4, 0)
+version = versions.Version(0, 4, 1)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")

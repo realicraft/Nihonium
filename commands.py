@@ -3,8 +3,8 @@ from lxml import html
 
 # This file is used to define the commands used by Nihonium.
 
-__version__ = versions.Version(1, 0)
-nihonium_minver = versions.Version(0, 3, 5) # This defines the minimum version of Nihonium needed to run these commands.
+__version__ = versions.Version(1, 1)
+nihonium_minver = versions.Version(0, 4, 1) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
@@ -32,9 +32,19 @@ def bot(bot_data):
     output += "\n  Valid Commands: " + str(bot_data["data"]["valid_commands"])
     output += "\n  Threads Parsed: " + str(bot_data["thread_ids"])
     return output
+
+def _help(bot_data):
+    output = "Commands:"
+    output += "\n[quote]  nh!coin\n    Flips a coin and gives you the result.[/quote]"
+    output += "\n[quote]  nh{dice|roll} num;int;1 sides;int;20\n    Rolls [i]num[/i] [i]sides[/i]-sided dice, and gives you the result.[/quote]"
+    output += "\n[quote]  nh!bot\n    Returns various statistics about the bot.[/quote]"
+    output += "\n[quote]  nh!help\n    Returns this help message.[/quote]"
+    output += "\nArguments are in the form \"name;type;default\". Arguments with no default are required."
+    output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/nihonium/index.html]the webpage[/url]."
+    return output
 #-------------------------
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
 
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help}
