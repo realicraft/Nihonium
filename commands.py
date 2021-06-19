@@ -25,12 +25,13 @@ def dice(bot_data, num=1, size=20):
     return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code]"
 
 def bot(bot_data):
-    output += "\nBot Statistics:\n  Uptime: " + str(datetime.datetime.now() - bot_data["uptime"])
+    output = "Bot Statistics:\n  Uptime: " + str(datetime.datetime.now() - bot_data["uptime"])
     output += "\n  Parse Cycles: " + str(bot_data["data"]["parse_cycles"])
     output += "\n  Commands Found: " + str(bot_data["data"]["commands_found"])
     output += "\n  Commands Parsed: " + str(bot_data["data"]["commands_parsed"])
     output += "\n  Valid Commands: " + str(bot_data["data"]["valid_commands"])
     output += "\n  Threads Parsed: " + str(bot_data["thread_ids"])
+    return output
 #-------------------------
 # Add commands above here.
 
