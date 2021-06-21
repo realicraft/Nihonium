@@ -130,7 +130,7 @@ def parse_command(command, tID):
         validCommand()
         output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
         try:
-            output += commands.commands[shards[0]](assemble_botdata(), assembe_threaddata(tID), *shards2)
+            output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
             output += "While parsing that command, an error occured: [code]"
