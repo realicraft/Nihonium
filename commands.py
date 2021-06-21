@@ -53,12 +53,13 @@ def suggest(bot_data, thread_data, *suggestion):
 
 def threadInfo(bot_data, thread_data):
     output = "Thread Info:"
-    output += "\n  Name: " + thread_data["name"]
+    output += "\n  Name: " + str(thread_data["name"])
     output += "\n  ID: " + str(thread_data["thread_id"])
     output += "\n  Types: " + str(thread_data["types"])
     if "goal" in thread_data:
         output += "\n  Goal: " + str(thread_data["goal"])
         output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
+    return output
 #-------------------------
 # Add commands above here.
 
