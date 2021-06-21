@@ -4,8 +4,8 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 3)            # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 4, 3) # This defines the minimum version of Nihonium needed to run these commands.
+version = versions.Version(1, 4)            # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 5, 0) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
@@ -50,9 +50,18 @@ def suggest(bot_data, thread_data, *suggestion):
     with open("suggestions.txt", "a") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
     return "Your suggestion has been recorded."
+
+def threadInfo(bot_data, thread_data):
+    output = "Thread Info:"
+    output += "\n  Name: " + thread_data["name"]
+    output += "\n  ID: " + str(thread_data["thread_id"])
+    output += "\n  Types: " + str(thread_data["types"])
+    if "goal" in thread_data:
+        output += "\n  Goal: " + str(thread_data["goal"])
+        output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
 #-------------------------
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
 
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo}

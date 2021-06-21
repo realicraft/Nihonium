@@ -2,7 +2,7 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 4, 3)
+version = versions.Version(0, 5, 0)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -113,6 +113,9 @@ def assemble_botdata():
     "headers": headers,
     "version": version}
 
+def assemble_threaddata(tID):
+    return {**post_ids[str(tID)], **{"thread_id": tID}}
+
 def parse_command(command, tID):
     global data
     with open("data.json", "r+") as datafile:
@@ -127,7 +130,7 @@ def parse_command(command, tID):
         validCommand()
         output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
         try:
-            output += commands.commands[shards[0]](assemble_botdata(), post_ids[str(tID)], *shards2)
+            output += commands.commands[shards[0]](assemble_botdata(), assembe_threaddata(tID), *shards2)
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
             output += "While parsing that command, an error occured: [code]"
