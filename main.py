@@ -2,13 +2,13 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 4, 2)
+version = versions.Version(0, 4, 3)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
 
-with open("postIDs.json", "r+") as postidfile:
-    post_ids = json.loads(postidfile.read())
+with open("threadData.json", "r+") as threadfile:
+    post_ids = json.loads(threadfile.read())
 
 with open("data.json", "r+") as datafile:
     data = json.loads(datafile.read())
@@ -113,7 +113,7 @@ def assemble_botdata():
     "headers": headers,
     "version": version}
 
-def parse_command(command):
+def parse_command(command, tID):
     global data
     with open("data.json", "r+") as datafile:
         data = json.loads(datafile.read())
@@ -127,7 +127,7 @@ def parse_command(command):
         validCommand()
         output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
         try:
-            output += commands.commands[shards[0]](assemble_botdata(), *shards2)
+            output += commands.commands[shards[0]](assemble_botdata(), post_ids[str(tID)], *shards2)
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
             output += "While parsing that command, an error occured: [code]"
@@ -154,14 +154,14 @@ def main_loop(tID, row):
     except IndexError:
         pageCount = "?p=1"
     pageCount = int(pageCount.split("=")[-1])
-    if post_ids[str(tID)] > (pageCount+1)*25:
+    if post_ids[str(tID)]["recentPost"] > (pageCount+1)*25:
         logEntry("Error: Page count for thread with ID " + str(tID) + " too low for known last parsed post")
         #raise ValueError("Page count for thread with ID " + str(tID) + " too low for known last parsed post")
         writeText(43, 5+(row*2), " ERROR ", 9)
         return None
     else:
         pass
-    i = math.ceil((post_ids[str(tID)]-1)/25)-1
+    i = math.ceil((post_ids[str(tID)]["recentPost"]-1)/25)-1
     need_to_parse = []
     while (i < pageCount):
         bpage = getReq('https://tbgforums.com/forums/viewtopic.php?id=' + str(tID) + '&p=' + str(i+1), headers=headers, cookies=cookies)
@@ -169,7 +169,7 @@ def main_loop(tID, row):
         j = 0
         x = btree.xpath('//div[contains(@class, "blockpost")]')
         while (j < len(x)):
-            if (j + (i*25) + 1 <= post_ids[str(tID)]):
+            if (j + (i*25) + 1 <= post_ids[str(tID)]["recentPost"]):
                 j += 1
                 continue
             k = {"author": "", "contents": ""}
@@ -185,13 +185,13 @@ def main_loop(tID, row):
                 writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
             j += 1
         i += 1
-    post_ids[str(tID)] = j + ((i-1)*25)
+    post_ids[str(tID)]["recentPost"] = j + ((i-1)*25)
     writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
     writeText(26, 5+(row*2), "  Working...  ")
     parsed = 0
     output = ""
     for l in need_to_parse:
-        output2 = parse_command(l)
+        output2 = parse_command(l, tID)
         if output2 == "":
             pass
         else:
@@ -202,8 +202,8 @@ def main_loop(tID, row):
     writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(43, 5+(row*2), "    OK ", 10)
     writeText(41, 5+(row*2), "≈", 6)
-    with open("postIDs.json", "w") as l:
-        l.write(json.dumps(post_ids))
+    with open("threadData.json", "w") as l:
+        l.write(json.dumps(post_ids, indent=4))
     if output == "":
         writeText(41, 5+(row*2), "-")
         return False
