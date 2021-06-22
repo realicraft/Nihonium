@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 4)            # This defines the version of the user-added commands.
+version = versions.Version(1, 5)            # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 5, 0) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
@@ -19,9 +19,13 @@ def coin(bot_data, thread_data):
     return "You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
 def dice(bot_data, thread_data, num=1, size=20):
-    num = int(num)
-    size = int(size)
+    num = int(float(num))
+    size = int(float(size))
     hold = []
+    if (num < 0): return "You can't roll negative dice."
+    elif (num == 0): return "You roll no dice, and get nothing."
+    elif (size < 0): return "You can't roll something that doesn't exist."
+    elif (size == 0): return "You roll " + str(num) + " pieces of air, and get air."
     for i in range(num):
         hold.append(random.randint(1, size))
     return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code]"
@@ -46,6 +50,7 @@ def _help(bot_data, thread_data):
     return output
 
 def suggest(bot_data, thread_data, *suggestion):
+    if (len(suggestion) == 0): return "Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
     with open("suggestions.txt", "a") as suggestFile:
         suggestFile.write(suggestion_full + "\n")

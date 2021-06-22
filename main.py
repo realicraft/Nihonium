@@ -2,7 +2,7 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 5, 0)
+version = versions.Version(0, 5, 1)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -281,7 +281,7 @@ while True:
             writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
             clock()
             time.sleep(1)
-            clearLine(2)
+        clearLine(2)
     writeText(0, 2, "Logging in...")
     logEntry("Logging in...")
     login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
