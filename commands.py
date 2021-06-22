@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 5)            # This defines the version of the user-added commands.
+version = versions.Version(1, 5, 1)            # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 5, 2) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
@@ -77,4 +77,4 @@ def threadInfo(bot_data, thread_data):
 
 # This registers the commands for use by Nihonium.
 
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo}
