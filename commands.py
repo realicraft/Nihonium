@@ -5,7 +5,7 @@ from lxml import html
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
 version = versions.Version(1, 5)            # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 5, 0) # This defines the minimum version of Nihonium needed to run these commands.
+nihonium_minver = versions.Version(0, 5, 2) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
@@ -64,6 +64,12 @@ def threadInfo(bot_data, thread_data):
     if "goal" in thread_data:
         output += "\n  Goal: " + str(thread_data["goal"])
         output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
+        adate = datetime.datetime(thread_data["data"]["year"], thread_data["data"]["month"], thread_data["data"]["day"], thread_data["data"]["hour"], thread_data["data"]["minute"], thread_data["data"]["second"])
+        bdate = datetime.datetime.now()
+        diff = bdate - adate
+        until = math.ceil(thread_data["goal"] / (thread_data["recentPost"] / (diff.days + (diff.seconds / 86400))))
+        cdate = adate + datetime.timedelta(days=until)
+        output += "\n  Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
     return output
 #-------------------------
 # Add commands above here.

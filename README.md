@@ -17,7 +17,15 @@ This file is formatted using the following:
         	"type1",
             "type2"
         ],
-        "name": "The name of the thread"
+        "name": "The name of the thread",
+        "date": {
+            "year": year_of_first_post,
+            "month": month_of_first_post,
+            "day": day_of_first_post,
+            "hour": hour_of_first_post,
+            "minute": minute_of_first_post,
+            "second": second_of_first_post
+        }
     }
 }
 ```
@@ -41,6 +49,8 @@ mfg_file | The thread is in the Game Files section of the forum.
 ```
 ##### `"name"`
 (String) The name of the thread.
+##### `"date"`
+(Dictonary of integers) The date and time of the first post in the thread.
 ##### `"goal"`
 (Integer) Exclusive to threads with the types `postID` or `gpostID`. The goal post ID.
 ##### `"race_thread"`
