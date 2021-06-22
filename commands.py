@@ -64,7 +64,7 @@ def threadInfo(bot_data, thread_data):
     if "goal" in thread_data:
         output += "\n  Goal: " + str(thread_data["goal"])
         output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
-        adate = datetime.datetime(thread_data["data"]["year"], thread_data["data"]["month"], thread_data["data"]["day"], thread_data["data"]["hour"], thread_data["data"]["minute"], thread_data["data"]["second"])
+        adate = datetime.datetime(thread_data["date"]["year"], thread_data["date"]["month"], thread_data["date"]["day"], thread_data["date"]["hour"], thread_data["date"]["minute"], thread_data["date"]["second"])
         bdate = datetime.datetime.now()
         diff = bdate - adate
         until = math.ceil(thread_data["goal"] / (thread_data["recentPost"] / (diff.days + (diff.seconds / 86400))))
