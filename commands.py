@@ -63,11 +63,12 @@ def threadInfo(bot_data, thread_data):
     output += "\n  Types: " + str(thread_data["types"])
     if "goal" in thread_data:
         output += "\n  Goal: " + str(thread_data["goal"])
+    if "postID" in thread_data["types"]:
         output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
         adate = datetime.datetime(thread_data["date"]["year"], thread_data["date"]["month"], thread_data["date"]["day"], thread_data["date"]["hour"], thread_data["date"]["minute"], thread_data["date"]["second"])
         bdate = datetime.datetime.now()
         diff = bdate - adate
-        until = math.ceil(thread_data["goal"] / (thread_data["recentPost"] / (diff.days + (diff.seconds / 86400))))
+        until = thread_data["goal"] / (thread_data["recentPost"] / (diff.days + (diff.seconds / 86400)))
         cdate = adate + datetime.timedelta(days=until)
         output += "\n  Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
     return output
