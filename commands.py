@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 5, 1)            # This defines the version of the user-added commands.
+version = versions.Version(1, 5, 2)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 5, 2) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
@@ -57,18 +57,22 @@ def suggest(bot_data, thread_data, *suggestion):
     return "Your suggestion has been recorded."
 
 def threadInfo(bot_data, thread_data):
+    adate = datetime.datetime(thread_data["date"]["year"], thread_data["date"]["month"], thread_data["date"]["day"], thread_data["date"]["hour"], thread_data["date"]["minute"], thread_data["date"]["second"])
+    bdate = datetime.datetime.now()
+    diff = bdate - adate
+    ppd = thread_data["recentPost"] / (diff.days + (diff.seconds / 86400))
     output = "Thread Info:"
     output += "\n  Name: " + str(thread_data["name"])
     output += "\n  ID: " + str(thread_data["thread_id"])
     output += "\n  Types: " + str(thread_data["types"])
+    output += "\n  Date: " + adate.strftime("%b %d, %Y %I:%M:%S %p")
+    output += "\n  Posts/Day: ~" + str(round(ppd, 5))
+    output += "\n  Posts/Hour: ~" + str(round(ppd/24, 5))
     if "goal" in thread_data:
         output += "\n  Goal: " + str(thread_data["goal"])
     if "postID" in thread_data["types"]:
         output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
-        adate = datetime.datetime(thread_data["date"]["year"], thread_data["date"]["month"], thread_data["date"]["day"], thread_data["date"]["hour"], thread_data["date"]["minute"], thread_data["date"]["second"])
-        bdate = datetime.datetime.now()
-        diff = bdate - adate
-        until = thread_data["goal"] / (thread_data["recentPost"] / (diff.days + (diff.seconds / 86400)))
+        until = thread_data["goal"] / ppd
         cdate = adate + datetime.timedelta(days=until)
         output += "\n  Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
     return output
