@@ -80,5 +80,4 @@ def threadInfo(bot_data, thread_data):
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-
 commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo}

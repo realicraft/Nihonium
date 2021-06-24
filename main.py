@@ -2,7 +2,7 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 5, 3)
+version = versions.Version(0, 5, 4)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -145,6 +145,7 @@ def parse_command(command, tID):
 
 def main_loop(tID, row):
     global cookies
+    writeText(0, 2, "Scraping thread " + str(tID) + "...")
     writeText(11, 5+(row*2), "  Working...  ")
     writeText(26, 5+(row*2), "  Waiting...  ")
     writeText(43, 5+(row*2), "  WORK ", 11)
@@ -191,6 +192,7 @@ def main_loop(tID, row):
     post_ids[str(tID)]["recentPost"] = j + ((i-1)*25)
     writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
     writeText(26, 5+(row*2), "  Working...  ")
+    writeText(0, 2, "Parsing thread " + str(tID) + "...")
     parsed = 0
     output = ""
     for l in need_to_parse:
@@ -204,6 +206,7 @@ def main_loop(tID, row):
         writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
     writeText(43, 5+(row*2), "    OK ", 10)
+    writeText(0, 2, "Posting to thread " + str(tID) + "...")
     writeText(41, 5+(row*2), "≈", 6)
     with open("threadData.json", "w") as l:
         l.write(json.dumps(post_ids, indent=4))
@@ -247,6 +250,7 @@ while True:
     loopNo += 1
     clock()
     thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
+    clearLine(2)
     writeText(0, 2, "Running loop...")
     logEntry("Running parse cycle " + str(loopNo) + "...")
     for i in range(len(thread_ids)):
@@ -288,3 +292,5 @@ while True:
     writeText(0, 2, "Logged in successfully.")
     logEntry("Logged in successfully.")
     time.sleep(1.5)
+    with open("threadData.json", "r+") as threadfile:
+        post_ids = json.loads(threadfile.read())
