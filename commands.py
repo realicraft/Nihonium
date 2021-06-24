@@ -52,15 +52,13 @@ def _help(bot_data, thread_data):
 def suggest(bot_data, thread_data, *suggestion):
     if (len(suggestion) == 0): return "Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
-    for i in range(len(suggestion_full)):
+    i = 0
+    while i < len(suggestion_full):
         if suggestion_full[i] == "&":
             if suggestion_full[i:i+4] == "&lt;": suggestion_full = suggestion_full[:i] + "<" + suggestion_full[i+4:]
-    for j in range(len(suggestion_full)):
-        if suggestion_full[j] == "&":
-            if suggestion_full[j:j+4] == "&gt;": suggestion_full = suggestion_full[:j] + ">" + suggestion_full[j+4:]
-    for k in range(len(suggestion_full)):
-        if suggestion_full[k] == "&":
-            if suggestion_full[k:k+5] == "&amp;": suggestion_full = suggestion_full[:k] + "&" + suggestion_full[k+5:]
+            if suggestion_full[i:i+4] == "&gt;": suggestion_full = suggestion_full[:i] + ">" + suggestion_full[i+4:]
+            if suggestion_full[i:i+5] == "&amp;": suggestion_full = suggestion_full[:i] + "&" + suggestion_full[i+5:]
+        i += 1
     with open("suggestions.txt", "a") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
     return "Your suggestion has been recorded."
