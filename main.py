@@ -2,7 +2,7 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 5, 4)
+version = versions.Version(0, 5, 5)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -32,8 +32,8 @@ cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(
 
 def logEntry(entry: str, timestamp=None):
     if timestamp is None: timestamp = datetime.datetime.now()
-    with open("log.log", "a") as logfile:
-        logfile.write("[" + timestamp.strftime("%b %d, %Y @ %I:%M:%S.%f %p") + "] " + entry + "\n")
+    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a") as logfile:
+        logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
 
 def getReq(*args, **kwargs):
     logEntry("Requesting URL: " + args[0])
@@ -277,14 +277,19 @@ while True:
     writeText(0, 2, "Sleeping...")
     logEntry("Sleeping...")
     clock()
-    for l in range(5, 0, -1):
-        sleeptime = thirtyminutes - datetime.datetime.now()
-        sleeptime = sleeptime.total_seconds()
-        logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
-        for k in range(int(sleeptime/l)):
-            writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
-            clock()
-            time.sleep(1)
+    try: #allow for graceful exit
+        for l in range(5, 0, -1):
+            sleeptime = thirtyminutes - datetime.datetime.now()
+            sleeptime = sleeptime.total_seconds()
+            logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
+            for k in range(int(sleeptime/l)):
+                writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
+                clock()
+                time.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    except:
+        raise
     clearLine(2)
     writeText(0, 2, "Logging in...")
     logEntry("Logging in...")

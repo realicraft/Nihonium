@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 5, 2)         # This defines the version of the user-added commands.
+version = versions.Version(1, 5, 3)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 5, 2) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
@@ -52,6 +52,15 @@ def _help(bot_data, thread_data):
 def suggest(bot_data, thread_data, *suggestion):
     if (len(suggestion) == 0): return "Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
+    for i in range(len(suggestion_full)):
+        if suggestion_full[i] == "&":
+            if suggestion_full[i:i+4] == "&lt;": suggestion_full = suggestion_full[:i] + "<" + suggestion_full[i+4:]
+    for j in range(len(suggestion_full)):
+        if suggestion_full[j] == "&":
+            if suggestion_full[j:j+4] == "&gt;": suggestion_full = suggestion_full[:j] + ">" + suggestion_full[j+4:]
+    for k in range(len(suggestion_full)):
+        if suggestion_full[k] == "&":
+            if suggestion_full[k:k+5] == "&amp;": suggestion_full = suggestion_full[:k] + "&" + suggestion_full[k+5:]
     with open("suggestions.txt", "a") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
     return "Your suggestion has been recorded."

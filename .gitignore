@@ -6,3 +6,5 @@ pass.txt
 log.log
 suggestions.txt
 __pycache__/
+files/
+logs/
