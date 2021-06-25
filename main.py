@@ -299,3 +299,8 @@ while True:
     time.sleep(1.5)
     with open("threadData.json", "r+") as threadfile:
         post_ids = json.loads(threadfile.read())
+    thread_ids = []
+    for h in post_ids:
+        thread_ids.append(int(h))
+    for m in range(4, 5+(2*len(thread_ids))):
+        writeText(0, m, "█"*50)
