@@ -93,6 +93,9 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
     # create | create a file, fails if it exists
     # delete | delete a file, fails if it does not exist
     # _.txt is unique in that append and insert behave like write, and create and delete both fail
+    if filename == "_":
+        if command == "append": command = "write"
+        if command == "insert": command = "write"
     if command == "read":
         try:
             with open("files/" + filename + ".txt", "r") as file:
@@ -105,6 +108,22 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
                 file.write(" ".join(other))
                 file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+        except IOError:
+            return "No file by the name [i]" + filename + ".txt[/i] exists."
+    elif command == "append":
+        try:
+            with open("files/" + filename + ".txt", "a+") as file:
+                file.write(" ".join(other))
+                file.seek(0)
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+        except IOError:
+            return "No file by the name [i]" + filename + ".txt[/i] exists."
+    elif command == "insert":
+        try:
+            with open("files/" + filename + ".txt", "r") as file:
+                temp = file.read()
+            with open("files/" + filename + ".txt", "w+") as file:
+                file.write(temp[:other[0]] + " ".join(other[1:]) + temp[other[0]:])
         except IOError:
             return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "create":
