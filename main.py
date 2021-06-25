@@ -2,7 +2,7 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback
 import versions, commands
 from lxml import html
 
-version = versions.Version(0, 5, 5)
+version = versions.Version(0, 6, 0)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -34,6 +34,10 @@ def logEntry(entry: str, timestamp=None):
     if timestamp is None: timestamp = datetime.datetime.now()
     with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a") as logfile:
         logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
+        logfile.seek(0)
+        line_count = 0
+        for line in logfile: line_count += 1
+        writeText(97, 2, str(line_count).rjust(4) + " entries in log file", 0, 7)
 
 def getReq(*args, **kwargs):
     logEntry("Requesting URL: " + args[0])
@@ -176,17 +180,23 @@ def main_loop(tID, row):
             if (j + (i*25) + 1 <= post_ids[str(tID)]["recentPost"]):
                 j += 1
                 continue
-            k = {"author": "", "contents": ""}
+            k = {"author": "", "contents": "", "postID": 0, "date": "", "internal_postid": 0}
             y = x[j].xpath('.//div/div[1]/div/div[2]/div[1]') #get contents of post
             z = x[j].xpath('.//div/div[1]/div/div[1]/dl/dt/strong/a') #get user who posted the post
+            a = x[j].xpath('.//h2/span/span') #get postid
+            b = x[j].xpath('.//h2/span/a') #get post date/internal post id
             k["contents"] = html.tostring(y[0]).decode("utf-8")[28:-18]
             k["author"] = html.tostring(z[0]).decode("utf-8").split(">")[1][0:-3]
+            k["postID"] = int(html.tostring(a[0]).decode("utf-8")[20:-8])
+            k["date"] = html.tostring(b[0]).decode("utf-8").split(">")[1][0:-3].replace("&#8201;", "")
+            k["internal_postid"] = int(html.tostring(b[0]).decode("utf-8").split('"')[1].split("p")[-1])
+            if k["internal_postid"] > data["recent_post"]: data["recent_post"] = k["internal_postid"]
             if k["contents"].startswith("<p>nh!"):
                 need_to_parse.append(k)
                 data["commands_found"] += 1
-                with open("data.json", "w") as datafile:
-                    datafile.write(json.dumps(data))
                 writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
+            with open("data.json", "w") as datafile:
+                datafile.write(json.dumps(data))
             j += 1
         i += 1
     post_ids[str(tID)]["recentPost"] = j + ((i-1)*25)

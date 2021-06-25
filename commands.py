@@ -3,9 +3,14 @@ from lxml import html
 
 # This file is used to define the commands used by Nihonium.
 
-__version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 6, 0)         # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 5, 2) # This defines the minimum version of Nihonium needed to run these commands.
+__version__ = versions.Version(1, 2)        # This defines the version of the module's framework.
+version = versions.Version(1, 6, 2)         # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 6, 0) # This defines the minimum version of Nihonium needed to run these commands.
+
+def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
+    if timestamp is None: timestamp = datetime.datetime.now()
+    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a") as logfile:
+        logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
@@ -98,42 +103,44 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
         if command == "insert": command = "write"
     if command == "read":
         try:
-            with open("files/" + filename + ".txt", "r") as file:
-                return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
-        except IOError:
-            return "No file by the name [i]" + filename + ".txt[/i] exists."
+            with open("files/" + filename + ".txt", "r") as file: return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+            logEntry("Read file '" + filename + ".txt'")
+        except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "write":
         try:
             with open("files/" + filename + ".txt", "w+") as file:
                 file.write(" ".join(other))
                 file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
-        except IOError:
-            return "No file by the name [i]" + filename + ".txt[/i] exists."
+                logEntry("Wrote to file '" + filename + ".txt'")
+        except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "append":
         try:
             with open("files/" + filename + ".txt", "a+") as file:
                 file.write(" ".join(other))
                 file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
-        except IOError:
-            return "No file by the name [i]" + filename + ".txt[/i] exists."
+                logEntry("Wrote to file '" + filename + ".txt'")
+        except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "insert":
         try:
-            with open("files/" + filename + ".txt", "r") as file:
-                temp = file.read()
-            with open("files/" + filename + ".txt", "w+") as file:
-                file.write(temp[:other[0]] + " ".join(other[1:]) + temp[other[0]:])
-        except IOError:
-            return "No file by the name [i]" + filename + ".txt[/i] exists."
+            with open("files/" + filename + ".txt", "r") as file: temp = file.read()
+            with open("files/" + filename + ".txt", "w+") as file: file.write(temp[:other[0]] + " ".join(other[1:]) + temp[other[0]:])
+            logEntry("Wrote to file '" + filename + ".txt'")
+        except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "create":
         try:
-            with open("files/" + filename + ".txt", "x") as file:
-                return "Successfully created [i]" + filename + ".txt[/i]"
-        except IOError:
-            return "A file by the name [i]" + filename + ".txt[/i] already exists."
-    else:
-        return "Invalid command: " + command
+            with open("files/" + filename + ".txt", "x") as file: return "Successfully created [i]" + filename + ".txt[/i]"
+            logEntry("Created file '" + filename + ".txt'")
+        except IOError: return "A file by the name [i]" + filename + ".txt[/i] already exists."
+    elif command == "create":
+        if filename == "_": return "Can't delete _."
+        else:
+            try:
+                os.remove("files/" + filename + ".txt")
+                logEntry("Deleted file '" + filename + ".txt'")
+            except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
+    else: return "Invalid command: " + command
 #-------------------------
 # Add commands above here.
 
