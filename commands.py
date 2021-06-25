@@ -95,17 +95,26 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
     # _.txt is unique in that append and insert behave like write, and create and delete both fail
     if command == "read":
         try:
-            with open(filename + ".txt", "r") as file:
+            with open("files/" + filename + ".txt", "r") as file:
                 return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError:
             return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "write":
         try:
-            with open(filename + ".txt", "w+") as file:
+            with open("files/" + filename + ".txt", "w+") as file:
                 file.write(" ".join(other))
+                file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError:
             return "No file by the name [i]" + filename + ".txt[/i] exists."
+    elif command == "create":
+        try:
+            with open("files/" + filename + ".txt", "x") as file:
+                return "Successfully created [i]" + filename + ".txt[/i]"
+        except IOError:
+            return "A file by the name [i]" + filename + ".txt[/i] already exists."
+    else:
+        return "Invalid command: " + command
 #-------------------------
 # Add commands above here.
 
