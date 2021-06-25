@@ -32,7 +32,7 @@ cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(
 
 def logEntry(entry: str, timestamp=None):
     if timestamp is None: timestamp = datetime.datetime.now()
-    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a") as logfile:
+    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a+") as logfile:
         logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
         logfile.seek(0)
         line_count = 0
