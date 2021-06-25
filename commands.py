@@ -93,7 +93,6 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
     # create | create a file, fails if it exists
     # delete | delete a file, fails if it does not exist
     # _.txt is unique in that append and insert behave like write, and create and delete both fail
-    pass
     if command == "read":
         try:
             with open(filename + ".txt", "r") as file:
@@ -111,4 +110,4 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text}
