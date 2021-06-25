@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 1)        # This defines the version of the modules framework.
-version = versions.Version(1, 5, 3)         # This defines the version of the user-added commands.
+version = versions.Version(1, 6, 0)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 5, 2) # This defines the minimum version of Nihonium needed to run these commands.
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
@@ -83,6 +83,30 @@ def threadInfo(bot_data, thread_data):
         cdate = adate + datetime.timedelta(days=until)
         output += "\n  Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
     return output
+
+def text(bot_data, thread_data, filename="_", command="read", *other):
+    # commands:
+    # read   | outputs the contents of the file
+    # write  | replaces the contents of the file with " ".join(other)
+    # append | add a new line the the end of the file, followed by " ".join(other)
+    # insert | insert " ".join(other[1:]) after character other[0]
+    # create | create a file, fails if it exists
+    # delete | delete a file, fails if it does not exist
+    # _.txt is unique in that append and insert behave like write, and create and delete both fail
+    pass
+    if command == "read":
+        try:
+            with open(filename + ".txt", "r") as file:
+                return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+        except IOError:
+            return "No file by the name [i]" + filename + ".txt[/i] exists."
+    elif command == "write":
+        try:
+            with open(filename + ".txt", "w+") as file:
+                file.write(" ".join(other))
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+        except IOError:
+            return "No file by the name [i]" + filename + ".txt[/i] exists."
 #-------------------------
 # Add commands above here.
 

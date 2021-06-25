@@ -6,7 +6,7 @@ The bot requires three files and one directory not in the repository to run. The
 - `pass.txt`, which contains the password for the bots account
 - `threadData.json`, a JSON file containing the IDs of the threads the bot can run in, along with the most recently parsed post in each of them. In the format of a dictionary, with each element having a key of the thread's ID (as a string), and a value containing various information about the thread.
 - `data.json`, a JSON file containing various statistics. The default is the following: `{"parse_cycles": 0, "commands_parsed": 0, "commands_found": 0, "valid_commands": 0}`
-- `logs`, a directory used to store log files. Default is empty.
+- `logs`, a directory used to store log files. Default contains a single empty file named `_.txt`.
 
 ### `threadData.json`
 This file is formatted using the following:
