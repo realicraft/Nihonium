@@ -8,3 +8,4 @@ suggestions.txt
 __pycache__/
 files/
 logs/
+.github/
