@@ -129,7 +129,7 @@ def parse_command(command, tID):
     logEntry("Parsing command: " + str(command2))
     shards = command2.split(" ")
     shards2 = shards[1:]
-    for i in shards2:
+    for i in range(len(shards2)):
         j = 0
         while j < len(shards2[i]):
             if shards2[i][j] == "&":
