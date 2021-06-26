@@ -1,4 +1,4 @@
-import random, math, datetime, time, sys, os, versions
+import random, math, datetime, time, sys, os, versions, shutil
 from lxml import html
 
 # This file is used to define the commands used by Nihonium.
@@ -84,13 +84,17 @@ def threadInfo(bot_data, thread_data):
 
 def text(bot_data, thread_data, filename="_", command="read", *other):
     # commands:
-    # read   | outputs the contents of the file
-    # write  | replaces the contents of the file with " ".join(other)
-    # append | add a new line the the end of the file, followed by " ".join(other)
-    # insert | insert " ".join(other[1:]) after character other[0]
-    # create | create a file, fails if it exists
-    # delete | delete a file, fails if it does not exist
-    # _.txt is unique in that append and insert behave like write, and create and delete both fail
+    # read      | outputs the contents of the file
+    # write     | replaces the contents of the file with " ".join(other)
+    # append    | add a new line the the end of the file, followed by " ".join(other)
+    # insert    | insert " ".join(other[1:]) after character other[0]
+    # cut       | cut a section of the file, removing it (clipboard will be emptied on paste)
+    # copy      | copy a section of the file, trunciated if it ends outide the file
+    # paste     | paste onto the end of the file, fails if the clipboard is empty
+    # create    | create a file, fails if it exists
+    # duplicate | duplicate a file, fails if it does not exist
+    # delete    | delete a file, fails if it does not exist
+    # _.txt is unique in that append and insert behave like write, copy and cut select everything, paste overwrites everything, and create, duplicate, and delete all fail
     if filename == "_":
         if command == "append": command = "write"
         if command == "insert": command = "write"
@@ -126,7 +130,14 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
             with open("files/" + filename + ".txt", "x") as file: return "Successfully created [i]" + filename + ".txt[/i]"
             logEntry("Created file '" + filename + ".txt'")
         except IOError: return "A file by the name [i]" + filename + ".txt[/i] already exists."
-    elif command == "create":
+    elif command == "duplicate":
+        if filename == "_": return "Can't duplicate _."
+        else:
+            try:
+                shutil.copy2("files/" + filename + ".txt", "files/copy_" + filename + ".txt")
+                logEntry("Copied file '" + filename + ".txt' to 'copy_" + filename + ".txt'")
+            except FileNotFoundError: return "No file by the name [i]" + filename + ".txt[/i] exists."
+    elif command == "delete":
         if filename == "_": return "Can't delete _."
         else:
             try:
