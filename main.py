@@ -157,6 +157,7 @@ def parse_command(command, tID):
 
 def main_loop(tID, row):
     global cookies
+    bell()
     writeText(0, 2, "Scraping thread " + str(tID) + "...")
     writeText(11, 5+(row*2), "  Working...  ")
     writeText(26, 5+(row*2), "  Waiting...  ")
