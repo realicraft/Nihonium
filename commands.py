@@ -136,6 +136,7 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
             try:
                 shutil.copy2("files/" + filename + ".txt", "files/copy_" + filename + ".txt")
                 logEntry("Copied file '" + filename + ".txt' to 'copy_" + filename + ".txt'")
+                return "Successfully duplicated [i]" + filename + ".txt[/i]"
             except FileNotFoundError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "delete":
         if filename == "_": return "Can't delete _."
