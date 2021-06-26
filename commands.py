@@ -4,8 +4,8 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 2)        # This defines the version of the module's framework.
-version = versions.Version(1, 6, 2)         # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 6, 0) # This defines the minimum version of Nihonium needed to run these commands.
+version = versions.Version(1, 6, 3)         # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
     if timestamp is None: timestamp = datetime.datetime.now()
@@ -57,13 +57,6 @@ def _help(bot_data, thread_data):
 def suggest(bot_data, thread_data, *suggestion):
     if (len(suggestion) == 0): return "Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
-    i = 0
-    while i < len(suggestion_full):
-        if suggestion_full[i] == "&":
-            if suggestion_full[i:i+4] == "&lt;": suggestion_full = suggestion_full[:i] + "<" + suggestion_full[i+4:]
-            if suggestion_full[i:i+4] == "&gt;": suggestion_full = suggestion_full[:i] + ">" + suggestion_full[i+4:]
-            if suggestion_full[i:i+5] == "&amp;": suggestion_full = suggestion_full[:i] + "&" + suggestion_full[i+5:]
-        i += 1
     with open("suggestions.txt", "a") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
     return "Your suggestion has been recorded."
