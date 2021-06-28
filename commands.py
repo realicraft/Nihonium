@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 2)        # This defines the version of the module's framework.
-version = versions.Version(1, 6, 3)         # This defines the version of the user-added commands.
+version = versions.Version(1, 7)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
@@ -82,7 +82,7 @@ def threadInfo(bot_data, thread_data):
         output += "\n  Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
     return output
 
-def text(bot_data, thread_data, filename="_", command="read", *other):
+def text(bot_data, thread_data, command="read", filename="_", *other):
     # commands:
     # read      | outputs the contents of the file
     # write     | replaces the contents of the file with " ".join(other)
@@ -146,8 +146,40 @@ def text(bot_data, thread_data, filename="_", command="read", *other):
                 logEntry("Deleted file '" + filename + ".txt'")
             except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     else: return "Invalid command: " + command
+
+def files(bot_data, thread_data, command="read", filename="_.txt", *other):
+    # commands:
+    # read | read the hex data of a file
+    # list | list all files
+    if command == "read":
+        try:
+            with open("files/" + filename, "rb") as file:
+                logEntry("Read file '" + filename + "'")
+                output = "Contents of [i]" + filename + "[/i]: \n[code]"
+                filehex = file.read().hex()
+                filehexlist = []
+                for i in range(0, len(filehex), 2):
+                    filehexlist.append(filehex[i:i+2])
+                d = "         x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF\n        ------------------------------------------------\n"
+                for j in range(math.ceil(len(filehexlist)/16)):
+                    d += "0x" + hex(j)[2:].rjust(3, "0") + "x |"
+                    for k in filehexlist[j*16:(j*16)+16]:
+                        d += " " + k
+                    d += " \n"
+                d = d[0:-1]
+                output += d
+                output += "[/code]"
+                return output
+        except IOError: return "No file by the name [i]" + filename + "[/i] exists."
+    elif command == "list":
+        output = "Files: [quote]"
+        for i in os.listdir("files"):
+            output += i + "\n"
+        output += "[/quote]"
+        return output
+    else: return "Invalid command: " + command
 #-------------------------
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files}
