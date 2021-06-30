@@ -173,11 +173,12 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
                 d = "         x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF\n        ------------------------------------------------\n"
                 for j in range(math.ceil(len(filehexlist)/16)):
                     d += "0x" + hex(j)[2:].rjust(3, "0") + "x |"
+                    e = ""
                     for k in filehexlist[j*16:(j*16)+16]:
-                        d += " " + k
-                    d += "|"
+                        e += " " + k
+                    d += e.ljust(48)
+                    d += " | "
                     for l in filehexlist[j*16:(j*16)+16]:
-                        d += " "
                         if l == "0a": # newline
                             d += "␤"
                         elif l == "09": # tab
@@ -188,10 +189,12 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
                             d += "·"
                         elif int(l, 16) < 32: # before printable
                             d += "•"
+                        elif l == "20": # space
+                            d += "␠"
                         else: # other
                             m = bytes.fromhex(l)
                             d += m.decode("ASCII")
-                    d += " \n"
+                    d += "\n"
                 d = d[0:-1]
                 output += d
                 output += "[/code]"
@@ -208,4 +211,4 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files, "file": files}
