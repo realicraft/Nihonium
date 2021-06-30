@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 2)        # This defines the version of the module's framework.
-version = versions.Version(1, 7)         # This defines the version of the user-added commands.
+version = versions.Version(1, 7, 1)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
@@ -180,17 +180,17 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
                     d += " | "
                     for l in filehexlist[j*16:(j*16)+16]:
                         if l == "0a": # newline
-                            d += "␤"
+                            d += "↕"
                         elif l == "09": # tab
-                            d += "⇥"
+                            d += "↔"
                         elif l == "00": # null
-                            d += "␀"
+                            d += "Φ"
                         elif int(l, 16) > 126: # outside ascii
                             d += "·"
                         elif int(l, 16) < 32: # before printable
                             d += "•"
                         elif l == "20": # space
-                            d += "␠"
+                            d += "˽"
                         else: # other
                             m = bytes.fromhex(l)
                             d += m.decode("ASCII")
