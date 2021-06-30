@@ -84,16 +84,17 @@ def threadInfo(bot_data, thread_data):
 
 def text(bot_data, thread_data, command="read", filename="_", *other):
     # commands:
-    # read      | outputs the contents of the file
-    # write     | replaces the contents of the file with " ".join(other)
-    # append    | add a new line the the end of the file, followed by " ".join(other)
-    # insert    | insert " ".join(other[1:]) after character other[0]
-    # cut       | cut a section of the file, removing it (clipboard will be emptied on paste)
-    # copy      | copy a section of the file, trunciated if it ends outide the file
-    # paste     | paste onto the end of the file, fails if the clipboard is empty
-    # create    | create a file, fails if it exists
-    # duplicate | duplicate a file, fails if it does not exist
-    # delete    | delete a file, fails if it does not exist
+    # read       | outputs the contents of the file
+    # write      | replaces the contents of the file with " ".join(other)
+    # append     | add " ".join(other) to the end of the file
+    # appendline | add a new line at the end of the file, followed by " ".join(other)
+    # insert     | insert " ".join(other[1:]) after character other[0]
+    # cut        | cut a section of the file, removing it (clipboard will be emptied on paste)
+    # copy       | copy a section of the file, trunciated if it ends outide the file
+    # paste      | paste onto the end of the file, fails if the clipboard is empty
+    # create     | create a file, fails if it exists
+    # duplicate  | duplicate a file, fails if it does not exist
+    # delete     | delete a file, fails if it does not exist
     # _.txt is unique in that append and insert behave like write, copy and cut select everything, paste overwrites everything, and create, duplicate, and delete all fail
     if filename == "_":
         if command == "append": command = "write"
@@ -114,6 +115,15 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
     elif command == "append":
         try:
             with open("files/" + filename + ".txt", "a+") as file:
+                file.write(" ".join(other))
+                file.seek(0)
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+                logEntry("Wrote to file '" + filename + ".txt'")
+        except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
+    elif command == "append":
+        try:
+            with open("files/" + filename + ".txt", "a+") as file:
+                file.write("\n")
                 file.write(" ".join(other))
                 file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
@@ -165,6 +175,22 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
                     d += "0x" + hex(j)[2:].rjust(3, "0") + "x |"
                     for k in filehexlist[j*16:(j*16)+16]:
                         d += " " + k
+                    d += "|"
+                    for l in filehexlist[j*16:(j*16)+16]:
+                        d += " "
+                        if l == "0a": # newline
+                            d += "␤"
+                        elif l == "09": # tab
+                            d += "⇥"
+                        elif l == "00": # null
+                            d += "␀"
+                        elif int(l, 16) > 126: # outside ascii
+                            d += "·"
+                        elif int(l, 16) < 32: # before printable
+                            d += "•"
+                        else: # other
+                            m = bytes.fromhex(l)
+                            d += m.decode("ASCII")
                     d += " \n"
                 d = d[0:-1]
                 output += d
