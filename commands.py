@@ -154,6 +154,7 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
             try:
                 os.remove("files/" + filename + ".txt")
                 logEntry("Deleted file '" + filename + ".txt'")
+                return "Successfully deleted [i]" + filename + ".txt[/i]"
             except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     else: return "Invalid command: " + command
 
