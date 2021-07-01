@@ -1,8 +1,9 @@
-import sys, math, random, os, time, json, requests, pause, datetime, traceback
-import versions, commands
-from lxml import html
+import sys, math, random, os, time, json, requests, pause, datetime, traceback # built-in modules
+import versions, commands # custom modules
+import html as html2 # disambiguate from lxml.html
+from lxml import html # from import
 
-version = versions.Version(0, 6, 3)
+version = versions.Version(0, 6, 4)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -130,13 +131,7 @@ def parse_command(command, tID):
     shards = command2.split(" ")
     shards2 = shards[1:]
     for i in range(len(shards2)):
-        j = 0
-        while j < len(shards2[i]):
-            if shards2[i][j] == "&":
-                if shards2[i][j:j+4] == "&lt;": shards2[i] = shards2[i][:j] + "<" + shards2[i][j+4:]
-                if shards2[i][j:j+4] == "&gt;": shards2[i] = shards2[i][:j] + ">" + shards2[i][j+4:]
-                if shards2[i][j:j+5] == "&amp;": shards2[i] = shards2[i][:j] + "&" + shards2[i][j+5:]
-            j += 1
+        shards2[i] = html2.unescape(shards2[i])
     hold = None
     if shards[0] in commands.commands:
         validCommand()
