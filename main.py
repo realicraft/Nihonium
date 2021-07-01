@@ -3,18 +3,18 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 6, 4)
+version = versions.Version(0, 6, 5)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
 
-with open("threadData.json", "r+") as threadfile:
+with open("threadData.json", "r+", encoding="utf-8") as threadfile:
     post_ids = json.loads(threadfile.read())
 
-with open("data.json", "r+") as datafile:
+with open("data.json", "r+", encoding="utf-8") as datafile:
     data = json.loads(datafile.read())
 
-with open("pass.txt", "r") as passfile:
+with open("pass.txt", "r", encoding="utf-8") as passfile:
     password = passfile.read()
 
 thread_ids = []
@@ -33,7 +33,7 @@ cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(
 
 def logEntry(entry: str, timestamp=None):
     if timestamp is None: timestamp = datetime.datetime.now()
-    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a+") as logfile:
+    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a+", encoding="utf-8") as logfile:
         logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
         logfile.seek(0)
         line_count = 0
@@ -105,7 +105,7 @@ def clock():
 
 def validCommand():
     data["valid_commands"] += 1
-    with open("data.json", "w") as datafile:
+    with open("data.json", "w", encoding="utf-8") as datafile:
         datafile.write(json.dumps(data))
 
 def assemble_botdata():
@@ -123,7 +123,7 @@ def assemble_threaddata(tID):
 
 def parse_command(command, tID):
     global data
-    with open("data.json", "r+") as datafile:
+    with open("data.json", "r+", encoding="utf-8") as datafile:
         data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
     command2 = command2.split("</p>")[0]
@@ -146,7 +146,7 @@ def parse_command(command, tID):
     else:
         output = ""
     data["commands_parsed"] += 1
-    with open("data.json", "w") as datafile:
+    with open("data.json", "w", encoding="utf-8") as datafile:
         datafile.write(json.dumps(data))
     return output
 
@@ -198,7 +198,7 @@ def main_loop(tID, row):
                 need_to_parse.append(k)
                 data["commands_found"] += 1
                 writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
-            with open("data.json", "w") as datafile:
+            with open("data.json", "w", encoding="utf-8") as datafile:
                 datafile.write(json.dumps(data))
             j += 1
         i += 1
@@ -221,7 +221,7 @@ def main_loop(tID, row):
     writeText(43, 5+(row*2), "    OK ", 10)
     writeText(0, 2, "Posting to thread " + str(tID) + "...")
     writeText(41, 5+(row*2), "≈", 6)
-    with open("threadData.json", "w") as l:
+    with open("threadData.json", "w", encoding="utf-8") as l:
         l.write(json.dumps(post_ids, indent=4))
     if output == "":
         writeText(41, 5+(row*2), "-")
@@ -285,7 +285,7 @@ while True:
             pause.until(sixtyseconds)
         clock()
     data["parse_cycles"] += 1
-    with open("data.json", "w") as datafile:
+    with open("data.json", "w", encoding="utf-8") as datafile:
         datafile.write(json.dumps(data))
     clearLine(2)
     writeText(0, 2, "Sleeping...")
@@ -311,7 +311,7 @@ while True:
     writeText(0, 2, "Logged in successfully.")
     logEntry("Logged in successfully.")
     time.sleep(1.5)
-    with open("threadData.json", "r+") as threadfile:
+    with open("threadData.json", "r+", encoding="utf-8") as threadfile:
         post_ids = json.loads(threadfile.read())
     thread_ids = []
     for h in post_ids:

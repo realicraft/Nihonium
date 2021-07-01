@@ -9,7 +9,7 @@ nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version o
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
     if timestamp is None: timestamp = datetime.datetime.now()
-    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a") as logfile:
+    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a", encoding="utf-8") as logfile:
         logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
@@ -57,7 +57,7 @@ def _help(bot_data, thread_data):
 def suggest(bot_data, thread_data, *suggestion):
     if (len(suggestion) == 0): return "Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
-    with open("suggestions.txt", "a") as suggestFile:
+    with open("suggestions.txt", "a", encoding="utf-8") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
     return "Your suggestion has been recorded."
 
@@ -101,12 +101,12 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
         if command == "insert": command = "write"
     if command == "read":
         try:
-            with open("files/" + filename + ".txt", "r") as file: return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
+            with open("files/" + filename + ".txt", "r", encoding="utf-8") as file: return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
             logEntry("Read file '" + filename + ".txt'")
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "write":
         try:
-            with open("files/" + filename + ".txt", "w+") as file:
+            with open("files/" + filename + ".txt", "w+", encoding="utf-8") as file:
                 file.write(" ".join(other))
                 file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
@@ -114,7 +114,7 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "append":
         try:
-            with open("files/" + filename + ".txt", "a+") as file:
+            with open("files/" + filename + ".txt", "a+", encoding="utf-8") as file:
                 file.write(" ".join(other))
                 file.seek(0)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
@@ -122,7 +122,7 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "append":
         try:
-            with open("files/" + filename + ".txt", "a+") as file:
+            with open("files/" + filename + ".txt", "a+", encoding="utf-8") as file:
                 file.write("\n")
                 file.write(" ".join(other))
                 file.seek(0)
@@ -131,13 +131,13 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "insert":
         try:
-            with open("files/" + filename + ".txt", "r") as file: temp = file.read()
-            with open("files/" + filename + ".txt", "w+") as file: file.write(temp[:other[0]] + " ".join(other[1:]) + temp[other[0]:])
+            with open("files/" + filename + ".txt", "r", encoding="utf-8") as file: temp = file.read()
+            with open("files/" + filename + ".txt", "w+", encoding="utf-8") as file: file.write(temp[:other[0]] + " ".join(other[1:]) + temp[other[0]:])
             logEntry("Wrote to file '" + filename + ".txt'")
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "create":
         try:
-            with open("files/" + filename + ".txt", "x") as file: return "Successfully created [i]" + filename + ".txt[/i]"
+            with open("files/" + filename + ".txt", "x", encoding="utf-8") as file: return "Successfully created [i]" + filename + ".txt[/i]"
             logEntry("Created file '" + filename + ".txt'")
         except IOError: return "A file by the name [i]" + filename + ".txt[/i] already exists."
     elif command == "duplicate":
