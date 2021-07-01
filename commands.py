@@ -120,7 +120,7 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
                 logEntry("Wrote to file '" + filename + ".txt'")
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
-    elif command == "append":
+    elif command == "appendline":
         try:
             with open("files/" + filename + ".txt", "a+", encoding="utf-8") as file:
                 file.write("\n")
