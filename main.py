@@ -206,6 +206,8 @@ def main_loop(tID, row):
             j += 1
         i += 1
     post_ids[str(tID)]["recentPost"] = j + ((i-1)*25)
+    with open("threadData.json", "w", encoding="utf-8") as l:
+        l.write(json.dumps(post_ids, indent=4))
     writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
     writeText(26, 5+(row*2), "  Working...  ")
     writeText(0, 2, "Parsing thread " + str(tID) + "...")
