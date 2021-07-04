@@ -1,9 +1,9 @@
-import random, math, datetime, time, sys, os, versions, shutil
+import random, math, datetime, time, sys, os, versions, shutil, json
 from lxml import html
 
 # This file is used to define the commands used by Nihonium.
 
-__version__ = versions.Version(1, 2)        # This defines the version of the module's framework.
+__version__ = versions.Version(1, 2, 1)        # This defines the version of the module's framework.
 version = versions.Version(1, 7, 1)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
 
@@ -208,8 +208,32 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
         output += "[/quote]"
         return output
     else: return "Invalid command: " + command
+
+def estimate(bot_data, thread_data, tID):
+    with open("threadData.json", "r+", encoding="utf-8") as threadfile:
+        post_ids = json.loads(threadfile.read())
+    thread_data2 = post_ids[str(tID)]
+    adate = datetime.datetime(thread_data2["date"]["year"], thread_data2["date"]["month"], thread_data2["date"]["day"], thread_data2["date"]["hour"], thread_data2["date"]["minute"], thread_data2["date"]["second"])
+    bdate = datetime.datetime.now()
+    diff = bdate - adate
+    ppd = thread_data2["recentPost"] / (diff.days + (diff.seconds / 86400))
+    if "postID" in thread_data2["types"]:
+        until = thread_data2["goal"] / ppd
+        cdate = adate + datetime.timedelta(days=until)
+        output = "Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
+        if len(thread_data2["estimates"]) >= 1:
+            output += "\nPrevious Estimates: [quote]"
+            for i in thread_data2["estimates"]:
+                output += "\n" + i
+            output += "[/quote]"
+        thread_data2["estimates"].append(cdate.strftime("%b %d, %Y %I:%M:%S %p"))
+        with open("threadData.json", "w", encoding="utf-8") as l:
+            l.write(json.dumps(post_ids, indent=4))
+    else:
+        output = "Unknown thread ID: [i]" + str(tID) + "[/i]"
+    return output
 #-------------------------
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files, "file": files}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files, "file": files, "estimate": estimate}

@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 6, 5)
+version = versions.Version(0, 6, 6)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -123,6 +123,7 @@ def assemble_threaddata(tID):
 
 def parse_command(command, tID):
     global data
+    global post_ids
     with open("data.json", "r+", encoding="utf-8") as datafile:
         data = json.loads(datafile.read())
     command2 = command["contents"].split("<br>")[0][6:]
@@ -138,6 +139,7 @@ def parse_command(command, tID):
         output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
         try:
             output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
+            data["commands_parsed"] += 1
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
             output += "While parsing that command, an error occured: [code]"
@@ -145,7 +147,8 @@ def parse_command(command, tID):
             output += "[/code]"
     else:
         output = ""
-    data["commands_parsed"] += 1
+    with open("threadData.json", "r+", encoding="utf-8") as threadfile:
+        post_ids = json.loads(threadfile.read())
     with open("data.json", "w", encoding="utf-8") as datafile:
         datafile.write(json.dumps(data))
     return output
