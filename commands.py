@@ -214,7 +214,9 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
         return output
     else: return "Invalid command: " + command
 
-def estimate(bot_data, thread_data, tID):
+def estimate(bot_data, thread_data, tID=None):
+    if tID is None:
+        tID = thread_data["thread_id"]
     with open("threadData.json", "r+", encoding="utf-8") as threadfile:
         post_ids = json.loads(threadfile.read())
     thread_data2 = post_ids[str(tID)]
