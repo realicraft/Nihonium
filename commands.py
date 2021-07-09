@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 2, 1)        # This defines the version of the module's framework.
-version = versions.Version(1, 7, 2)         # This defines the version of the user-added commands.
+version = versions.Version(1, 7, 3)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
@@ -32,7 +32,7 @@ def dice(bot_data, thread_data, num=1, size=20):
     elif (num == 0): return "You roll no dice, and get nothing."
     elif (size < 0): return "You can't roll something that doesn't exist."
     elif (size == 0): return "You roll " + str(num) + " pieces of air, and get air."
-    elif (num > math.floor(1000000/math.floor(math.log(size)))): doSanity = True 
+    elif (num > math.floor(5000/math.floor(math.log(size)))): doSanity = True 
     for i in range(num):
         hold.append(random.randint(1, size))
     if doSanity:
@@ -41,7 +41,9 @@ def dice(bot_data, thread_data, num=1, size=20):
         return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code] (Total: [i]" + str(sum(hold)) + "[/i])"
 
 def bot(bot_data, thread_data):
-    output = "Bot Statistics:\n  Uptime: " + str(datetime.datetime.now() - bot_data["uptime"])
+    output = "Bot Statistics:"
+    output += "\n  Version: " + str(bot_data["version"])
+    output += "\n  Uptime: " + str(datetime.datetime.now() - bot_data["uptime"])
     output += "\n  Parse Cycles: " + str(bot_data["data"]["parse_cycles"])
     output += "\n  Commands Found: " + str(bot_data["data"]["commands_found"])
     output += "\n  Commands Parsed: " + str(bot_data["data"]["commands_parsed"])
