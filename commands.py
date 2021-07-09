@@ -167,8 +167,16 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
 
 def files(bot_data, thread_data, command="read", filename="_.txt", *other):
     # commands:
-    # read | read the hex data of a file
-    # list | list all files
+    # read      | read the hex data of a file
+    # rename    | rename a file
+    # list      | list all files
+    # move      | move a file
+    # cut       | cut a section of the file, removing it (clipboard will be emptied on paste)
+    # copy      | copy a section of the file, trunciated if it ends outide the file
+    # paste     | paste onto the end of the file, fails if the clipboard is empty
+    # create    | create a file, fails if it exists
+    # duplicate | duplicate a file, fails if it does not exist
+    # delete    | delete a file, fails if it does not exist
     if command == "read":
         try:
             with open("files/" + filename, "rb") as file:
@@ -208,12 +216,39 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
                 output += "[/code]"
                 return output
         except IOError: return "No file by the name [i]" + filename + "[/i] exists."
+    elif command == "rename":
+        try:
+            os.rename("files/" + filename, "files/" + other[0])
+            logEntry("Renamed file '" + filename + "' to '" + other[0] + "'")
+        except FileNotFoundError: return "No file by the name [i]" + filename + "[/i] exists."
+        except FileExistsError: return "A file by the name [i]" + other[0] + "[/i] already exists."
     elif command == "list":
         output = "Files: [quote]"
         for i in os.listdir("files"):
             output += i + "\n"
         output += "[/quote]"
         return output
+    elif command == "create":
+        try:
+            with open("files/" + filename, "x", encoding="utf-8") as file: return "Successfully created [i]" + filename + "[/i]"
+            logEntry("Created file '" + filename + "'")
+        except IOError: return "A file by the name [i]" + filename + "[/i] already exists."
+    elif command == "duplicate":
+        if filename == "_": return "Can't duplicate _."
+        else:
+            try:
+                shutil.copy2("files/" + filename, "files/copy_" + filename)
+                logEntry("Copied file '" + filename + "' to 'copy_" + filename + "'")
+                return "Successfully duplicated [i]" + filename + "[/i]"
+            except FileNotFoundError: return "No file by the name [i]" + filename + "[/i] exists."
+    elif command == "delete":
+        if filename == "_": return "Can't delete _."
+        else:
+            try:
+                os.remove("files/" + filename)
+                logEntry("Deleted file '" + filename + "'")
+                return "Successfully deleted [i]" + filename + "[/i]"
+            except IOError: return "No file by the name [i]" + filename + "[/i] exists."
     else: return "Invalid command: " + command
 
 def estimate(bot_data, thread_data, tID=None):
