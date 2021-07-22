@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 7, 0)
+version = versions.Version(0, 7, 1)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -156,9 +156,9 @@ def parse_command(command, tID):
 def main_loop(tID, row):
     global cookies
     writeText(0, 2, "Scraping thread " + str(tID) + "...")
-    writeText(11, 5+(row*2), "  Working...  ")
-    writeText(26, 5+(row*2), "  Waiting...  ")
-    writeText(43, 5+(row*2), "  WORK ", 11)
+    writeText(11, 5+(row), "  Working...  ")
+    writeText(26, 5+(row), "  Waiting...  ")
+    writeText(43, 5+(row), "  WORK ", 11)
     apage = getReq('https://tbgforums.com/forums/viewtopic.php?id=' + str(tID), headers=headers, cookies=cookies)
     atree = html.fromstring(apage.content)
     pageCountEl = atree.xpath('//*[@id="brdmain"]/div[1]/div/div[1]/p[1]/a')
@@ -171,7 +171,7 @@ def main_loop(tID, row):
     if post_ids[str(tID)]["recentPost"] > (pageCount+1)*25:
         logEntry("Error: Page count for thread with ID " + str(tID) + " too low for known last parsed post")
         #raise ValueError("Page count for thread with ID " + str(tID) + " too low for known last parsed post")
-        writeText(43, 5+(row*2), " ERROR ", 9)
+        writeText(43, 5+(row), " ERROR ", 9)
         return None
     else:
         pass
@@ -200,7 +200,7 @@ def main_loop(tID, row):
             if k["contents"].startswith("<p>nh!"):
                 need_to_parse.append(k)
                 data["commands_found"] += 1
-                writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
+                writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
             with open("data.json", "w", encoding="utf-8") as datafile:
                 datafile.write(json.dumps(data))
             j += 1
@@ -208,8 +208,8 @@ def main_loop(tID, row):
     post_ids[str(tID)]["recentPost"] = j + ((i-1)*25)
     with open("threadData.json", "w", encoding="utf-8") as l:
         l.write(json.dumps(post_ids, indent=4))
-    writeText(11, 5+(row*2), str(len(need_to_parse)).rjust(5) + " found.  ")
-    writeText(26, 5+(row*2), "  Working...  ")
+    writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
+    writeText(26, 5+(row), "  Working...  ")
     writeText(0, 2, "Parsing thread " + str(tID) + "...")
     parsed = 0
     output = ""
@@ -221,26 +221,26 @@ def main_loop(tID, row):
             output += output2
             output += "\n"
         parsed += 1
-        writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
-    writeText(26, 5+(row*2), str(parsed).rjust(4) + " parsed.  ")
-    writeText(43, 5+(row*2), "    OK ", 10)
+        writeText(26, 5+(row), str(parsed).rjust(4) + " parsed.  ")
+    writeText(26, 5+(row), str(parsed).rjust(4) + " parsed.  ")
+    writeText(43, 5+(row), "    OK ", 10)
     writeText(0, 2, "Posting to thread " + str(tID) + "...")
-    writeText(41, 5+(row*2), "≈", 6)
+    writeText(41, 5+(row), "≈", 6)
     with open("threadData.json", "w", encoding="utf-8") as l:
         l.write(json.dumps(post_ids, indent=4))
     if output == "":
-        writeText(41, 5+(row*2), "-")
+        writeText(41, 5+(row), "-")
         return False
     else:
         post_req = postReq("https://tbgforums.com/forums/post.php?tid=" + str(tID), data={"req_message": output, "form_sent": 1}, headers=headers, cookies=cookies)
         try:
             post_req.raise_for_status()
         except:
-            writeText(41, 5+(row*2), "X", 9)
-            writeText(43, 5+(row*2), " ERROR ", 9)
+            writeText(41, 5+(row), "X", 9)
+            writeText(43, 5+(row), " ERROR ", 9)
             raise
         else:
-            writeText(41, 5+(row*2), "√", 10)
+            writeText(41, 5+(row), "√", 10)
         return True
     
 
@@ -261,7 +261,7 @@ time.sleep(1.5)
 clock()
 clearLine(2)
 
-for m in range(4, 5+(2*len(thread_ids))):
+for m in range(4, 6+len(thread_ids)):
     writeText(0, m, "█"*50)
 
 while True:
@@ -272,11 +272,11 @@ while True:
     writeText(0, 2, "Running loop...")
     logEntry("Running parse cycle " + str(loopNo) + "...")
     for i in range(len(thread_ids)):
-        writeText(2, 5+(i*2), str(thread_ids[i]).center(8))
-        writeText(11, 5+(i*2), "  Waiting...  ")
-        writeText(26, 5+(i*2), "  Waiting...  ")
-        writeText(43, 5+(i*2), "  WAIT ", 3)
-        writeText(41, 5+(i*2), "W", 3)
+        writeText(2, 5+i, str(thread_ids[i]).center(8))
+        writeText(11, 5+i, "  Waiting...  ")
+        writeText(26, 5+i, "  Waiting...  ")
+        writeText(43, 5+i, "  WAIT ", 3)
+        writeText(41, 5+i, "W", 3)
     bell()
     for j in range(len(thread_ids)):
         writeText(0, 2, "Running loop...")
@@ -321,5 +321,5 @@ while True:
     thread_ids = []
     for h in post_ids:
         thread_ids.append(int(h))
-    for m in range(4, 5+(2*len(thread_ids))):
+    for m in range(4, 6+len(thread_ids)):
         writeText(0, m, "█"*50)
