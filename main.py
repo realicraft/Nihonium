@@ -243,9 +243,13 @@ def main_loop(tID, row):
             writeText(41, 5+(row), "√", 10)
         return True
     
-
-os.system("cls")
-os.system("title Nihonium (Version " + str(version) + ")")
+#from https://stackoverflow.com/a/2084628
+os.system('cls' if os.name == 'nt' else 'clear')
+#from https://stackoverflow.com/a/2330596
+if os.name == "nt":
+    os.system("title Nihonium (Version " + str(version) + ")")
+else:
+    sys.stdout.write("\x1b]2;Nihonium (Version " + str(version) + ")\x07")
 
 logEntry("Starting up...")
 writeText(0, 1, "Nihonium - A TBGs Bot")
