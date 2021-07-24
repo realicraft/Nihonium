@@ -1,9 +1,9 @@
-import sys, math, random, os, time, json, requests, pause, datetime, traceback # built-in modules
+import sys, math, random, os, time, json, requests, pause, datetime, traceback, asyncio # built-in modules
 import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 7, 1)
+version = versions.Version(0, 8, 0)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -37,16 +37,18 @@ def logEntry(entry: str, timestamp=None):
         logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
         logfile.seek(0)
         line_count = 0
-        for line in logfile: line_count += 1
+        for _ in logfile: line_count += 1
         writeText(97, 2, str(line_count).rjust(4) + " entries in log file", 0, 7)
 
 def getReq(*args, **kwargs):
+    global cookies
     logEntry("Requesting URL: " + args[0])
     output = mainSession.get(*args, **kwargs)
     cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(mainSession.cookies))
     return output
 
 def postReq(*args, **kwargs):
+    global cookies
     logEntry("Posting to URL: " + args[0])
     output = mainSession.post(*args, **kwargs)
     cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(mainSession.cookies))
@@ -91,6 +93,9 @@ def writeText(x, y, text, fcolor=None, bcolor=None):
     sys.stdout.write("\u001b[0m")
     sys.stdout.flush()
 
+async def writeTextA(x, y, text, fcolor=None, bcolor=None):
+    writeText(x, y, text, fcolor, bcolor)
+
 def bell():
     sys.stdout.write("\007")
     sys.stdout.flush()
@@ -100,8 +105,11 @@ def clearLine(line):
     sys.stdout.write(" "*120)
     sys.stdout.flush()
 
-def clock():
-    writeText(113, 0, datetime.datetime.now().strftime("%I:%M %p"), 12, 7)
+async def clock():
+    await writeTextA(0, 25, "tick", 12, 7)
+    while True:
+        await writeTextA(113, 1, datetime.datetime.now().strftime("%I:%M %p"), 12, 7)
+        await asyncio.sleep(1)
 
 def validCommand():
     data["valid_commands"] += 1
@@ -133,7 +141,6 @@ def parse_command(command, tID):
     shards2 = shards[1:]
     for i in range(len(shards2)):
         shards2[i] = html2.unescape(shards2[i])
-    hold = None
     if shards[0] in commands.commands:
         validCommand()
         output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
@@ -243,14 +250,17 @@ def main_loop(tID, row):
             writeText(41, 5+(row), "√", 10)
         return True
     
-
-os.system("cls")
-os.system("title Nihonium (Version " + str(version) + ")")
+#from https://stackoverflow.com/a/2084628
+os.system('cls' if os.name == 'nt' else 'clear')
+#from https://stackoverflow.com/a/2330596
+if os.name == "nt":
+    os.system("title Nihonium (Version " + str(version) + ")")
+else:
+    sys.stdout.write("\x1b]2;Nihonium (Version " + str(version) + ")\x07")
 
 logEntry("Starting up...")
 writeText(0, 1, "Nihonium - A TBGs Bot")
 writeText(23, 1, "(Version " + str(version) + ")", 14)
-clock()
 
 writeText(0, 2, "Logging in...")
 logEntry("Logging in...")
@@ -258,68 +268,72 @@ login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"r
 writeText(0, 2, "Logged in successfully.")
 logEntry("Logged in successfully.")
 time.sleep(1.5)
-clock()
 clearLine(2)
 
 for m in range(4, 6+len(thread_ids)):
     writeText(0, m, "█"*50)
 
-while True:
-    loopNo += 1
-    clock()
-    thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
-    clearLine(2)
-    writeText(0, 2, "Running loop...")
-    logEntry("Running parse cycle " + str(loopNo) + "...")
-    for i in range(len(thread_ids)):
-        writeText(2, 5+i, str(thread_ids[i]).center(8))
-        writeText(11, 5+i, "  Waiting...  ")
-        writeText(26, 5+i, "  Waiting...  ")
-        writeText(43, 5+i, "  WAIT ", 3)
-        writeText(41, 5+i, "W", 3)
-    bell()
-    for j in range(len(thread_ids)):
+async def true_main_loop():
+    global loopNo
+    global thread_ids
+    while True:
+        loopNo += 1
+        thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
+        clearLine(2)
         writeText(0, 2, "Running loop...")
-        logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
-        do_sixsec = main_loop(thread_ids[j], j)
-        sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
-        if (j+1 == len(thread_ids)) or (do_sixsec == False):
-            pass
-        else:
-            writeText(0, 2, "Waiting for 60-second rule...")
-            pause.until(sixtyseconds)
-        clock()
-    data["parse_cycles"] += 1
-    with open("data.json", "w", encoding="utf-8") as datafile:
-        datafile.write(json.dumps(data))
-    clearLine(2)
-    writeText(0, 2, "Sleeping...")
-    logEntry("Sleeping...")
-    clock()
-    try: #allow for graceful exit
-        for l in range(5, 0, -1):
-            sleeptime = thirtyminutes - datetime.datetime.now()
-            sleeptime = sleeptime.total_seconds()
-            logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
-            for k in range(int(sleeptime/l)):
-                writeText(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
-                clock()
-                time.sleep(1)
-    except KeyboardInterrupt:
-        pass
-    except:
-        raise
-    clearLine(2)
-    writeText(0, 2, "Logging in...")
-    logEntry("Logging in...")
-    login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
-    writeText(0, 2, "Logged in successfully.")
-    logEntry("Logged in successfully.")
-    time.sleep(1.5)
-    with open("threadData.json", "r+", encoding="utf-8") as threadfile:
-        post_ids = json.loads(threadfile.read())
-    thread_ids = []
-    for h in post_ids:
-        thread_ids.append(int(h))
-    for m in range(4, 6+len(thread_ids)):
-        writeText(0, m, "█"*50)
+        logEntry("Running parse cycle " + str(loopNo) + "...")
+        for i in range(len(thread_ids)):
+            await writeTextA(2, 5+i, str(thread_ids[i]).center(8))
+            await writeTextA(11, 5+i, "  Waiting...  ")
+            await writeTextA(26, 5+i, "  Waiting...  ")
+            await writeTextA(43, 5+i, "  WAIT ", 3)
+            await writeTextA(41, 5+i, "W", 3)
+        bell()
+        for j in range(len(thread_ids)):
+            await writeTextA(0, 2, "Running loop...")
+            logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
+            do_sixsec = main_loop(thread_ids[j], j)
+            sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
+            if (j+1 == len(thread_ids)) or (do_sixsec == False):
+                pass
+            else:
+                await writeTextA(0, 2, "Waiting for 60-second rule...")
+                pause.until(sixtyseconds)
+        data["parse_cycles"] += 1
+        with open("data.json", "w", encoding="utf-8") as datafile:
+            datafile.write(json.dumps(data))
+        clearLine(2)
+        await writeTextA(0, 2, "Sleeping...")
+        logEntry("Sleeping...")
+        try: #allow for graceful exit
+            for l in range(5, 0, -1):
+                sleeptime = thirtyminutes - datetime.datetime.now()
+                sleeptime = sleeptime.total_seconds()
+                logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
+                for k in range(int(sleeptime/l)):
+                    await writeTextA(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
+                    time.sleep(1)
+        #except KeyboardInterrupt:
+        #    pass
+        except:
+            raise
+        clearLine(2)
+        await writeTextA(0, 2, "Logging in...")
+        logEntry("Logging in...")
+        login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
+        _ = login_req #suppress unused variable warning
+        await writeTextA(0, 2, "Logged in successfully.")
+        logEntry("Logged in successfully.")
+        time.sleep(1.5)
+        with open("threadData.json", "r+", encoding="utf-8") as threadfile:
+            post_ids = json.loads(threadfile.read())
+        thread_ids = []
+        for h in post_ids:
+            thread_ids.append(int(h))
+        for m in range(4, 6+len(thread_ids)):
+            await writeTextA(0, m, "█"*50)
+
+async def outerloop():
+    await asyncio.gather(*(true_main_loop(), clock()))
+
+asyncio.run(outerloop())
