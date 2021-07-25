@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 8, 0)
+version = versions.Version(0, 8, 1)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -106,7 +106,6 @@ def clearLine(line):
     sys.stdout.flush()
 
 async def clock():
-    await writeTextA(0, 25, "tick", 12, 7)
     while True:
         await writeTextA(113, 1, datetime.datetime.now().strftime("%I:%M %p"), 12, 7)
         await asyncio.sleep(1)
@@ -276,64 +275,80 @@ for m in range(4, 6+len(thread_ids)):
 async def true_main_loop():
     global loopNo
     global thread_ids
-    while True:
-        loopNo += 1
-        thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
-        clearLine(2)
-        writeText(0, 2, "Running loop...")
-        logEntry("Running parse cycle " + str(loopNo) + "...")
-        for i in range(len(thread_ids)):
-            await writeTextA(2, 5+i, str(thread_ids[i]).center(8))
-            await writeTextA(11, 5+i, "  Waiting...  ")
-            await writeTextA(26, 5+i, "  Waiting...  ")
-            await writeTextA(43, 5+i, "  WAIT ", 3)
-            await writeTextA(41, 5+i, "W", 3)
-        bell()
-        for j in range(len(thread_ids)):
-            await writeTextA(0, 2, "Running loop...")
-            logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
-            do_sixsec = main_loop(thread_ids[j], j)
-            sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
-            if (j+1 == len(thread_ids)) or (do_sixsec == False):
-                pass
-            else:
-                await writeTextA(0, 2, "Waiting for 60-second rule...")
-                pause.until(sixtyseconds)
-        data["parse_cycles"] += 1
-        with open("data.json", "w", encoding="utf-8") as datafile:
-            datafile.write(json.dumps(data))
-        clearLine(2)
-        await writeTextA(0, 2, "Sleeping...")
-        logEntry("Sleeping...")
-        try: #allow for graceful exit
+    try: #ugh
+        while True:
+            loopNo += 1
+            thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
+            clearLine(2)
+            writeText(0, 2, "Running loop...")
+            logEntry("Running parse cycle " + str(loopNo) + "...")
+            for i in range(len(thread_ids)):
+                await writeTextA(2, 5+i, str(thread_ids[i]).center(8))
+                await writeTextA(11, 5+i, "  Waiting...  ")
+                await writeTextA(26, 5+i, "  Waiting...  ")
+                await writeTextA(43, 5+i, "  WAIT ", 3)
+                await writeTextA(41, 5+i, "W", 3)
+            bell()
+            for j in range(len(thread_ids)):
+                await writeTextA(0, 2, "Running loop...")
+                logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
+                do_sixsec = main_loop(thread_ids[j], j)
+                sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
+                if (j+1 == len(thread_ids)) or (do_sixsec == False):
+                    pass
+                else:
+                    await writeTextA(0, 2, "Waiting for 60-second rule...")
+                    pause.until(sixtyseconds)
+            data["parse_cycles"] += 1
+            with open("data.json", "w", encoding="utf-8") as datafile:
+                datafile.write(json.dumps(data))
+            clearLine(2)
+            await writeTextA(0, 2, "Sleeping...")
+            logEntry("Sleeping...")
             for l in range(5, 0, -1):
                 sleeptime = thirtyminutes - datetime.datetime.now()
                 sleeptime = sleeptime.total_seconds()
                 logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
                 for k in range(int(sleeptime/l)):
                     await writeTextA(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
-                    time.sleep(1)
-        #except KeyboardInterrupt:
-        #    pass
-        except:
-            raise
-        clearLine(2)
-        await writeTextA(0, 2, "Logging in...")
-        logEntry("Logging in...")
-        login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
-        _ = login_req #suppress unused variable warning
-        await writeTextA(0, 2, "Logged in successfully.")
-        logEntry("Logged in successfully.")
-        time.sleep(1.5)
-        with open("threadData.json", "r+", encoding="utf-8") as threadfile:
-            post_ids = json.loads(threadfile.read())
-        thread_ids = []
-        for h in post_ids:
-            thread_ids.append(int(h))
-        for m in range(4, 6+len(thread_ids)):
-            await writeTextA(0, m, "█"*50)
+                    asyncio.sleep(1)
+            clearLine(2)
+            await writeTextA(0, 2, "Logging in...")
+            logEntry("Logging in...")
+            login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
+            _ = login_req #suppress unused variable warning
+            await writeTextA(0, 2, "Logged in successfully.")
+            logEntry("Logged in successfully.")
+            asyncio.sleep(1.5)
+            with open("threadData.json", "r+", encoding="utf-8") as threadfile:
+                post_ids = json.loads(threadfile.read())
+            thread_ids = []
+            for h in post_ids:
+                thread_ids.append(int(h))
+            for m in range(4, 6+len(thread_ids)):
+                await writeTextA(0, m, "█"*50)
+    except (KeyboardInterrupt, EOFError): #from https://stackoverflow.com/a/31131378
+        time.sleep(1)
 
 async def outerloop():
     await asyncio.gather(*(true_main_loop(), clock()))
 
-asyncio.run(outerloop())
+async def final():
+    logEntry("Script closed")
+    await writeTextA(1, 2, "Closing.")
+
+async def exit_script():
+    loop = asyncio.get_event_loop()
+    loop.stop()
+
+#from https://stackoverflow.com/a/54528397
+loop = asyncio.get_event_loop()
+try:
+    clock_future = asyncio.ensure_future(clock())
+    loop.run_until_complete(true_main_loop())
+except KeyboardInterrupt:
+    clock_future.cancel()
+    loop.run_until_complete(final())
+    asyncio.ensure_future(exit_script())
+finally:
+    moveCursor(0, 6+len(thread_ids))
