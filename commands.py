@@ -1,11 +1,15 @@
+"""This file is used to define the commands used by Nihonium."""
+
+# This version of commands.py is extended to support Flerovium.
+# It should theorically work with Nihonium as well.
+
 import random, math, datetime, time, sys, os, versions, shutil, json
-from lxml import html
 
-# This file is used to define the commands used by Nihonium.
-
-__version__ = versions.Version(1, 2, 1)        # This defines the version of the module's framework.
-version = versions.Version(1, 7, 3)         # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
+__version__ = versions.Version(1, 3, 0)      # This defines the version of the module's framework.
+version = versions.Version(1, 8, 0)          # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 6, 1)  # This defines the minimum version of Nihonium needed to run these commands.
+flerovium_minver = versions.Version(0, 1, 0) # This defines the minimum version of Flerovium needed to run these commands.
+flerovium_compatible = True                  # This defines overall compatiblity with Flerovium.
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
     if timestamp is None: timestamp = datetime.datetime.now()
@@ -20,25 +24,31 @@ def logEntry(entry: str, timestamp=None): # Used to add entries to the log files
 
 # Add commands below here.
 #-------------------------
+
+
 def coin(bot_data, thread_data):
-    return "You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
+    return (":no_entry_sign: " if is_fl else "")+"You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
 def dice(bot_data, thread_data, num=1, size=20):
     num = int(float(num))
     size = int(float(size))
     hold = []
     doSanity = False # sanity check, prevent the post from getting too long
-    if (num < 0): return "You can't roll negative dice."
+    is_fl = False
+    if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
+    if (num < 0): return (":no_entry_sign: " if is_fl else "")+"You can't roll negative dice."
     elif (num == 0): return "You roll no dice, and get nothing."
-    elif (size < 0): return "You can't roll something that doesn't exist."
-    elif (size == 0): return "You roll " + str(num) + " pieces of air, and get air."
+    elif (size < 0): return (":no_entry_sign: " if is_fl else "")+"You can't roll something that doesn't exist."
+    elif (size == 0): return (":wind_chime: " if is_fl else "")+"You roll " + str(num) + " pieces of air, and get air."
     elif (num > math.floor(5000/math.floor(math.log(size)))): doSanity = True 
     for i in range(num):
         hold.append(random.randint(1, size))
     if doSanity:
-        return "You roll " + str(num) + "d" + str(size) + ", and get: [i]" + str(sum(hold)) + "[/i]"
+        if is_fl: return ":game_die: You roll " + str(num) + "d" + str(size) + ", and get: *" + str(sum(hold)) + "*"
+        else: return "You roll " + str(num) + "d" + str(size) + ", and get: [i]" + str(sum(hold)) + "[/i]"
     else:
-        return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code] (Total: [i]" + str(sum(hold)) + "[/i])"
+        if is_fl: return ":game_die: You roll " + str(num) + "d" + str(size) + ", and get: ```\n" + str(hold)[1:-1] + "\n``` (Total: _" + str(sum(hold)) + "_)"
+        else: return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code] (Total: [i]" + str(sum(hold)) + "[/i])"
 
 def bot(bot_data, thread_data):
     output = "Bot Statistics:"
@@ -49,6 +59,16 @@ def bot(bot_data, thread_data):
     output += "\n  Commands Parsed: " + str(bot_data["data"]["commands_parsed"])
     output += "\n  Valid Commands: " + str(bot_data["data"]["valid_commands"])
     output += "\n  Threads Parsed: " + str(bot_data["thread_ids"])
+    return output
+    
+def f_bot(bot_data, thread_data):
+    import discord
+    output = discord.Embed(title="Bot Statistics")
+    output.add_field(name="Version", value=str(bot_data["version"]))
+    output.add_field(name="Uptime", value=str(datetime.datetime.now() - bot_data["uptime"]))
+    output.add_field(name="Commands Found", value=str(bot_data["data"]["commands_found"]))
+    output.add_field(name="Commands Parsed", value=str(bot_data["data"]["commands_parsed"]))
+    output.add_field(name="Valid Commands", value=str(bot_data["data"]["valid_commands"]))
     return output
 
 def _help(bot_data, thread_data):
@@ -61,12 +81,27 @@ def _help(bot_data, thread_data):
     output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/nihonium/index.html]the webpage[/url]."
     return output
 
+def f_help(bot_data, thread_data):
+    import discord
+    output = discord.Embed(title="Commands")
+    output.add_field(name="nh!coin",value="Flips a coin and gives you the result.")
+    output.add_field(name="nh{dice|roll} num;int;1 sides;int;20",value="Rolls *num* *sides*-sided dice, and gives you the result.")
+    output.add_field(name="nh!bot",value="Returns various statistics about the bot.")
+    output.add_field(name="nh!help",value="Returns this help message.")
+    footer = "Arguments are in the form \"name;type;default\". Arguments with no default are required."
+    footer += "\nFor more information about commands (updated quicker), visit https://realicraft.github.io/nihonium/index.html."
+    footer += "\nFor more information about Flerovium, visit [link later]"
+    output.set_footer(text=footer)
+    return output
+
 def suggest(bot_data, thread_data, *suggestion):
-    if (len(suggestion) == 0): return "Your empty space has been recorded."
+    is_fl = False
+    if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
+    if (len(suggestion) == 0): return (":pencil: " if is_fl else "")+"Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
     with open("suggestions.txt", "a", encoding="utf-8") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
-    return "Your suggestion has been recorded."
+    return (":pencil: " if is_fl else "")+"Your suggestion has been recorded."
 
 def threadInfo(bot_data, thread_data):
     adate = datetime.datetime(thread_data["date"]["year"], thread_data["date"]["month"], thread_data["date"]["day"], thread_data["date"]["hour"], thread_data["date"]["minute"], thread_data["date"]["second"])
@@ -276,8 +311,11 @@ def estimate(bot_data, thread_data, tID=None):
     else:
         output = "Unknown thread ID: [i]" + str(tID) + "[/i]"
     return output
+
 #-------------------------
 # Add commands above here.
 
-# This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files, "file": files, "estimate": estimate}
+# This registers the commands for use by Nihonium and Flerovium.
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files, "file": files}
+flerovium_commands = {"bot": f_bot, "help": f_help}
+flerovium_inc_commands = {threadInfo, estimate}            # This is a list of functions that Flerovium doesn't support.

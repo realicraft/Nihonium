@@ -85,4 +85,7 @@ class Version:
         if hold == NotImplemented: return NotImplemented
         else: return not hold
 
+class VersionError(ValueError):
+	pass
+
 __version__ = Version(1)
