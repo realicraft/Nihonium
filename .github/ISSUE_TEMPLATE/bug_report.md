@@ -19,11 +19,8 @@ Describe what's meant to happen here.
 **Actual Behavior**
 Describe what actually happens here.
 
-**Thread Info**
-Give info about the thread the bug occurred in here. A good template is:
-- Thread Name: [If this gets...]
-- Thread ID: [5800]
-- Thread Types" ["postID", ...]
+**Bot Info**
+If neccesary, give some stats of your Discord bot. (like roles, permissions, etc.)
 
 **Additional Info**
 If there's any information relevant to the bug that wasn't given earlier, you can give it here.
