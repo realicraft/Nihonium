@@ -10,7 +10,7 @@ inc_commands = () # Commands this copy is incompatible with.
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.nihonium_minver) + ".")
 
-if (commands.alt_minvers[bot_info["id"]] > version):
+if (bot_info["id"] != "nihonium") and (commands.alt_minvers[bot_info["id"]] > version):
     raise ValueError("This " + bot_info["name"] + " install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.alt_minvers[bot_info["id"]]) + ".")
 
 with open("threadData.json", "r+", encoding="utf-8") as threadfile:
