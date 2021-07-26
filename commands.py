@@ -3,9 +3,10 @@ from lxml import html
 
 # This file is used to define the commands used by Nihonium.
 
-__version__ = versions.Version(1, 2, 1)        # This defines the version of the module's framework.
-version = versions.Version(1, 7, 3)         # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 6, 1) # This defines the minimum version of Nihonium needed to run these commands.
+__version__ = versions.Version(1, 3)        # This defines the version of the module's framework.
+version = versions.Version(1, 7, 4)         # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 8, 3) # This defines the minimum version of Nihonium needed to run these commands.
+alt_minvers = {"nihonium2": versions.Version(0, 8, 3)}                            # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
     if timestamp is None: timestamp = datetime.datetime.now()
@@ -23,6 +24,9 @@ def logEntry(entry: str, timestamp=None): # Used to add entries to the log files
 def coin(bot_data, thread_data):
     return "You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
+def coin2(bot_data, thread_data):
+    return "You flip a coin 2, and get " + random.choice(["heads 2", "tails 2"]) + "."
+
 def dice(bot_data, thread_data, num=1, size=20):
     num = int(float(num))
     size = int(float(size))
@@ -33,12 +37,10 @@ def dice(bot_data, thread_data, num=1, size=20):
     elif (size < 0): return "You can't roll something that doesn't exist."
     elif (size == 0): return "You roll " + str(num) + " pieces of air, and get air."
     elif (num > math.floor(5000/math.floor(math.log(size)))): doSanity = True 
-    for i in range(num):
+    for _ in range(num):
         hold.append(random.randint(1, size))
-    if doSanity:
-        return "You roll " + str(num) + "d" + str(size) + ", and get: [i]" + str(sum(hold)) + "[/i]"
-    else:
-        return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code] (Total: [i]" + str(sum(hold)) + "[/i])"
+    if doSanity: return "You roll " + str(num) + "d" + str(size) + ", and get: [i]" + str(sum(hold)) + "[/i]"
+    else: return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code] (Total: [i]" + str(sum(hold)) + "[/i])"
 
 def bot(bot_data, thread_data):
     output = "Bot Statistics:"
@@ -80,8 +82,7 @@ def threadInfo(bot_data, thread_data):
     output += "\n  Date: " + adate.strftime("%b %d, %Y %I:%M:%S %p")
     output += "\n  Posts/Day: ~" + str(round(ppd, 5))
     output += "\n  Posts/Hour: ~" + str(round(ppd/24, 5))
-    if "goal" in thread_data:
-        output += "\n  Goal: " + str(thread_data["goal"])
+    if "goal" in thread_data: output += "\n  Goal: " + str(thread_data["goal"])
     if "postID" in thread_data["types"]:
         output += "\n  Completion: " + str(round((thread_data["recentPost"]/thread_data["goal"])*100, 2)) + "% (" + str(thread_data["recentPost"]) + "/" + str(thread_data["goal"]) + ")"
         until = thread_data["goal"] / ppd
@@ -116,16 +117,16 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
             with open("files/" + filename + ".txt", "w+", encoding="utf-8") as file:
                 file.write(" ".join(other))
                 file.seek(0)
-                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
                 logEntry("Wrote to file '" + filename + ".txt'")
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "append":
         try:
             with open("files/" + filename + ".txt", "a+", encoding="utf-8") as file:
                 file.write(" ".join(other))
                 file.seek(0)
-                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
                 logEntry("Wrote to file '" + filename + ".txt'")
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "appendline":
         try:
@@ -133,8 +134,8 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
                 file.write("\n")
                 file.write(" ".join(other))
                 file.seek(0)
-                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
                 logEntry("Wrote to file '" + filename + ".txt'")
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "insert":
         try:
@@ -280,4 +281,7 @@ def estimate(bot_data, thread_data, tID=None):
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadInfo": threadInfo, "threadinfo": threadInfo, "text": text, "files": files, "file": files, "estimate": estimate}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadinfo": threadInfo, "text": text, "files": files, "file": files, "estimate": estimate}
+# This registers commands exclusive to certain bots.
+# Format: {"<id>": {"<command_name>": "<function>"}}
+ex_commands = {"nihonium2": {"coin2": coin2}}

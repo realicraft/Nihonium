@@ -3,10 +3,15 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 8, 2)
+version = versions.Version(0, 8, 3)
+bot_info = {"name": "Nihonium", "id": "nihonium"} # Info about the bot.
+inc_commands = () # Commands this copy is incompatible with.
 
 if (commands.nihonium_minver > version):
-    raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
+    raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.nihonium_minver) + ".")
+
+if (commands.alt_minvers[bot_info["id"]] > version):
+    raise ValueError("This " + bot_info["name"] + " install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.alt_minvers[bot_info["id"]]) + ".")
 
 with open("threadData.json", "r+", encoding="utf-8") as threadfile:
     post_ids = json.loads(threadfile.read())
@@ -67,7 +72,7 @@ def update_sig(_motd, xline, misc):
         full_sig += _motd2
         siggy[0] = _motd2
     full_sig += "\n---------------"
-    full_sig += "\nNihonum (version " + str(version) + ")"
+    full_sig += "\n" + bot_info["name"] + " (version " + str(version) + ")"
     full_sig += "\n[i]A bot for the TBGs.[/i]"
     if xline is None: xline = siggy[1]
     if xline is False:
@@ -83,7 +88,7 @@ def update_sig(_motd, xline, misc):
     _ = postReq("https://tbgforums.com/forums/profile.php?section=personality&id=1751", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
-    return random.choice(["test 1", "test 2", "beep"])
+    return random.choice(["beep", "a", str(version), ":)"])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")
@@ -154,7 +159,8 @@ def assemble_botdata():
     "cookies": cookies,
     "session": mainSession,
     "headers": headers,
-    "version": version}
+    "version": version,
+    "bot_info": bot_info}
 
 def assemble_threaddata(tID):
     return {**post_ids[str(tID)], **{"thread_id": tID}}
@@ -171,11 +177,12 @@ def parse_command(command, tID):
     shards2 = shards[1:]
     for i in range(len(shards2)):
         shards2[i] = html2.unescape(shards2[i])
-    if shards[0] in commands.commands:
+    if ((shards[0].lower() in commands.commands) or (shards[0].lower() in commands.ex_commands[bot_info["id"]])) and (shards[0].lower() not in inc_commands):
         validCommand()
         output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
         try:
-            output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
+            if shards[0].lower() in commands.commands: output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
+            else: output += commands.ex_commands[bot_info["id"]][shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
             data["commands_parsed"] += 1
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
@@ -285,12 +292,12 @@ def main_loop(tID, row):
 os.system('cls' if os.name == 'nt' else 'clear')
 #from https://stackoverflow.com/a/2330596
 if os.name == "nt":
-    os.system("title Nihonium (Version " + str(version) + ")")
+    os.system("title " + bot_info["name"] + " (Version " + str(version) + ")")
 else:
-    sys.stdout.write("\x1b]2;Nihonium (Version " + str(version) + ")\x07")
+    sys.stdout.write("\x1b]2;" + bot_info["name"] + " (Version " + str(version) + ")\x07")
 
 logEntry("Starting up...")
-writeText(0, 1, "Nihonium - A TBGs Bot")
+writeText(0, 1, "" + bot_info["name"] + " - A TBGs Bot")
 writeText(23, 1, "(Version " + str(version) + ")", 14)
 
 writeText(0, 2, "Logging in...")
