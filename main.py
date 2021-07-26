@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 8, 1)
+version = versions.Version(0, 8, 2)
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using is of version " + str(commands.nihonium_minver) + ".")
@@ -53,6 +53,37 @@ def postReq(*args, **kwargs):
     output = mainSession.post(*args, **kwargs)
     cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(mainSession.cookies))
     return output
+
+siggy = ["lang.en.motd", False, ""]
+
+#motd (function), "---..." (const), name/version (no pass), description (const), on/offline (bool), threads parsed (no pass), misc data (str)
+#use None to keep whatever was used previously
+def update_sig(_motd, xline, misc):
+    global siggy
+    full_sig = ""
+    if _motd is None: full_sig += siggy[0]
+    else:
+        _motd2 = _motd()
+        full_sig += _motd2
+        siggy[0] = _motd2
+    full_sig += "\n---------------"
+    full_sig += "\nNihonum (version " + str(version) + ")"
+    full_sig += "\n[i]A bot for the TBGs.[/i]"
+    if xline is None: xline = siggy[1]
+    if xline is False:
+        full_sig += "\nCurrently offline."
+        siggy[1] = False
+    else:
+        full_sig += "\nCurrently online. ([i]may not be guaranteed[/i])"
+        siggy[1] = True
+    full_sig += "\nThreads parsed: " + str(thread_ids)
+    if misc is None: misc = siggy[2]
+    else: siggy[2] = misc
+    full_sig += "\n" + misc
+    _ = postReq("https://tbgforums.com/forums/profile.php?section=personality&id=1751", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
+
+def motd():
+    return random.choice(["test 1", "test 2", "beep"])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")
@@ -216,6 +247,7 @@ def main_loop(tID, row):
         l.write(json.dumps(post_ids, indent=4))
     writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
     writeText(26, 5+(row), "  Working...  ")
+    clearLine(2)
     writeText(0, 2, "Parsing thread " + str(tID) + "...")
     parsed = 0
     output = ""
@@ -269,6 +301,8 @@ logEntry("Logged in successfully.")
 time.sleep(1.5)
 clearLine(2)
 
+update_sig(motd, True, None)
+
 for m in range(4, 6+len(thread_ids)):
     writeText(0, m, "█"*50)
 
@@ -289,6 +323,7 @@ async def true_main_loop():
                 await writeTextA(43, 5+i, "  WAIT ", 3)
                 await writeTextA(41, 5+i, "W", 3)
             bell()
+            update_sig(motd, None, None)
             for j in range(len(thread_ids)):
                 await writeTextA(0, 2, "Running loop...")
                 logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
@@ -311,7 +346,7 @@ async def true_main_loop():
                 logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
                 for k in range(int(sleeptime/l)):
                     await writeTextA(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
-                    asyncio.sleep(1)
+                    await asyncio.sleep(1)
             clearLine(2)
             await writeTextA(0, 2, "Logging in...")
             logEntry("Logging in...")
@@ -319,12 +354,13 @@ async def true_main_loop():
             _ = login_req #suppress unused variable warning
             await writeTextA(0, 2, "Logged in successfully.")
             logEntry("Logged in successfully.")
-            asyncio.sleep(1.5)
+            await asyncio.sleep(1.5)
             with open("threadData.json", "r+", encoding="utf-8") as threadfile:
                 post_ids = json.loads(threadfile.read())
             thread_ids = []
             for h in post_ids:
                 thread_ids.append(int(h))
+            update_sig(None, None, None)
             for m in range(4, 6+len(thread_ids)):
                 await writeTextA(0, m, "█"*50)
     except (KeyboardInterrupt, EOFError): #from https://stackoverflow.com/a/31131378
@@ -333,9 +369,12 @@ async def true_main_loop():
 async def outerloop():
     await asyncio.gather(*(true_main_loop(), clock()))
 
-async def final():
+def final():
+    clearLine(2)
+    writeText(1, 2, "Closing...")
+    update_sig(None, False, None)
     logEntry("Script closed")
-    await writeTextA(1, 2, "Closing.")
+    writeText(1, 2, "Closed.")
 
 async def exit_script():
     loop = asyncio.get_event_loop()
@@ -348,7 +387,7 @@ try:
     loop.run_until_complete(true_main_loop())
 except KeyboardInterrupt:
     clock_future.cancel()
-    loop.run_until_complete(final())
     asyncio.ensure_future(exit_script())
 finally:
+    final()
     moveCursor(0, 6+len(thread_ids))
