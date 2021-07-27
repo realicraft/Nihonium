@@ -3,8 +3,8 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 8, 3)
-bot_info = {"name": "Nihonium", "id": "nihonium"} # Info about the bot.
+version = versions.Version(0, 8, 4)
+bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 
 if (commands.nihonium_minver > version):
@@ -179,7 +179,7 @@ def parse_command(command, tID):
         shards2[i] = html2.unescape(shards2[i])
     if ((shards[0].lower() in commands.commands) or (shards[0].lower() in commands.ex_commands[bot_info["id"]])) and (shards[0].lower() not in inc_commands):
         validCommand()
-        output = "[quote=" + command["author"] + "]nh!" + command2 + "[/quote]\n"
+        output = "[quote=" + command["author"] + "]" + bot_info["prefix"] + command2 + "[/quote]\n"
         try:
             if shards[0].lower() in commands.commands: output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
             else: output += commands.ex_commands[bot_info["id"]][shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
@@ -241,7 +241,7 @@ def main_loop(tID, row):
             k["date"] = html.tostring(b[0]).decode("utf-8").split(">")[1][0:-3].replace("&#8201;", "")
             k["internal_postid"] = int(html.tostring(b[0]).decode("utf-8").split('"')[1].split("p")[-1])
             if k["internal_postid"] > data["recent_post"]: data["recent_post"] = k["internal_postid"]
-            if k["contents"].startswith("<p>nh!"):
+            if k["contents"].startswith("<p>" + bot_info["prefix"]):
                 need_to_parse.append(k)
                 data["commands_found"] += 1
                 writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")

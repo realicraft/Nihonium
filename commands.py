@@ -4,7 +4,7 @@ from lxml import html
 # This file is used to define the commands used by Nihonium.
 
 __version__ = versions.Version(1, 3)        # This defines the version of the module's framework.
-version = versions.Version(1, 7, 4)         # This defines the version of the user-added commands.
+version = versions.Version(1, 7, 5)         # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 8, 3) # This defines the minimum version of Nihonium needed to run these commands.
 alt_minvers = {"nihonium2": versions.Version(0, 8, 3)}                            # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
@@ -60,7 +60,7 @@ def _help(bot_data, thread_data):
     output += "\n[quote]  nh!bot\n    Returns various statistics about the bot.[/quote]"
     output += "\n[quote]  nh!help\n    Returns this help message.[/quote]"
     output += "\nArguments are in the form \"name;type;default\". Arguments with no default are required."
-    output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/nihonium/index.html]the webpage[/url]."
+    output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/Nihonium/index.html]the webpage[/url]."
     return output
 
 def suggest(bot_data, thread_data, *suggestion):
