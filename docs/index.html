@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Commands | Nihonium</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <div id="header">
+            <div id="head-left">
+                <h1>Nihonium</h1>
+            </div><div id="head-right">
+                <a href="index.html">Commands</a><p> | </p><a href="updates.html">Updates</a><p> | </p><a href="about.html">About</a><p> | </p><a href="suggestions.html">Suggestions</a><p> | </p><a href="https://github.com/realicraft/Nihonium">Repository</a>
+            </div>
+        </div>
+        <h3><em>A bot for the TBGs</em></h3>
+        <br /><p>All command names are case-insensitive.</p><br /><br />
+        <div class="command">
+            <pre>nh!coin</pre>
+            <p>Flips a coin and gives you the result.</p>
+        </div>
+        <div class="command">
+            <pre>nh!{dice|roll} num sides</pre>
+            <ul>
+                <li class="input_int"><em>num</em> (int >=1): The number of dice. Defaults to 1.</li>
+                <li class="input_int"><em>sides</em> (int >=1): The number of sides on the dice. Defaults to 20.</li>
+            </ul>
+            <p>Rolls <em>num</em> <em>sides</em>-sided dice, and gives you the result.</p>
+        </div>
+        <div class="command">
+            <pre>nh!bot</pre>
+            <p>Returns various statistics about the bot.</p>
+        </div>
+        <div class="command">
+            <pre>nh!help</pre>
+            <p>Returns a list of the commands Nihonium supports.</p>
+        </div>
+        <div class="command">
+            <pre>nh!suggest *suggestion</pre>
+            <ul>
+                <li class="input_str"><em>*suggestion</em> (str, allows spaces): The suggestion you want to make.</li>
+            </ul>
+            <p>Make a suggestion on what to add to Nihonium.</p>
+        </div>
+        <div class="command">
+            <pre>nh!threadInfo</pre>
+            <p>Returns a list of various information about the thread the command was called in.</p>
+        </div>
+        <div class="command">
+            <pre>nh!text command filename *other</pre>
+            <ul>
+                <li class="input_str"><em>command</em> (str, no spaces): The subcommand to use. Defaults to <em>read</em>.</li>
+                <li class="input_fn"><em>filename</em> (filename, no extension): The file to use. Defaults to <em>_</em>.</li>
+                <li class="input_vary"><em>*other</em> (varies): Varies by subcommand. May be optional.</li>
+            </ul>
+            <p>A set of subcommands for manipulating text files.<br />Commands:</p>
+            <div class="command">
+                <pre>read</pre>
+                <p>Read the contents of the file. <em>*other</em> is unused.</p>
+            </div>
+            <div class="command">
+                <pre>write</pre>
+                <ul>
+                    <li class="input_str"><em>*content</em> (str, allows spaces): What to write to the file.</li>
+                </ul>
+                <p>Write to the file, overriding whatever was present before.</p>
+            </div>
+            <div class="command">
+                <pre>append</pre>
+                <ul>
+                    <li class="input_str"><em>*content</em> (str, allows spaces): What to append to the file.</li>
+                </ul>
+                <p>Append to the end of file. Adds no spacing. Due to the way it's implimented, creates the file if it doesn't already exist.</p>
+            </div>
+            <div class="command">
+                <pre>appendline</pre>
+                <ul>
+                    <li class="input_str"><em>*content</em> (str, allows spaces): What to append to the file.</li>
+                </ul>
+                <p>Acts like <em>append</em>, but adds a newline before <em>*content</em>.</p>
+            </div>
+            <div class="command">
+                <pre>insert</pre>
+                <ul>
+                    <li class="input_int"><em>char</em> (int >=0): Where to insert <em>*content</em> before.</li>
+                    <li class="input_str"><em>*content</em> (str, allows spaces): What to insert into the file.</li>
+                </ul>
+                <p>Insert <em>*content</em> into the file before the position specified by <em>char</em>.</p>
+            </div>
+            <div class="command">
+                <pre>create</pre>
+                <p>Create the file if it doesn't already exist. <em>*other</em> is unused.</p>
+            </div>
+            <div class="command">
+                <pre>duplicate</pre>
+                <p>Duplicate the file. The new file is named "copy_<em>filename</em>". <em>*other</em> is unused.</p>
+            </div>
+            <div class="command">
+                <pre>delete</pre>
+                <p>Delete the file. <em>*other</em> is unused.</p>
+            </div>
+        </div>
+        <div class="command">
+            <pre>nh!{files|file} command filename *other</pre>
+            <ul>
+                <li class="input_str"><em>command</em> (str, no spaces): The subcommand to use. Defaults to <em>read</em>.</li>
+                <li class="input_fn"><em>filename</em> (filename, requires extension): The file to use. Defaults to <em>_.txt</em>.</li>
+                <li class="input_vary"><em>*other</em> (varies): Varies by subcommand. May be optional.</li>
+            </ul>
+            <p>A set of subcommands for manipulating files.<br />Commands:</p>
+            <div class="command">
+                <pre>read</pre>
+                <p>Read the contents of the file with a hex viewer. <em>*other</em> is unused.</p>
+            </div>
+            <div class="command">
+                <pre>list</pre>
+                <p>List all files. <em>*other</em> and <em>filename</em> are both unused.</p>
+            </div>
+        </div>
+        <div class="command">
+            <pre>nh!estimate tID</pre>
+            <ul>
+                <li class="input_int"><em>tID</em> (int): The thread you want an estimation for. Defaults to the current thread.</li>
+            </ul>
+            <p>Give an estimation on when a thread will be completed. Not available on some threads.</p>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </body>
+</html>

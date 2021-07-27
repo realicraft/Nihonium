@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Suggestions | Nihonium</title>
+        <link rel="stylesheet" href="main.css">
+        <style>
+            .added {
+                color: #1fdf1f
+            }
+            .considered {
+                color: #cfcf0f
+            }
+            .soon {
+                color: #1f1fdf
+            }
+            .delayed {
+                color: #0f0f6f
+            }
+            .denied {
+                color: #df1f1f
+            }
+            .undecided {
+                color: #9f9f9f
+            }
+            .suggestion_num {
+                background-color: #3f3f3f;
+                border: #0f0f0f solid 4px;
+                border-radius: 10px;
+                color: #fff;
+                display: inline-block;
+                font-weight: bold;
+                font-size: 11px;
+            }
+            .command pre {
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div id="head-left">
+                <h1>Nihonium</h1>
+            </div><div id="head-right">
+                <a href="index.html">Commands</a><p> | </p><a href="updates.html">Updates</a><p> | </p><a href="about.html">About</a><p> | </p><a href="suggestions.html">Suggestions</a><p> | </p><a href="https://github.com/realicraft/Nihonium">Repository</a>
+            </div>
+        </div>
+        <h3><em>A bot for the TBGs</em></h3>
+        <br><br>
+        <h4>Actual Suggestions</h4>
+        <div class="command">
+            <div class="suggestion_num">S1</div>
+            <pre>Prediction of advance or something</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>As of 0.5.2, <em>nh!threadInfo</em> has a section for Estimated Completion Date.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S2</div>
+            <pre>allow the bot to post in tgoradaswh</pre><br />
+            <p>Status: </p><p class="considered">Considered</p><br />
+            <p>Beyond the ability to roll a dice, it's unclear what advantage this would have.</p><br />
+            <p><em>Update 1 (Jul. 1, '21):</em> I might make it so that certain threads can only use certain commands.</p>
+        </div>
+        <!--
+            48m        | 48
+            36m        | 36
+            22h 10m    | 1330
+            20h 9m     | 1209
+            3h 2m      | 182
+            23h 59m    | 1439
+            3d 18h 11m | 5411
+            5h 32m     | 332
+        -->
+        <div class="command">
+            <div class="suggestion_num">S3</div>
+            <pre>Allow rolling on TBGs Play monopoly</pre><br />
+            <p>Status: </p><p class="considered">Considered</p><br />
+            <p>The ability to call a command and have dice be rolled would be useful, but the bot only posts at a speed of once every 30 minutes, likely too slow for gameplay.</p>
+            <p><em>Update 1 (Jul. 4, '21):</em> After checking pg. 20 of the topic, it looks like gameplay is surprisingly slow, with the average distance between rolls on pg. 20 being <em>1,248</em>.
+                (Though this may not be accurate, as I measured the distance by hand.)</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S4</div>
+            <pre>Post reminder (like "notify me at post 100000 to do something")</pre><br />
+            <p>Status: </p><p class="undecided">Undecided</p><br />
+            <p>This could be useful, but would require a database or JSON file to keep track of reminders, and there's a risk of reminders being dropped due to crashes.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S5</div>
+            <pre>make the bot respond faster</pre><br />
+            <p>Status: </p><p class="considered">Considered</p><br />
+            <p>The current speed is quite slow, but this is to prevent inflating the view count of the threads, which is unavoidable with the way the bot gathers data.
+                On average, the bot views around 2 or 3 pages per visit, though this could be increased by downtime or spikes in activity.</p><br />
+            <p><em>Update 1 (Jul. 1, '21):</em> I've been thinking about it some more, and 2 or 3 pages is a really small number. It takes about 10 seconds to reload a page three times.
+                If I do decrease the delay, it'll probably be to 15 or 20 minutes.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S6</div>
+            <pre>transporting posts from here to discord and vice versa (i'm working on this)</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>No. The way the bot's code is formatted right now is very incompatible with the format of a Discord bot, and would likely require completely restructureing the code to support this.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S7</div>
+            <pre>official nihonium thread (just use postID 0 for now)</pre><br />
+            <p>Status: </p><p class="delayed">Delayed</p><br />
+            <p>I'll probably do that once there are more commands, but for now I'll just use PostID 0, like you said.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S8</div>
+            <pre>change the &lt;title&gt; of Suggestions page</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>Oh, did I forget to do that? My bad.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S9</div>
+            <pre>make nihonium's website link on here be nihonium's webpage</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>Done.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S10</div>
+            <pre>Birthday command</pre><br />
+            <p>Status: </p><p class="considered">Considered</p><br />
+            <p>Not sure how this would be useful, but it shouldn't be <em>that</em> hard to implement.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S11</div>
+            <pre>add text command documentation to the site</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>Sorry about being slow on that.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S12</div>
+            <pre>bump command</pre><br />
+            <p>Status: </p><p class="soon">Soon</p><br />
+            <p>Making a bump command for the current thread would be easy (albeit redundant), but making a bump command for <em>any</em> thread would require some extra thought.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S13</div>
+            <pre>Music in official website</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>What exactly do you mean by this?</p><br />
+            <p><em>Update 1 (Jul. 4, '21):</em></p>
+            <div class="command">
+                <b style="font-size: 12px;"><a href="https://tbgforums.com/forums/profile.php?id=1628">Byron_Inc_TBG</a> <a href="https://tbgforums.com/forums/viewtopic.php?pid=561582#p561582">wrote</a>:</b>
+                <br />Add music<br />So when you open nihonium page<br />There's music
+            </div>
+            <p>I'm not sure I see what the point is, nor do I have an idea of what the music would be. It would also probably be annoying.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S14</div>
+            <pre>xkcd</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>While there's probably some API for it, xkcd isn't the most <em>kid-friendly</em>, so no.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S15</div>
+            <pre>Rewrite entire code to fit as a Discord bot</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>N-no! That would take forever!</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S16</div>
+            <pre>Show sum of dies rolled (like Grogar)</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>As of 0.6.7, <em>nh!dice</em> now shows the total number rolled.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S17</div>
+            <pre>replace &amp;nbsp; with a space after splitting into subcommands</pre><br />
+            <p>Status: </p><p class="soon">Soon</p><br />
+            <p>Shouldn't be <em>too</em> difficult.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">S18</div>
+            <pre>set up miniTWOW (search it up of you don't know)</pre><br />
+            <p>Status: </p><p class="undecided">Undecided</p><br />
+            <p>As a matter of fact, I <em>do</em> know. However, setting one up would be somewhat complicated, and might require a database.</p>
+        </div>
+        <!--
+            J1  this is a test
+            J2  add vertical slabs
+            J3  *where do the suggestions go?
+            S1  Prediction of advance or something
+            J4  more cave ambient sounds
+            S2  allow the bot to post in tgoradaswh
+            J5  add cloud lists
+            S3  Allow rolling on TBGs Play monopoly
+            J6
+            S4  Post reminder (like "notify me at post 100000 to do something")
+            S5  make the bot respond faster
+            ---
+            S6  transporting posts from here to discord and vice versa (i'm working on this)
+            J7  get nihonium to top 100 posters
+            S7  official nihonium thread (just use postID 0 for now)
+            J8  invite Rick Astley to rickroll us
+            J9  Flerovium
+            S8  change the &lt;title&gt; of Suggestions page
+            J10 testing <>& unescaping
+            ---
+            S9  make nihonium's website link on here be nihonium's webpage
+            J11 <img src="https://tbgforums.com/forums/img/smilies/smile.png" width="15" height="15" alt="smile">
+            S10 Birthday command
+            J12 I am offended how my "Flerovium" suggestion was treated as a joke suggestion. Flerovium is the element after Nihonium.
+            S11 add text command documentation to the site
+            S12 bump command
+            J13 make Nihonium sing the ABC song
+            S13 Music in official website
+            ---
+            J14 create asdf
+            S14 xkcd
+            J15 make Nihonum speak Spanish
+            S15 Rewrite entire code to fit as a Discord bot
+            S16 Show sum of dies rolled (like Grogar)
+            J16 TypeError: can only concatenate str (not "int") to str
+            J17 tseggus!hn
+            S17 replace &nbsp; with a space after splitting into subcommands
+            J18 reject this suggestion
+            S18 set up miniTWOW (search it up of you don't know)
+        -->
+        <h4>Joke Suggestions</h4>
+        <div class="command">
+            <div class="suggestion_num">J1</div>
+            <pre>this is a test</pre><br />
+            <p>looks like it works</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J2</div>
+            <pre>add vertical slabs</pre><br />
+            <p>Hold on while I relay this to Mojang.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J3</div>
+            <pre>*where do the suggestions go?</pre><br />
+            <p>To <em>suggestions.txt</em>, and eventually here.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J4</div>
+            <pre>more cave ambient sounds</pre><br />
+            <p>You get <em>bell()</em>, take it or leave it.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J5</div>
+            <pre>add cloud lists</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>Databases are hard.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J6</div>
+            <pre>&lt;empty line&gt;</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>What an amazing suggestion!</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J7</div>
+            <pre>get nihonium to top 100 posters</pre><br />
+            <p>Status: </p><p class="delayed">Delayed</p><br />
+            <p>At ~1 post every 30 minutes, that might take a while.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J8</div>
+            <pre>invite Rick Astley to rickroll us</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>Sorry, don't know his number.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J9</div>
+            <pre>Flerovium</pre><br />
+            <p>...what?</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J10</div>
+            <pre>testing &lt;&gt;&amp; unescaping</pre><br />
+            <p>Looks like it worked.</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J11</div>
+            <pre>&lt;img src="https://tbgforums.com/forums/img/smilies/smile.png" width="15" height="15" alt="smile"&gt;</pre><br />
+            <p><img src="https://tbgforums.com/forums/img/smilies/smile.png" width="15" height="15" alt="smile"></p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J12</div>
+            <pre>I am offended how my "Flerovium" suggestion was treated as a joke suggestion. Flerovium is the element after Nihonium.</pre><br />
+            <p>but what else am i supposed to name the section?</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J13</div>
+            <pre>make Nihonium sing the ABC song</pre><br />
+            <p>Status: </p><p class="delayed">Delayed</p><br />
+            <p>...with what? And where?</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J14</div>
+            <pre>create asdf</pre><br />
+            <p><em>Did you mean</em>: <b><em>nh!text create asdf</em></b>?</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J15</div>
+            <pre>make Nihonum speak Spanish</pre><br />
+            <p>Status: </p><p class="denied">Denied</p><br />
+            <p>It doesn't even speak English??</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J16</div>
+            <pre>TypeError: can only concatenate str (not "int") to str</pre><br />
+            <p>make sure to use <em>str()</em></p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J17</div>
+            <pre>tseggus!hn</pre><br />
+            <p>.noitseggus taerg a tahW</p>
+        </div>
+        <div class="command">
+            <div class="suggestion_num">J18</div>
+            <pre>reject this suggestion</pre><br />
+            <p>Status: </p><p class="added">Added</p><br />
+            <p>Nope.</p>
+        </div>
+        <!--
+            J1  this is a test
+            J2  add vertical slabs
+            J3  *where do the suggestions go?
+            S1  Prediction of advance or something
+            J4  more cave ambient sounds
+            S2  allow the bot to post in tgoradaswh
+            J5  add cloud lists
+            S3  Allow rolling on TBGs Play monopoly
+            J6
+            S4  Post reminder (like "notify me at post 100000 to do something")
+            S5  make the bot respond faster
+            ---
+            S6  transporting posts from here to discord and vice versa (i'm working on this)
+            J7  get nihonium to top 100 posters
+            S7  official nihonium thread (just use postID 0 for now)
+            J8  invite Rick Astley to rickroll us
+            J9  Flerovium
+            S8  change the &lt;title&gt; of Suggestions page
+            J10 testing <>& unescaping
+            ---
+            S9  make nihonium's website link on here be nihonium's webpage
+            J11 <img src="https://tbgforums.com/forums/img/smilies/smile.png" width="15" height="15" alt="smile">
+            S10 Birthday command
+            J12 I am offended how my "Flerovium" suggestion was treated as a joke suggestion. Flerovium is the element after Nihonium.
+            S11 add text command documentation to the site
+            S12 bump command
+            J13 make Nihonium sing the ABC song
+            S13 Music in official website
+            ---
+            J14 create asdf
+            S14 xkcd
+            J15 make Nihonum speak Spanish
+            S15 Rewrite entire code to fit as a Discord bot
+            S16 Show sum of dies rolled (like Grogar)
+            J16 TypeError: can only concatenate str (not "int") to str
+            J17 tseggus!hn
+            S17 replace &nbsp; with a space after splitting into subcommands
+            J18 reject this suggestion
+            S18 set up miniTWOW (search it up of you don't know)
+        -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Updates | Nihonium</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <div id="header">
+            <div id="head-left">
+                <h1>Nihonium</h1>
+            </div><div id="head-right">
+                <a href="index.html">Commands</a><p> | </p><a href="updates.html">Updates</a><p> | </p><a href="about.html">About</a><p> | </p><a href="suggestions.html">Suggestions</a><p> | </p><a href="https://github.com/realicraft/Nihonium">Repository</a>
+            </div>
+        </div>
+        <h3><em>A bot for the TBGs</em></h3>
+        <br><br>
+        <div class="command">
+            <b>0.6.x</b>
+            <div class="command">
+                <pre>0.6.5</pre>
+                <p>Fixed issue with <em>nh!text delete</em> not returning an output.<br />Fixed issue with non-ASCII characters failing to be saved to files.</p>
+            </div>
+            <div class="command">
+                <pre>0.6.4</pre>
+                <p>Fixed a spacing issue with <em>nh!files read</em>.<br />Added a special character for space.<br />
+                The replacement characters used in <em>nh!files read</em> have been changed to ones present in <span style="font-family: Consolas;">Consolas</span>.<br />
+                All HTML escape codes are now unescaped, not just <em>&amp;lt;</em>, <em>&amp;gt;</em>, and <em>&amp;amp;</em>.</p>
+            </div>
+            <div class="command">
+                <pre>0.6.3</pre>
+                <p>Added <em>nh!text appendline</em>.<br /><em>nh!files read</em> now has a text viewer.</p>
+            </div>
+            <div class="command">
+                <pre>0.6.2</pre>
+                <p>Added <em>nh!text duplicate</em>.<br />Fixed a crash bug.<br />Fixed issue with <em>nh!text duplicate</em> not returning an output.<br />
+                The console now makes a sound at the start of a parse-cycle.<br />Added <em>nh!files</em> with two subcommands (<em>read</em>, <em>list</em>.)<br />
+                <em>nh!text</em> now has its arguments in the order (subcommand, filename.)</p>
+            </div>
+            <div class="command">
+                <pre>0.6.1</pre>
+                <p>&lt;, &gt;, and &amp; are now unescaped in <em>main.py</em>, not <em>commands.py</em>.<br />Fixed a crash bug.</p>
+            </div>
+            <div class="command">
+                <pre>0.6.0</pre>
+                <p>Fixed bug causing <em>nh!suggest</em> to fail if any escaped characters were present.<br />
+                Added <em>nh!text</em> and its subcommands (<em>read</em>, <em>write</em>, <em>append</em>, <em>insert</em>, <em>create</em>, <em>delete</em>.)<br />
+                The list of thread IDs is now updated at the end of a parse-cycle.<br />More information about a post is gathered.<br />Commands can now create log entries.<br />
+                Added an indicator for the size of the log file.</p>
+            </div>
+        </div>
+        <div class="command">
+            <b>0.5.x</b>
+            <div class="command">
+                <pre>0.5.5</pre>
+                <p>Logs are now in a directory, split by date, rather than in a single file.<br /><em>nh!suggest</em> now unescapes &lt;, &gt;, and &amp;.</p>
+            </div>
+            <div class="command">
+                <pre>0.5.4</pre>
+                <p>Added additional status lines.<br />The dictionary for thread information is now updated at the end of a parse-cycle.</p>
+            </div>
+            <div class="command">
+                <pre>0.5.3</pre>
+                <p>Fixed bug that prevented <em>nh!threadInfo</em> from functioning.<br />Made <em>nh!threadInfo</em> only give estimated completion date for threads with the postID type.<br />
+                Fixed issue that caused the est. completion date to have the same time as the first post.<br />Added <em>nh!threadinfo</em> as an alias for <em>nh!threadInfo</em>.<br />
+                <em>nh!threadInfo</em> now includes the date, posts per day, and posts per hour of a thread.</p>
+            </div>
+            <div class="command">
+                <pre>0.5.2</pre>
+                <p><em>nh!threadInfo</em> now gives estimated completion date & time.<br />Added the date of a threads first post to <em>threadData.json</em></p>
+            </div>
+            <div class="command">
+                <pre>0.5.1</pre>
+                <p>Fixed a crash bug.<br />Fixed bug that prevented <em>nh!threadInfo</em> from functioning.<br />Adjusted console output.</p>
+            </div>
+            <div class="command">
+                <pre>0.5.0</pre>
+                <p>Added a command for thread information.</p>
+            </div>
+        </div>
+        <div class="command">
+            <b>0.4.x</b>
+            <div class="command">
+                <pre>0.4.3</pre>
+                <p>Added additional thread information to <em>postIDs.json</em> (renamed to <em>threadData.json</em>)</p>
+            </div>
+            <div class="command">
+                <pre>0.4.2</pre>
+                <p>Added a suggestions command.</p>
+            </div>
+            <div class="command">
+                <pre>0.4.1</pre>
+                <p>Fixed bugs that prevented <em>nh!dice</em> and <em>nh!bot</em> from functioning.<br />Added a log file.<br />Added a help command.</p>
+            </div>
+            <div class="command">
+                <pre>0.4.0</pre>
+                <p>The console title now gets changed when running Nihonium.<br />A module was added for managing version numbers.<br />Fixed two version number-related crash bugs.<br />
+                Moved commands into a seperate module.<br />Added an error catcher for commands.</p>
+            </div>
+        </div>
+        <div class="command">
+            <b>0.3.x</b>
+            <div class="command">
+                <pre>0.3.4</pre>
+                <p>Added a section to the console output for the status of the post's http request.</p>
+            </div>
+            <div class="command">
+                <pre>0.3.3</pre>
+                <p>Added an unused bell function.<br />Fixed a crash bug caused by a post having multiple paragraphs.<br /><em>postIDs.json</em> is now updated at the end of parsing a thread.</p>
+            </div>
+            <div class="command">
+                <pre>0.3.2</pre>
+                <p>A clock was added in the upper-right corner of the console.</p>
+            </div>
+            <div class="command">
+                <pre>0.3.1</pre>
+                <p>This release fixed 3 seperate crash bugs. An additional 2 crash bugs were fixed in later commits.</p>
+            </div>
+            <div class="command">
+                <pre>0.3.0</pre>
+                <p><em>nh!bot</em> was updated with additional information.<br />Fixed a crash bug.</p>
+            </div>
+        </div>
+        <div class="command">
+            <b>0.2.x</b>
+            <div class="command">
+                <pre>0.2.4</pre>
+                <p><em>nh!dice</em> gained <em>nh!roll</em> as an alias.</p>
+            </div>
+            <div class="command">
+                <pre>0.2.3</pre>
+                <p>Added <em>nh!bot.</em><br />Adjusted console output.<br />0.2.2 is not present in the repository, and either never existed or has been lost to the sands of time.</p>
+            </div>
+            <div class="command">
+                <pre>0.2.1</pre>
+                <p>The oldest update on the repository, updates before this have been lost to the sands of time.</p>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </body>
+</html>
