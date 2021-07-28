@@ -312,11 +312,11 @@ def rollADice(bot_data, thread_data, user_data):
             output += ", and gained " + str(hold) + " point" + ("s" if hold != 1 else "") + "."
         elif result == 4:
             hold = random.randint(1, 10)
-            roll_data[random.choose(roll_data2.keys())]["points"] -= hold
+            roll_data[random.choice(roll_data2.keys())]["points"] -= hold
             output += ", causing someone random to lose " + str(hold) + " point" + ("s" if hold != 1 else "") + "."
         elif result == 5:
             hold = random.randint(1, 5)
-            roll_data[random.choose(roll_data2.keys())]["points"] -= hold
+            roll_data[random.choice(roll_data2.keys())]["points"] -= hold
             roll_data[uID]["points"] += hold
             output += ", causing someone random to lose " + str(hold) + " point" + ("s" if hold != 1 else "") + ", and for you to recieve said lost points."
         elif result == 6:
@@ -328,7 +328,7 @@ def rollADice(bot_data, thread_data, user_data):
             output += ", gained one point, and get to roll again!\n"
         elif result == 8:
             roll_data[uID]["points"] += 1
-            roll_data[random.choose(roll_data2.keys())]["points"] += 2
+            roll_data[random.choice(roll_data2.keys())]["points"] += 2
             output += ", and gained one point, while someone random gained two."
         elif result == 9:
             hold = (random.randint(1, random.randint(1, 60)))
