@@ -3,11 +3,11 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 8, 5)
+version = versions.Version(0, 9, 0)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
-dis_commands = () # Commands disabled in this copy. Overridden by exc_commands.
-exc_commands = {} # Commands exclusive to specific threads. In the format {"<threadID>": ("<command_name>")}
+dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
+exc_commands = {"5790": ("rolladice", "rolldice")} # Commands exclusive to specific threads. In the format {"<threadID>": ("<command_name>")}
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.nihonium_minver) + ".")
@@ -167,6 +167,10 @@ def assemble_botdata():
 def assemble_threaddata(tID):
     return {**post_ids[str(tID)], **{"thread_id": tID}}
 
+def assemble_userdata(command):
+    return {"name": command["author"],
+    "uID": command["authorID"]}
+
 def parse_command(command, tID):
     global data
     global post_ids
@@ -183,8 +187,8 @@ def parse_command(command, tID):
         validCommand()
         output = "[quote=" + command["author"] + "]" + bot_info["prefix"] + command2 + "[/quote]\n"
         try:
-            if shards[0].lower() in commands.commands: output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
-            else: output += commands.ex_commands[bot_info["id"]][shards[0]](assemble_botdata(), assemble_threaddata(tID), *shards2)
+            if shards[0].lower() in commands.commands: output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
+            else: output += commands.ex_commands[bot_info["id"]][shards[0]](assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
             data["commands_parsed"] += 1
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
@@ -232,13 +236,14 @@ def main_loop(tID, row):
             if (j + (i*25) + 1 <= post_ids[str(tID)]["recentPost"]):
                 j += 1
                 continue
-            k = {"author": "", "contents": "", "postID": 0, "date": "", "internal_postid": 0}
+            k = {"author": "", "authorID": 0, "contents": "", "postID": 0, "date": "", "internal_postid": 0}
             y = x[j].xpath('.//div/div[1]/div/div[2]/div[1]') #get contents of post
             z = x[j].xpath('.//div/div[1]/div/div[1]/dl/dt/strong/a') #get user who posted the post
             a = x[j].xpath('.//h2/span/span') #get postid
             b = x[j].xpath('.//h2/span/a') #get post date/internal post id
             k["contents"] = html.tostring(y[0]).decode("utf-8")[28:-18]
             k["author"] = html.tostring(z[0]).decode("utf-8").split(">")[1][0:-3]
+            k["authorID"] = int(html.tostring(z[0]).decode("utf-8").split('"')[1].split("=")[1])
             k["postID"] = int(html.tostring(a[0]).decode("utf-8")[20:-8])
             k["date"] = html.tostring(b[0]).decode("utf-8").split(">")[1][0:-3].replace("&#8201;", "")
             k["internal_postid"] = int(html.tostring(b[0]).decode("utf-8").split('"')[1].split("p")[-1])

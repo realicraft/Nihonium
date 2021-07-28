@@ -3,10 +3,10 @@ from lxml import html
 
 # This file is used to define the commands used by Nihonium.
 
-__version__ = versions.Version(1, 3)        # This defines the version of the module's framework.
+__version__ = versions.Version(1, 3, 1)     # This defines the version of the module's framework.
 version = versions.Version(1, 7, 5)         # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 8, 3) # This defines the minimum version of Nihonium needed to run these commands.
-alt_minvers = {"nihonium2": versions.Version(0, 8, 3)}                            # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
+nihonium_minver = versions.Version(0, 9, 0) # This defines the minimum version of Nihonium needed to run these commands.
+alt_minvers = {"nihonium2": versions.Version(0, 9, 0)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
     if timestamp is None: timestamp = datetime.datetime.now()
@@ -18,16 +18,17 @@ def logEntry(entry: str, timestamp=None): # Used to add entries to the log files
 # If a command raises TypeError, ValueError, KeyError, IndexError, OverflowError, or ZeroDivisionError, it will be caught by Nihonium. Other errors will not be caught.
 # The first argument a command recieves will contain information about the bot.
 # The second argument a command recieves will contain information about the thread the command was called in.
+# The third argument a command recieves will contain information about the user who called the command.
 
 # Add commands below here.
 #-------------------------
-def coin(bot_data, thread_data):
+def coin(bot_data, thread_data, user_data):
     return "You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
-def coin2(bot_data, thread_data):
+def coin2(bot_data, thread_data, user_data):
     return "You flip a coin 2, and get " + random.choice(["heads 2", "tails 2"]) + "."
 
-def dice(bot_data, thread_data, num=1, size=20):
+def dice(bot_data, thread_data, user_data, num=1, size=20):
     num = int(float(num))
     size = int(float(size))
     hold = []
@@ -42,7 +43,7 @@ def dice(bot_data, thread_data, num=1, size=20):
     if doSanity: return "You roll " + str(num) + "d" + str(size) + ", and get: [i]" + str(sum(hold)) + "[/i]"
     else: return "You roll " + str(num) + "d" + str(size) + ", and get: [code]" + str(hold)[1:-1] + "[/code] (Total: [i]" + str(sum(hold)) + "[/i])"
 
-def bot(bot_data, thread_data):
+def bot(bot_data, thread_data, user_data):
     output = "Bot Statistics:"
     output += "\n  Version: " + str(bot_data["version"])
     output += "\n  Uptime: " + str(datetime.datetime.now() - bot_data["uptime"])
@@ -53,24 +54,29 @@ def bot(bot_data, thread_data):
     output += "\n  Threads Parsed: " + str(bot_data["thread_ids"])
     return output
 
-def _help(bot_data, thread_data):
+def _help(bot_data, thread_data, user_data):
     output = "Commands:"
     output += "\n[quote]  nh!coin\n    Flips a coin and gives you the result.[/quote]"
     output += "\n[quote]  nh{dice|roll} num;int;1 sides;int;20\n    Rolls [i]num[/i] [i]sides[/i]-sided dice, and gives you the result.[/quote]"
     output += "\n[quote]  nh!bot\n    Returns various statistics about the bot.[/quote]"
     output += "\n[quote]  nh!help\n    Returns this help message.[/quote]"
-    output += "\nArguments are in the form \"name;type;default\". Arguments with no default are required."
+    output += "\n[quote]  nh!suggest suggestion;str;allows_spaces\n   Make a suggestion.[/quote]"
+    output += "\n[quote]  nh!threadInfo\n    Get information about the current thread.[/quote]"
+    output += "\n[quote]  nh!text command;str;no_spaces;'read' filename;str;no_spaces;'_' other;varies\n    Text file modificaton.[/quote]"
+    output += "\n[quote]  nh!{file|files} command;str;no_spaces;'read' filename;str;no_spaces;'_.txt' other;varies\n    File modificaton.[/quote]"
+    output += "\n[quote]  nh!estimate tID;int;<current_thread>\n    Estimates when a thread will be completed.[/quote]"
+    output += "\nArguments are in the form \"name;type;spaces;default\". Arguments with no default are required, [i]spaces[/i] is only present for strings."
     output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/Nihonium/index.html]the webpage[/url]."
     return output
 
-def suggest(bot_data, thread_data, *suggestion):
+def suggest(bot_data, thread_data, user_data, *suggestion):
     if (len(suggestion) == 0): return "Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
     with open("suggestions.txt", "a", encoding="utf-8") as suggestFile:
         suggestFile.write(suggestion_full + "\n")
     return "Your suggestion has been recorded."
 
-def threadInfo(bot_data, thread_data):
+def threadInfo(bot_data, thread_data, user_data):
     adate = datetime.datetime(thread_data["date"]["year"], thread_data["date"]["month"], thread_data["date"]["day"], thread_data["date"]["hour"], thread_data["date"]["minute"], thread_data["date"]["second"])
     bdate = datetime.datetime.now()
     diff = bdate - adate
@@ -90,7 +96,7 @@ def threadInfo(bot_data, thread_data):
         output += "\n  Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
     return output
 
-def text(bot_data, thread_data, command="read", filename="_", *other):
+def text(bot_data, thread_data, user_data, command="read", filename="_", *other):
     # commands:
     # read       | outputs the contents of the file
     # write      | replaces the contents of the file with " ".join(other)
@@ -166,7 +172,7 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
             except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     else: return "Invalid command: " + command
 
-def files(bot_data, thread_data, command="read", filename="_.txt", *other):
+def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *other):
     # commands:
     # read      | read the hex data of a file
     # rename    | rename a file
@@ -252,7 +258,7 @@ def files(bot_data, thread_data, command="read", filename="_.txt", *other):
             except IOError: return "No file by the name [i]" + filename + "[/i] exists."
     else: return "Invalid command: " + command
 
-def estimate(bot_data, thread_data, tID=None):
+def estimate(bot_data, thread_data, user_data, tID=None):
     if tID is None:
         tID = thread_data["thread_id"]
     with open("threadData.json", "r+", encoding="utf-8") as threadfile:
@@ -277,11 +283,71 @@ def estimate(bot_data, thread_data, tID=None):
     else:
         output = "Unknown thread ID: [i]" + str(tID) + "[/i]"
     return output
+
+def rollADice(bot_data, thread_data, user_data):
+    with open("roll_a_dice.json", "r+", encoding="utf-8") as rollfile:
+        roll_data = json.loads(rollfile.read())
+    roll_data2 = {**roll_data}
+    del roll_data2["roll_last"]
+    uID = str(user_data["uID"])
+    if uID not in roll_data: roll_data[uID] = {"points": 0, "timer": 0}
+    timenow = datetime.datetime.now(tz=datetime.timezone.utc)
+    if roll_data[uID]["timer"] > timenow.timestamp(): return "You can't roll right now, you can roll again in about " + str(math.ceil((roll_data[uID]["timer"] - timenow.timestamp())/60)) + " minutes."
+    done = False
+    output = ""
+    while not done:
+        done = True
+        result = random.randint(1, 10)
+        output += "You rolled a " + str(result)
+        if result == 1:
+            roll_data[uID]["points"] += 1
+            output += ", and gained one point."
+        elif result == 2:
+            roll_data[uID]["points"] += 2
+            roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=4)).timestamp())
+            output += ", and gained two points. You can't roll for the next four hours."
+        elif result == 3:
+            hold = math.floor((int(timenow.timestamp()) - roll_data["roll_last"])/(60*60))
+            roll_data[uID]["points"] += hold
+            output += ", and gained " + str(hold) + " point" + ("s" if hold != 1 else "") + "."
+        elif result == 4:
+            hold = random.randint(1, 10)
+            roll_data[random.choose(roll_data2.keys())]["points"] -= hold
+            output += ", causing someone random to lose " + str(hold) + " point" + ("s" if hold != 1 else "") + "."
+        elif result == 5:
+            hold = random.randint(1, 5)
+            roll_data[random.choose(roll_data2.keys())]["points"] -= hold
+            roll_data[uID]["points"] += hold
+            output += ", causing someone random to lose " + str(hold) + " point" + ("s" if hold != 1 else "") + ", and for you to recieve said lost points."
+        elif result == 6:
+            roll_data[uID]["points"] -= 1
+            output += ", and lost one point."
+        elif result == 7:
+            roll_data[uID]["points"] += 1
+            done = False
+            output += ", gained one point, and get to roll again!\n"
+        elif result == 8:
+            roll_data[uID]["points"] += 1
+            roll_data[random.choose(roll_data2.keys())]["points"] += 2
+            output += ", and gained one point, while someone random gained two."
+        elif result == 9:
+            hold = (random.randint(1, random.randint(1, 60)))
+            roll_data[uID]["points"] += hold
+            output += ", and gained points equal to how long you have on the 60 second rule. ...we'll pretend that's" + str(hold) + "."
+        elif result == 10:
+            roll_data[uID]["points"] += 10
+            roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=12)).timestamp())
+            output += ", and gained ten points! You can't roll for the next twelve hours, though."
+    output += "\nYou now have " + str(roll_data[uID]["points"])+ " point" + ("s" if roll_data[uID]["points"] != 1 else "") + "."
+    roll_data["roll_last"] = int(timenow.timestamp())
+    with open("roll_a_dice.json", "w", encoding="utf-8") as rollfile:
+        rollfile.write(json.dumps(roll_data, indent=4))
+    return output
 #-------------------------
 # Add commands above here.
 
 # This registers the commands for use by Nihonium.
-commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadinfo": threadInfo, "text": text, "files": files, "file": files, "estimate": estimate}
+commands = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadinfo": threadInfo, "text": text, "files": files, "file": files, "estimate": estimate, "rolladice": rollADice, "rolldice": rollADice}
 # This registers commands exclusive to certain bots.
 # Format: {"<id>": {"<command_name>": "<function>"}}
 ex_commands = {"nihonium2": {"coin2": coin2}}
