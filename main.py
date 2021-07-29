@@ -3,11 +3,11 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 9, 1)
+version = versions.Version(0, 9, 2)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
-exc_commands = {"5790": ("rolladice", "rolldice")} # Commands exclusive to specific threads. In the format {"<threadID>": ("<command_name>")}
+exc_commands = {"5893": ("rolladice", "rolldice")} # Commands exclusive to specific threads. In the format {"<threadID>": ("<command_name>")}
 
 if (commands.nihonium_minver > version):
     raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.nihonium_minver) + ".")
@@ -183,7 +183,7 @@ def parse_command(command, tID):
     shards2 = shards[1:]
     for i in range(len(shards2)):
         shards2[i] = html2.unescape(shards2[i])
-    if ((shards[0].lower() in commands.commands) or (shards[0].lower() in commands.ex_commands[bot_info["id"]])) and (shards[0].lower() not in inc_commands) and ((shards[0].lower() not in dis_commands) or ((str(tID) in exc_commands) and (shards[0].lower() in exc_commands[str(tID)]))):
+    if ((shards[0].lower() in commands.commands) or ((bot_info["id"] in commands.ex_commands) and (shards[0].lower() in commands.ex_commands[bot_info["id"]]))) and (shards[0].lower() not in inc_commands) and ((shards[0].lower() not in dis_commands) or ((str(tID) in exc_commands) and (shards[0].lower() in exc_commands[str(tID)]))):
         validCommand()
         output = "[quote=" + command["author"] + "]" + bot_info["prefix"] + command2 + "[/quote]\n"
         try:
