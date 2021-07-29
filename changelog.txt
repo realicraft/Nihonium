@@ -1,0 +1,10 @@
+2021-07-27  Gilbert TR  
+
+	* main.py (formatToDiscord): way to convert BBcode formatting to Discord formatting
+	* main.py (bot_info, inc_commands): better Nihonium support
+	* commands.py (alt_minvers): better Nihonium support
+	
+2021-07-28  Gilbert TR  
+
+	* main.py (Flerovium.on_message): better Nihonium support
+	* commands.py (alt_minvers): better Nihonium support

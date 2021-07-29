@@ -7,9 +7,14 @@ import random, math, datetime, time, sys, os, versions, shutil, json
 
 __version__ = versions.Version(1, 3, 0)      # This defines the version of the module's framework.
 version = versions.Version(1, 8, 0)          # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 6, 1)  # This defines the minimum version of Nihonium needed to run these commands.
-flerovium_minver = versions.Version(0, 1, 0) # This defines the minimum version of Flerovium needed to run these commands.
-flerovium_compatible = True                  # This defines overall compatiblity with Flerovium.
+nihonium_minver = versions.Version(0, 9, 0)  # This defines the minimum version of Nihonium needed to run these commands.
+alt_minvers = {"flerovium": versions.Version(0, 1, 1)} # This defines the minimum version of bots other than Nihonium needed to run this command.
+
+# These are for compatibility with Flerovium 0.1.0.
+flerovium_minver = alt_minvers["flerovium"]       # This defines the minimum version of Flerovium needed to run these commands.
+flerovium_compatible = "flerovium" in alt_minvers # This defines overall compatiblity with Flerovium.
+
+initial_emoji = ""
 
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
     if timestamp is None: timestamp = datetime.datetime.now()
@@ -27,17 +32,21 @@ def logEntry(entry: str, timestamp=None): # Used to add entries to the log files
 
 
 def coin(bot_data, thread_data):
-    return (":no_entry_sign: " if is_fl else "")+"You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
+    is_fl = False if "bot_info" not in bot_data else bot_data["bot_info"]["id"] == "flerovium"
+    if not is_fl: # for Flevorium 0.1.0
+        if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
+    return (":coin: " if is_fl else "")+"You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
 def dice(bot_data, thread_data, num=1, size=20):
     num = int(float(num))
     size = int(float(size))
     hold = []
     doSanity = False # sanity check, prevent the post from getting too long
-    is_fl = False
-    if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
+    is_fl = False if "bot_info" not in bot_data else bot_data["bot_info"]["id"] == "flerovium"
+    if not is_fl: # for Flevorium 0.1.0
+        if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
     if (num < 0): return (":no_entry_sign: " if is_fl else "")+"You can't roll negative dice."
-    elif (num == 0): return "You roll no dice, and get nothing."
+    elif (num == 0): return ":wind_chime: You roll no dice, and get nothing."
     elif (size < 0): return (":no_entry_sign: " if is_fl else "")+"You can't roll something that doesn't exist."
     elif (size == 0): return (":wind_chime: " if is_fl else "")+"You roll " + str(num) + " pieces of air, and get air."
     elif (num > math.floor(5000/math.floor(math.log(size)))): doSanity = True 
@@ -95,8 +104,9 @@ def f_help(bot_data, thread_data):
     return output
 
 def suggest(bot_data, thread_data, *suggestion):
-    is_fl = False
-    if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
+    is_fl = False if "bot_info" not in bot_data else bot_data["bot_info"]["id"] == "flerovium"
+    if not is_fl: # for Flevorium 0.1.0
+        if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
     if (len(suggestion) == 0): return (":pencil: " if is_fl else "")+"Your empty space has been recorded."
     suggestion_full = " ".join(suggestion)
     with open("suggestions.txt", "a", encoding="utf-8") as suggestFile:
@@ -138,6 +148,10 @@ def text(bot_data, thread_data, command="read", filename="_", *other):
     # duplicate  | duplicate a file, fails if it does not exist
     # delete     | delete a file, fails if it does not exist
     # _.txt is unique in that append and insert behave like write, copy and cut select everything, paste overwrites everything, and create, duplicate, and delete all fail
+    is_fl = False if "bot_info" not in bot_data else bot_data["bot_info"]["id"] == "flerovium"
+    if not is_fl: # for Flevorium 0.1.0
+        if "is_flerovium" in bot_data: is_fl = bot_data["is_flerovium"]
+    if is_fl: initial_emoji = ":clipboard:"
     if filename == "_":
         if command == "append": command = "write"
         if command == "insert": command = "write"
