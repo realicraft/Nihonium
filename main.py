@@ -323,6 +323,7 @@ for m in range(4, 6+len(thread_ids)):
 async def true_main_loop():
     global loopNo
     global thread_ids
+    global post_ids
     try: #ugh
         while True:
             loopNo += 1
