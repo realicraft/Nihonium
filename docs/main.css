@@ -2,10 +2,6 @@ body {
     background: #f7efdf;
     font-family: sans-serif;
 }
-input {
-    display: inline;
-    width: 30px;
-}
 p {
     display: inline;
 }
@@ -28,6 +24,7 @@ div.command li {
     padding-left: 40px;
     list-style: none;
     margin: 0;
+    height: 20px;
 }
 div#header {
     margin: 15px;
@@ -76,28 +73,55 @@ div#header h1 {
     margin: 0px;
 }
 li.input_int {
-    background: url("input_types/inputInt.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px 0px;
 }
 li.input_float {
-    background: url("input_types/inputFloat.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -20px;
 }
 li.input_str {
-    background: url("input_types/inputStr.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -40px;
 }
 li.input_bool {
-    background: url("input_types/inputBool.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -60px;
 }
 li.input_b64 {
-    background: url("input_types/inputB64.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -80px;
 }
 li.input_img {
-    background: url("input_types/inputImg.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -100px;
 }
 li.input_fn {
-    background: url("input_types/inputFilename.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -120px;
 }
 li.input_vary {
-    background: url("input_types/inputVaries.png") no-repeat 0px 0px;
+    background: url("input_types.png") no-repeat 0px -140px;
+}
+li.compat_very {
+    background: url("input_types.png") no-repeat 0px -580px;
+    color: #007f00;
+}
+li.compat_semi {
+    background: url("input_types.png") no-repeat 0px -600px;
+    color: #7f7f00;
+}
+li.compat_not {
+    background: url("input_types.png") no-repeat 0px -620px;
+    color: #7f0000;
+}
+li.rec_very {
+    background: url("input_types.png") no-repeat 0px -520px;
+    color: #007f00;
+}
+li.rec_semi {
+    background: url("input_types.png") no-repeat 0px -540px;
+    color: #7f7f00;
+}
+li.rec_not {
+    background: url("input_types.png") no-repeat 0px -560px;
+    color: #7f0000;
+}
+li.compat_very, li.compat_semi, li.compat_not, li.rec_very, li.rec_semi, li.rec_not {
+    font-weight: bold;
 }
 .command .command {
     background: #f7efdf;

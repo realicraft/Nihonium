@@ -18,6 +18,10 @@
         <br /><p>All command names are case-insensitive.</p><br /><br />
         <div class="command">
             <pre>nh!coin</pre>
+            <ul>
+                <li class="compat_very">Considered very compatible.</li>
+                <li class="rec_very">When forking, it's recommended you keep this command.</li>
+            </ul>
             <p>Flips a coin and gives you the result.</p>
         </div>
         <div class="command">
@@ -25,26 +29,39 @@
             <ul>
                 <li class="input_int"><em>num</em> (int >=1): The number of dice. Defaults to 1.</li>
                 <li class="input_int"><em>sides</em> (int >=1): The number of sides on the dice. Defaults to 20.</li>
+                <li class="compat_very">Considered very compatible.</li>
+                <li class="rec_very">When forking, it's recommended you keep this command.</li>
             </ul>
             <p>Rolls <em>num</em> <em>sides</em>-sided dice, and gives you the result.</p>
         </div>
         <div class="command">
             <pre>nh!bot</pre>
+            <ul>
+                <li class="compat_semi">Considered somewhat compatible.</li>
+            </ul>
             <p>Returns various statistics about the bot.</p>
         </div>
         <div class="command">
             <pre>nh!help</pre>
+            <ul>
+                <li class="compat_semi">Considered somewhat compatible.</li>
+            </ul>
             <p>Returns a list of the commands Nihonium supports.</p>
         </div>
         <div class="command">
             <pre>nh!suggest *suggestion</pre>
             <ul>
                 <li class="input_str"><em>*suggestion</em> (str, allows spaces): The suggestion you want to make.</li>
+                <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
             </ul>
             <p>Make a suggestion on what to add to Nihonium.</p>
         </div>
         <div class="command">
             <pre>nh!threadInfo</pre>
+            <ul>
+                <li class="compat_not">Considered not compatible.</li>
+                <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
+            </ul>
             <p>Returns a list of various information about the thread the command was called in.</p>
         </div>
         <div class="command">
@@ -53,6 +70,7 @@
                 <li class="input_str"><em>command</em> (str, no spaces): The subcommand to use. Defaults to <em>read</em>.</li>
                 <li class="input_fn"><em>filename</em> (filename, no extension): The file to use. Defaults to <em>_</em>.</li>
                 <li class="input_vary"><em>*other</em> (varies): Varies by subcommand. May be optional.</li>
+                <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
             </ul>
             <p>A set of subcommands for manipulating text files.<br />Commands:</p>
             <div class="command">
@@ -77,6 +95,7 @@
                 <pre>appendline</pre>
                 <ul>
                     <li class="input_str"><em>*content</em> (str, allows spaces): What to append to the file.</li>
+                    <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
                 </ul>
                 <p>Acts like <em>append</em>, but adds a newline before <em>*content</em>.</p>
             </div>
@@ -107,6 +126,7 @@
                 <li class="input_str"><em>command</em> (str, no spaces): The subcommand to use. Defaults to <em>read</em>.</li>
                 <li class="input_fn"><em>filename</em> (filename, requires extension): The file to use. Defaults to <em>_.txt</em>.</li>
                 <li class="input_vary"><em>*other</em> (varies): Varies by subcommand. May be optional.</li>
+                <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
             </ul>
             <p>A set of subcommands for manipulating files.<br />Commands:</p>
             <div class="command">
@@ -122,6 +142,8 @@
             <pre>nh!estimate tID</pre>
             <ul>
                 <li class="input_int"><em>tID</em> (int): The thread you want an estimation for. Defaults to the current thread.</li>
+                <li class="compat_not">Considered not compatible.</li>
+                <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
             </ul>
             <p>Give an estimation on when a thread will be completed. Not available on some threads.</p>
         </div>
