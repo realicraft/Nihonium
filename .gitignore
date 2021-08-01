@@ -2,7 +2,7 @@ LICENSE
 threadData.json
 postIDs.json
 data.json
-pass.txt
+token.txt
 log.log
 suggestions.txt
 __pycache__/
