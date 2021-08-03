@@ -1,6 +1,9 @@
 body {
     background: #f7efdf;
     font-family: sans-serif;
+    font-size: 14px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 p {
     display: inline;
@@ -10,8 +13,6 @@ div.command {
     border-radius: 12px;
     background: #fffbf3;
     padding: 5px;
-    margin-left: 10px;
-    margin-right: 10px;
     margin-bottom: 15px;
 }
 div.command pre {
@@ -27,15 +28,13 @@ div.command li {
     height: 20px;
 }
 div#header {
-    margin: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
     padding: 5px;
     background-color: #3f3f3f;
     border: #0f0f0f solid 5px;
     border-radius: 7px;
     color: #fff;
-}
-h3 {
-    margin-left: 15px;
 }
 div#head-left {
     width: 50%;
@@ -95,6 +94,24 @@ li.input_fn {
 }
 li.input_vary {
     background: url("input_types.png") no-repeat 0px -140px;
+}
+li.input_time {
+    background: url("input_types.png") no-repeat 0px -160px;
+}
+li.input_func {
+    background: url("input_types.png") no-repeat 0px -180px;
+}
+li.input_list {
+    background: url("input_types.png") no-repeat 0px -200px;
+}
+li.input_array {
+    background: url("input_types.png") no-repeat 0px -220px;
+}
+li.input_dict {
+    background: url("input_types.png") no-repeat 0px -240px;
+}
+li.input_obj {
+    background: url("input_types.png") no-repeat 0px -260px;
 }
 li.compat_very {
     background: url("input_types.png") no-repeat 0px -580px;

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dev Info | Nihonium</title>
+        <link rel="stylesheet" href="main.css">
+        <style>
+            pre {
+                display: inline;
+            }
+            div.command > pre:first-of-type {
+                display: block;
+            }
+            kbd {
+                border: 1px solid black;
+                border-radius: 5px;
+                background: #bfbfbf;
+                padding-left: 3px;
+                padding-right: 3px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header">
+            <div id="head-left">
+                <h1>Nihonium</h1>
+            </div><div id="head-right">
+                <a href="index.html">Commands</a><p> | </p>
+                <a href="updates.html">Updates</a><p> | </p>
+                <a href="about.html">About</a><p> | </p>
+                <a href="suggestions.html">Suggestions</a><p> | </p>
+                <a href="dev.html">Developer</a><p> | </p>
+                <a href="https://github.com/realicraft/Nihonium">Repository</a>
+            </div>
+        </div>
+        <p>This page lists variables and functions used in Nihonium.</p><br />
+        <p>Last Updated: Aug. 3rd, 2021 (0.9.2)</p><br />
+        <p>(<em>Note: this page is currently incomplete, and has only been uploaded due to the fact that the webpages and bot are in the same repository.</em>)</p>
+        <h3><i><pre>main.py</pre></i></h3>
+        <h4><i>Functions</i></h4>
+        <div class="command">
+            <pre>logEntry(entry, timestamp)</pre>
+            <ul>
+                <li class="input_str"><em>entry</em> (str): The message you want to make an entry for. Required.</li>
+                <li class="input_time"><em>timestamp</em> (<pre>datetime.datetime</pre>): The timestamp for the entry. Defaults to <pre>datetime.datetime.now()</pre>.</li>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Creates an entry in the logfiles.</p>
+        </div>
+        <div class="command">
+            <pre>getReq(*args, **kwargs)</pre>
+            <ul>
+                <li class="input_vary"><em>args, kwargs</em> (varies): The arguments you want to pass to <pre>mainSession.get()</pre>.</li>
+            </ul>
+            <p>Makes a GET request, stores the received cookies, and makes a log entry.</p>
+        </div>
+        <div class="command">
+            <pre>postReq(*args, **kwargs)</pre>
+            <ul>
+                <li class="input_vary"><em>args, kwargs</em> (varies): The arguments you want to pass to <pre>mainSession.post()</pre>.</li>
+            </ul>
+            <p>Makes a POST request, stores the received cookies, and makes a log entry.</p>
+        </div>
+        <div class="command">
+            <pre>update_sig(_motd, xline, misc)</pre>
+            <ul>
+                <li class="input_func"><em>_motd</em> (function, takes no inputs): A function used to generate a motd (message of the day).</li>
+                <li class="input_bool"><em>xline</em> (bool): Whether to mark the bot as online or offline.</li>
+                <li class="input_str"><em>misc</em> (str): Miscellaneous info.</li>
+            </ul>
+            <p>Updates the bot's signature. Uses the <pre>siggy</pre> variable to store inputs, in case they are ommited later.</p>
+        </div>
+        <div class="command">
+            <pre>motd()</pre>
+            <p>Used in <pre>update_sig()</pre>.</p>
+        </div>
+        <div class="command">
+            <pre>moveCursor(x, y)</pre>
+            <ul>
+                <li class="input_int"><em>x</em> (int): The new X position of the cursor. Required.</li>
+                <li class="input_int"><em>y</em> (int): The new Y position of the cursor. Required.</li>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Moves the terminal cursor.</p>
+        </div>
+        <div class="command">
+            <pre>writeText(x, y, text, fcolor, bcolor)</pre>
+            <ul>
+                <li class="input_int"><em>x</em> (int): The X position of the text. Required.</li>
+                <li class="input_int"><em>y</em> (int): The Y position of the text. Required.</li>
+                <li class="input_str"><em>text</em> (str): The text to display on screen. Required.</li>
+                <li class="input_int"><em>fcolor</em> (int): The foreground color of the text. Defaults to the terminal's default.</li>
+                <li class="input_int"><em>bcolor</em> (int): The background color of the text. Defaults to the terminal's default.</li>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Displays text on the terminal, in a specified location, with specified colors. Crucial for managing a text-based display.</p>
+        </div>
+        <div class="command">
+            <pre>async writeTextA(x, y, text, fcolor, bcolor)</pre>
+            <ul>
+                <li class="input_int"><em>x</em> (int): The X position of the text. Required.</li>
+                <li class="input_int"><em>y</em> (int): The Y position of the text. Required.</li>
+                <li class="input_str"><em>text</em> (str): The text to display on screen. Required.</li>
+                <li class="input_int"><em>fcolor</em> (int): The foreground color of the text. Defaults to the terminal's default.</li>
+                <li class="input_int"><em>bcolor</em> (int): The background color of the text. Defaults to the terminal's default.</li>
+            </ul>
+            <p>A wrapper for <pre>writeText()</pre> that allows you to <pre>await</pre> it.</p>
+        </div>
+        <div class="command">
+            <pre>bell()</pre>
+            <p>Makes an audible noise.</p>
+        </div>
+        <div class="command">
+            <pre>clearLine(line)</pre>
+            <ul>
+                <li class="input_int"><em>line</em> (int): The line number of the line you want to clear.</li>
+            </ul>
+            <p>Clears the specified line.</p>
+        </div>
+        <div class="command">
+            <pre>async clock()</pre>
+            <ul>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Runs a clock in the top-right corner of the terminal.</p>
+        </div>
+        <div class="command">
+            <pre>validCommand()</pre>
+            <p>Increases the valid command count, and then writes <pre>data</pre> to <pre>data.json</pre>.</p>
+        </div>
+        <div class="command">
+            <pre>assemble_botdata()</pre>
+            <ul>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Used by <pre>parse_command()</pre> to generate data about the bot.<br />Returns a <pre>dict</pre> containing the following:</p>
+            <ul>
+                <li class="input_time"><em>uptime</em> (<pre>datetime.datetime</pre>): The time Nihonium was started.</li>
+                <li class="input_dict"><em>data</em> (dict): The contents of <pre>data.json</pre>.</li>
+                <li class="input_list"><em>thread_ids</em> (list of ints): The threads parsed by this copy of Nihonium.</li>
+                <li class="input_dict"><em>post_ids</em> (dict): The contents of <pre>threadData.json</pre>.</li>
+                <li class="input_obj"><em>cookies</em> (<pre>requests.cookies.cookielib.CookieJar</pre>): The cookies used to keep Nihonium logged in.</li>
+                <li class="input_obj"><em>session</em> (<pre>requests.sessions.Session</pre>): A session used to assist with HTTP requests.</li>
+                <li class="input_dict"><em>headers</em> (dict): Headers sent with HTTP requests.</li>
+                <li class="input_obj"><em>version</em> (<pre>versions.Version</pre>): The current version of Nihonium.</li>
+                <li class="input_dict"><em>bot_info</em> (dict): Various information about the bot.</li>
+            </ul>
+        </div>
+        <div class="command">
+            <pre>assemble_threaddata(tID)</pre>
+            <ul>
+                <li class="input_int"><em>tID</em> (int): The id of the thread.</li>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Used by <pre>parse_command()</pre> to generate data about the thread the command was called in.<br />Returns a <pre>dict</pre> containing the contents of <pre>post_ids[str(tID)]</pre>, plus the following:</p>
+            <ul>
+                <li class="input_int"><em>thread_id</em> (int): The id of the thread.</li>
+            </ul>
+        </div>
+        <div class="command">
+            <pre>assemble_userdata(command)</pre>
+            <ul>
+                <li class="input_dict"><em>command</em> (dict): A dict containing information about the post the command was called in.</li>
+                <li class="rec_very">When forking, it's recommended you keep this function.</li>
+            </ul>
+            <p>Used by <pre>parse_command()</pre> to generate data about the user who called the command.<br />Returns a <pre>dict</pre> containing the following:</p>
+            <ul>
+                <li class="input_str"><em>name</em> (str): The username of the user.</li>
+                <li class="input_int"><em>uID</em> (int): The id of the user.</li>
+            </ul>
+        </div>
+        <div class="command">
+            <pre>parse_command(command, tID)</pre>
+            <ul>
+                <li class="input_dict"><em>command</em> dict: A dict containing information about the post the command was called in.</li>
+                <li class="input_int"><em>tID</em> (int): The ID of the thread the command was called in.</li>
+                <li class="rec_not">This function is crucial to having the bot work properly, removing it is not recommended unless you know what you're doing.</li>
+            </ul>
+            <p>Parses the given command.<br />Returns a string which contains the output to be displayed. This string may be empty, in which case no output is displayed for that command.</p>
+        </div>
+        <div class="command">
+            <pre>main_loop(tID, row)</pre>
+            <ul>
+                <li class="input_int"><em>tID</em> (int): The ID of the thread the command was called in.</li>
+                <li class="input_int"><em>row</em> (int): The row on the terminal display the function writes to.</li>
+                <li class="rec_not">This function is crucial to having the bot work properly, removing it is not recommended unless you know what you're doing.</li>
+            </ul>
+            <p>Scrapes commands from the thread given by <pre>tID</pre>, passes them to <pre>parse_command()</pre> to be parse, and takes the outputs and posts them to the thread.</p>
+        </div>
+        <div class="command">
+            <pre>async true_main_loop()</pre>
+            <ul>
+                <li class="rec_not">This function basically <em>is</em> the bot, removing it is not recommended unless you <em>really</em> know what you're doing.</li>
+            </ul>
+            <p>Manages several things, including the calling <pre>main_loop()</pre> for each of the threads, keeping track of the sixty second and thity minute waits, and some of the terminal output.</p>
+        </div>
+        <div class="command">
+            <pre>async outerloop()</pre>
+            <p>Starts both <pre>true_main_loop()</pre> and <pre>clock()</pre>.</p>
+        </div>
+        <div class="command">
+            <pre>final()</pre>
+            <p>Used when the bot is closed with <kbd>Ctrl</kbd>+<kbd>C</kbd>.</p>
+        </div>
+        <div class="command">
+            <pre>async exit_script()</pre>
+            <p>Stops both <pre>true_main_loop()</pre> and <pre>clock()</pre>.</p>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    </body>
+</html>
