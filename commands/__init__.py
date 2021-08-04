@@ -2,7 +2,7 @@ import glob, importlib, versions
 
 _submodules = []
 for i in glob.glob("commands/*.py"):
-    if (i == "commands/__init__.py") or (i == "commands/framework.py"): continue
+    if (i == "commands/__init__.py") or (i == "commands/framework.py") or (i == "commands\__init__.py") or (i == "commands\framework.py"): continue
     _submodules.append(importlib.import_module("commands." + i[9:-3]))
 
 # This folder is used to define the commands used by Nihonium.
