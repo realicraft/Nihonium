@@ -73,6 +73,13 @@ div#head-right a:active {
 div#header h1 {
     margin: 0px;
 }
+kbd {
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #bfbfbf;
+    padding-left: 3px;
+    padding-right: 3px;
+}
 li.input_int {
     list-style: url("input_types/tile000.png") inside;
 }

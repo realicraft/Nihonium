@@ -11,13 +11,94 @@
             <div id="head-left">
                 <h1>Nihonium</h1>
             </div><div id="head-right">
-                <a href="index.html">Commands</a><p> | </p><a href="updates.html">Updates</a><p> | </p><a href="about.html">About</a><p> | </p><a href="suggestions.html">Suggestions</a><p> | </p><a href="https://github.com/realicraft/Nihonium">Repository</a>
+                <a href="index.html">Commands</a><p> | </p>
+                <a href="updates.html">Updates</a><p> | </p>
+                <a href="about.html">About</a><p> | </p>
+                <a href="suggestions.html">Suggestions</a><p> | </p>
+                <a href="dev.html">Developer</a><p> | </p>
+                <a href="https://github.com/realicraft/Nihonium">Repository</a>
             </div>
         </div>
         <h3><em>A bot for the TBGs</em></h3>
         <br><br>
         <div class="command">
+            <b>0.9.x</b>
+            <div class="command">
+                <pre>0.9.4</pre>
+                <p>Fixed a crash caused by confusion between "\" and "/", along with missing imports.<br />Updated <em>commands</em> to 2.0<br />
+                Fixed issue where, if the bot failed to parse a thread due to the number of pages being smaller than it expects, it would wait for the sixty-second
+                rule, even though it never posted.</p>
+            </div>
+            <div class="command">
+                <pre>0.9.3</pre>
+                <p>Fixed a crash that would occur if you added a new thread to <em>threadData.json</em> while Nihonium was running.<br />
+                Updated <em>versions.py</em> to 1.1.1<br />The <em>commands</em> module is now in seperate files, rather than all being in <em>commands.py</em>.<br />
+                Updated <em>commands</em> to 2.0.0-alpha2</p>
+            </div>
+            <div class="command">
+                <pre>0.9.2</pre>
+                <p>Fixed a bug with checking to see if a command is in <em>commands.py</em>'s exclusive commands list.</p>
+            </div>
+            <div class="command">
+                <pre>0.9.1</pre>
+                <p>Fixed a crash caused by a typo.<br />Added subcommands to <em>nh!rolladice</em>: <em>roll</em>, <em>points</em>, and <em>leaderboard</em>.</p>
+            </div>
+            <div class="command">
+                <pre>0.9.0</pre>
+                <p>Commands now recieve a small amount of information about the user who called them.<br />Added <em>nh!rolladice</em>.</p>
+            </div>
+        </div>
+        <div class="command">
+            <b>0.8.x</b>
+            <div class="command">
+                <pre>0.8.5</pre>
+                <p>Added the ability to specify disabled commands, along with commands exclusive to certain threads.</p>
+            </div>
+            <div class="command">
+                <pre>0.8.4</pre>
+                <p>Fixed a crash that would occur if the bot's id had not been changed.<br />You can now specify the bot's prefix.</p>
+            </div>
+            <div class="command">
+                <pre>0.8.3</pre>
+                <p>Updated <em>versions.py</em> to 1.1<br />Commands are now case-insensitive.<br />The bot's name is now no longer hardcoded in several places.<br />
+                You can now specify commands exclusive to certain forks, along with minimum supported versions for those forks.<br/>
+                Added better support for forks.</p>
+            </div>
+            <div class="command">
+                <pre>0.8.2</pre>
+                <p>Nihonium can now edit its own signature.</p>
+            </div>
+            <div class="command">
+                <pre>0.8.1</pre>
+                <p>Fixed the in-terminal clock.<br />Nihonium can now be gracefully exited by pressing <kbd>Ctrl</kbd>+<kbd>C</kbd>.</p>
+            </div>
+            <div class="command">
+                <pre>0.8.0</pre>
+                <p>You can now run Nihonium on Linux machines.<br />Added <em>asyncio</em>.</p>
+            </div>
+        </div>
+        <div class="command">
+            <b>0.7.x</b>
+            <div class="command">
+                <pre>0.7.1</pre>
+                <p>The terminal display now only gives one line to each thread, rather than two.</p>
+            </div>
+            <div class="command">
+                <pre>0.7.0</pre>
+                <p>Added four new subcommands to <em>nh!files</em>: <em>rename</em>, <em>create</em>, <em>duplicate</em>, and <em>delete</em>.</p>
+            </div>
+        </div>
+        <div class="command">
             <b>0.6.x</b>
+            <div class="command">
+                <pre>0.6.7</pre>
+                <p>Fixed issue where the bot would repeat commands.<br />Added a sanity check to <em>nh!dice</em> to keep the output from getting too large.<br/>
+                <em>nh!estimate</em> now defaults to the thread it is used in.<br /><em>nh!bot</em> now reports the version number.</p>
+            </div>
+            <div class="command">
+                <pre>0.6.6</pre>
+                <p>Fixed issue where <em>nh!text appendline</em> would fail.<br />Added <em>nh!estimate</em>.<br />The bot now reloads <em>threadData.json</em> after each parse-cycle.</p>
+            </div>
             <div class="command">
                 <pre>0.6.5</pre>
                 <p>Fixed issue with <em>nh!text delete</em> not returning an output.<br />Fixed issue with non-ASCII characters failing to be saved to files.</p>
