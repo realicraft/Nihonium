@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 9, 4)
+version = versions.Version(0, 9, 5)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -187,8 +187,8 @@ def parse_command(command, tID):
         validCommand()
         output = "[quote=" + command["author"] + "]" + bot_info["prefix"] + command2 + "[/quote]\n"
         try:
-            if shards[0].lower() in commands.commands: output += commands.commands[shards[0]](assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
-            else: output += commands.ex_commands[bot_info["id"]][shards[0]](assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
+            if shards[0].lower() in commands.commands: output += commands.commands[shards[0].lower()](assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
+            else: output += commands.ex_commands[bot_info["id"]][shards[0].lower()](assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
             data["commands_parsed"] += 1
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))

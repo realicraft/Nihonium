@@ -1,5 +1,5 @@
 import versions
-import shutil, os, datetime, math
+import shutil, os, datetime, math, random
 
 version = versions.Version(1, 7, 5)
 nihonium_minver = versions.Version(0, 9, 0)
@@ -28,6 +28,10 @@ def text(bot_data, thread_data, user_data, command="read", filename="_", *other)
     if filename == "_":
         if command == "append": command = "write"
         if command == "insert": command = "write"
+    if "../" in filename:
+        return "No file by the name [i]" + filename + ".txt[/i] exists" + random.choice("", "", "", "", "", ", cheater", ", Mr. Hackerman")  + "."
+    if filename == "con":
+        return "Stop that."
     if command == "read":
         try:
             with open("files/" + filename + ".txt", "r", encoding="utf-8") as file: return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
@@ -99,6 +103,10 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
     # create    | create a file, fails if it exists
     # duplicate | duplicate a file, fails if it does not exist
     # delete    | delete a file, fails if it does not exist
+    if "../" in filename:
+        return "No file by the name [i]" + filename + "[/i] exists" + random.choice("", "", "", "", "", ", cheater", ", Mr. Hackerman")  + "."
+    if filename.startswith("con."):
+        return "Stop that."
     if command == "read":
         try:
             with open("files/" + filename, "rb") as file:

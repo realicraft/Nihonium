@@ -24,6 +24,12 @@
         <div class="command">
             <b>0.9.x</b>
             <div class="command">
+                <pre>0.9.5</pre>
+                <p>Fixed issue where ".." was allowed in <em>nh!files</em> and <em>nh!text</em>, allowing users to view files outside of the <em>files</em> folder, along with editing text files.<br />
+                Fixed issue where "con" was allowed in <em>nh!files</em> and <em>nh!text</em>, which would allow a user to freeze the bot by requesting the contents of <em>con</em>.<br />
+                Fixed issue preventing commands from being used unless they were in lowercase (not including arguments/subcommands).</p>
+            </div>
+            <div class="command">
                 <pre>0.9.4</pre>
                 <p>Fixed a crash caused by confusion between "\" and "/", along with missing imports.<br />Updated <em>commands</em> to 2.0<br />
                 Fixed issue where, if the bot failed to parse a thread due to the number of pages being smaller than it expects, it would wait for the sixty-second
