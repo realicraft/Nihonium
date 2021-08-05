@@ -1,10 +1,33 @@
 2021-07-27  Gilbert TR  
 
-	* main.py (formatToDiscord): way to convert BBcode formatting to Discord formatting
-	* main.py (bot_info, inc_commands): better Nihonium support
-	* commands.py (alt_minvers): better Nihonium support
-	
+    * main.py (formatToDiscord): way to convert BBcode formatting to Discord formatting
+    * main.py (bot_info, inc_commands): better Nihonium support
+    * commands.py (alt_minvers): better Nihonium support
+    
 2021-07-28  Gilbert TR  
 
-	* main.py (Flerovium.on_message): better Nihonium support
-	* commands.py (alt_minvers): better Nihonium support
+    * main.py (Flerovium.on_message): better Nihonium support
+    * commands.py (alt_minvers): better Nihonium support
+    
+2021-07-29  Gilbert TR  
+
+    * main.py (Flerovium.on_message): better Nihonium support
+    
+2021-07-30  Gilbert TR  
+
+    * main.py (Flerovium.on_message): remove Flerovium 0.x compatibility (too messy), added re replace
+    * commands.py (alt_minvers, ex_commands): revert to Nihonium 0.9.2, added Flerovium support
+    
+2021-07-31  Gilbert TR  
+
+    * attribs.json: more replacements
+    * main.py: more redundancy
+    
+2021-08-02  Gilbert TR
+    
+    * setup.py: added for installing commands.py and versions.py
+    * main.py: more redundancy
+
+2021-08-05  Gilbert TR
+    
+    * main.py: more redundancy, implemented fancy text and read-only mode

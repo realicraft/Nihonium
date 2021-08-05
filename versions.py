@@ -1,28 +1,31 @@
 # This file provides an object for version numbers.
 
 class Version:
-    def __init__(self, major: int, minor: int=0, patch: int=0):
+    def __init__(self, major: int, minor: int=0, patch: int=0, tag: str=""):
         self.major = major
         self.minor = minor
         self.patch = patch
+        self.tag = tag
     
     def __repr__(self):
-        return "Version(" + str(self.major) + ", " + str(self.minor) + ", " + str(self.patch) + ")"
+        return "Version(" + str(self.major) + ", " + str(self.minor) + ", " + str(self.patch) + ", " + self.tag + ")"
     
     def __str__(self):
-        return str(self.major) + "." + str(self.minor) + "." + str(self.patch)
+        return str(self.major) + "." + str(self.minor) + "." + str(self.patch) + self.tag
     
     def __len__(self):
-        if self.patch == 0:
-            if self.minor == 0: return 1
-            else: return 2
-        else: return 3
+        if self.tag == "":
+            if self.patch == 0:
+                if self.minor == 0: return 1
+                else: return 2
+            else: return 3
+        else: return 4
     
     def __int__(self):
         return self.major
     
-    def __float__(self):
-        return self.major + (self.minor / (10 ** len(self.minor)))
+    #def __float__(self):
+    #    return self.major + (self.minor / (10 ** len(self.minor)))
     
     def __eq__(self, o):
         if type(o) == str:
@@ -85,7 +88,15 @@ class Version:
         if hold == NotImplemented: return NotImplemented
         else: return not hold
 
-class VersionError(ValueError):
-	pass
+    def __iter__(self):
+        if self.tag == "":
+            for i in (self.major, self.minor, self.patch):
+                yield i
+        else:
+            for i in (self.major, self.minor, self.patch, self.tag):
+                yield i
+    
+    def asdict(self):
+        return {"major": self.major, "minor": self.minor, "patch": self.patch, "tag": self.tag}
 
-__version__ = Version(1)
+__version__ = Version(1, 1)

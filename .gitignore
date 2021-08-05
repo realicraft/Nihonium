@@ -1,11 +1,6 @@
-LICENSE
-threadData.json
-postIDs.json
-data.json
 token.txt
-log.log
-suggestions.txt
 __pycache__/
 files/
 logs/
 .github/
+suggestions.txt
