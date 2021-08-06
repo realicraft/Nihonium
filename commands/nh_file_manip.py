@@ -29,7 +29,7 @@ def text(bot_data, thread_data, user_data, command="read", filename="_", *other)
         if command == "append": command = "write"
         if command == "insert": command = "write"
     if "../" in filename:
-        return "No file by the name [i]" + filename + ".txt[/i] exists" + random.choice("", "", "", "", "", ", cheater", ", Mr. Hackerman")  + "."
+        return "No file by the name [i]" + filename + ".txt[/i] exists" + random.choice(("", "", "", "", "", ", cheater", ", Mr. Hackerman"))  + "."
     if filename == "con":
         return "Stop that."
     if command == "read":
@@ -104,7 +104,7 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
     # duplicate | duplicate a file, fails if it does not exist
     # delete    | delete a file, fails if it does not exist
     if "../" in filename:
-        return "No file by the name [i]" + filename + "[/i] exists" + random.choice("", "", "", "", "", ", cheater", ", Mr. Hackerman")  + "."
+        return "No file by the name [i]" + filename + "[/i] exists" + random.choice(("", "", "", "", "", ", cheater", ", Mr. Hackerman"))  + "."
     if filename.startswith("con."):
         return "Stop that."
     if command == "read":
