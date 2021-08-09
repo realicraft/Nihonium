@@ -1,5 +1,5 @@
 import versions # This import is required.
-import random, math, datetime # These imports are dependent on what your commands need.
+import random, math, datetime, json # These imports are dependent on what your commands need.
 
 # This file can be used as an example of a command file.
 
