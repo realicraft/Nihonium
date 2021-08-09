@@ -1,4 +1,5 @@
-import versions, framework as fw # These imports are required. (The "as fw" is not required, and is only here to shorten lines.)
+import versions
+from . import framework as fw # These imports are required. (The "as fw" is not required, and is only here to shorten lines.)
 import random, math, datetime, json # These imports are dependent on what your commands need.
 
 # This file can be used as an example of a command file.

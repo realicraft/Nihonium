@@ -24,7 +24,7 @@ class Command:
         self.command = command
         self.inputs = inputs
         self.help = {"s": helpShort, "l": helpLong}
-        self.hashelp = {"s": (False if self.helpShort == "" else True), "l": (False if self.helpLong == "" else True)}
+        self.hashelp = {"s": (False if self.help["s"] == "" else True), "l": (False if self.help["l"] == "" else True)}
     
     def run(self, *args, **kwargs) -> str:
         """Alternative for calling `Command.command` directly."""

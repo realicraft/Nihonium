@@ -1,4 +1,5 @@
-import versions, framework as fw
+import versions
+from . import framework as fw
 import shutil, os, datetime, math, random
 
 version = versions.Version(1, 7, 5)
