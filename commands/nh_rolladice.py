@@ -80,5 +80,5 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
 
 diceCommand = fw.Command("rolladice", rollADice, [fw.CommandInput("action", "str", "roll", "What action you want to perform.")], helpShort="Roll a dice and see what happens.")
 
-commandlist = {"rolladice": rollADice, "rolldice": rollADice}
+commandlist = {"rolladice": diceCommand, "rolldice": diceCommand}
 ex_commandlist = {}
