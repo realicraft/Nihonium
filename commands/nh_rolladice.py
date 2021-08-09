@@ -1,8 +1,8 @@
-import versions
+import versions, framework as fw
 import random, json, datetime, math
 
 version = versions.Version(1, 7, 5)
-nihonium_minver = versions.Version(0, 9, 0)
+nihonium_minver = versions.Version(0, 10, 0)
 alt_minvers = {}
 
 def rollADice(bot_data, thread_data, user_data, action="roll"):
@@ -76,6 +76,8 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
             output += str(i) + ": " + str(roll_data2[i]["points"]) + " point" + ("s" if roll_data2[i]["points"] != 1 else "") + "\n"
         output += "[/quote][i](Note: the leaderboard uses user IDs rather than usernames, as that is all that is stored.)[/i]"
     return output
+
+diceCommand = fw.Command("rolladice", rollADice, [fw.CommandInput("action", "str", "roll", "What action you want to perform.")], helpShort="Roll a dice and see what happens.")
 
 commandlist = {"rolladice": rollADice, "rolldice": rollADice}
 ex_commandlist = {}

@@ -1,8 +1,8 @@
-import versions
+import versions, framework as fw
 import shutil, os, datetime, math, random
 
 version = versions.Version(1, 7, 5)
-nihonium_minver = versions.Version(0, 9, 0)
+nihonium_minver = versions.Version(0, 10, 0)
 alt_minvers = {}
 
 #from Nihonium
@@ -181,5 +181,14 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
             except IOError: return "No file by the name [i]" + filename + "[/i] exists."
     else: return "Invalid command: " + command
 
-commandlist = {"text": text, "files": files, "file": files}
+textCommand = fw.Command("text", text, [fw.CommandInput("command", "str", "read", "The subcommand to use."),
+                                        fw.CommandInput("filename", "str", "_", "The file to use."),
+                                        fw.CommandInput("other", "varies", "", "Varies by subcommand.")], helpShort="Text file modificaton.",
+                                        helpLong="A set of subcommands for manipulating text files.\n(You can see the list of subcommands on Nihonium's website.)")
+fileCommand = fw.Command("files", files, [fw.CommandInput("command", "str", "read", "The subcommand to use."),
+                                        fw.CommandInput("filename", "str", "_", "The file to use."),
+                                        fw.CommandInput("other", "varies", "", "Varies by subcommand.")], helpShort="File modificaton.",
+                                        helpLong="A set of subcommands for manipulating files.\n(You can see the list of subcommands on Nihonium's website.)")
+
+commandlist = {"text": textCommand, "files": fileCommand, "file": fileCommand}
 ex_commandlist = {}

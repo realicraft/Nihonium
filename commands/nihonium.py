@@ -1,11 +1,11 @@
-import versions # This import is required.
+import versions, framework as fw # These imports are required. (The "as fw" is not required, and is only here to shorten lines.)
 import random, math, datetime # These imports are dependent on what your commands need.
 
 # This file can be used as an example of a command file.
 
-version = versions.Version(1, 7, 5)                    # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 9, 0)            # This defines the minimum version of Nihonium needed to run these commands.
-alt_minvers = {"nihonium2": versions.Version(0, 9, 0)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
+version = versions.Version(1, 7, 5)                     # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 10, 0)            # This defines the minimum version of Nihonium needed to run these commands.
+alt_minvers = {"nihonium2": versions.Version(0, 10, 0)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
@@ -15,7 +15,6 @@ alt_minvers = {"nihonium2": versions.Version(0, 9, 0)} # Used to define minimum 
 # The third argument a command recieves will contain information about the user who called the command.
 
 # The functions below are executed when certain commands are called:
-
 def coin(bot_data, thread_data, user_data):
     return "You flip a coin, and get " + random.choice(["heads", "tails"]) + "."
 
@@ -51,16 +50,17 @@ def bot(bot_data, thread_data, user_data):
 def _help(bot_data, thread_data, user_data):
     output = "Commands:"
     output += "\n[quote]  nh!coin\n    Flips a coin and gives you the result.[/quote]"
-    output += "\n[quote]  nh{dice|roll} num;int;1 sides;int;20\n    Rolls [i]num[/i] [i]sides[/i]-sided dice, and gives you the result.[/quote]"
+    output += "\n[quote]  nh!{dice|roll} num;int;1 sides;int;20\n    Rolls [i]num[/i] [i]sides[/i]-sided dice, and gives you the result.[/quote]"
     output += "\n[quote]  nh!bot\n    Returns various statistics about the bot.[/quote]"
     output += "\n[quote]  nh!help\n    Returns this help message.[/quote]"
-    output += "\n[quote]  nh!suggest suggestion;str;allows_spaces\n   Make a suggestion.[/quote]"
+    output += "\n[quote]  nh!suggest suggestion;str;allows_spaces\n    Make a suggestion.[/quote]"
     output += "\n[quote]  nh!threadInfo\n    Get information about the current thread.[/quote]"
     output += "\n[quote]  nh!text command;str;no_spaces;'read' filename;str;no_spaces;'_' other;varies\n    Text file modificaton.[/quote]"
     output += "\n[quote]  nh!{file|files} command;str;no_spaces;'read' filename;str;no_spaces;'_.txt' other;varies\n    File modificaton.[/quote]"
     output += "\n[quote]  nh!estimate tID;int;<current_thread>\n    Estimates when a thread will be completed.[/quote]"
     output += "\nArguments are in the form \"name;type;spaces;default\". Arguments with no default are required, [i]spaces[/i] is only present for strings."
     output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/Nihonium/index.html]the webpage[/url]."
+    output += "\n(Note: I plan on adding a system to auto-generate the results of this command. It hasn't been added yet, though.)"
     return output
 
 def suggest(bot_data, thread_data, user_data, *suggestion):
@@ -116,8 +116,20 @@ def estimate(bot_data, thread_data, user_data, tID=None):
         output = "Unknown thread ID: [i]" + str(tID) + "[/i]"
     return output
 
+# These turn the functions above into commands:
+coinCommand = fw.Command("coin", coin, [], helpShort="Flips a coin and gives you the result.", helpLong="Flips a coin and gives you the result.")
+diceCommand = fw.Command("dice", dice,
+                        [fw.CommandInput("num", "int", "1", "The number of dice."), fw.CommandInput("size", "int", "20", "The number of sides on the dice.")],
+                        helpShort="Rolls [i]num[/i] [i]sides[/i]-sided dice, and gives you the result.",
+                        helpLong="Rolls [i]num[/i] [i]sides[/i]-sided dice, and gives you the result.")
+botCommand = fw.Command("bot", bot, [], helpShort="Returns various statistics about the bot.", helpLong="Returns various statistics about the bot.")
+helpCommand = fw.Command("help", _help, [])
+suggestCommand = fw.Command("suggest", suggest, [fw.CommandInput("suggestion", "str")])
+tiCommand = fw.Command("threadInfo", threadInfo, [])
+estiCommand = fw.Command("estimate", estimate, [fw.CommandInput("tID", "int", "<current_thread>")])
+
 # This registers the commands for use by Nihonium.
-commandlist = {"coin": coin, "dice": dice, "roll": dice, "bot": bot, "help": _help, "suggest": suggest, "threadinfo": threadInfo, "estimate": estimate}
+commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "bot": botCommand, "help": helpCommand, "suggest": suggestCommand, "threadinfo": tiCommand, "estimate": estiCommand}
 # This registers commands exclusive to certain bots.
 # Format: {"<id>": {"<command_name>": "<function>"}}
 ex_commandlist = {"nihonium2": {"coin2": coin2}}

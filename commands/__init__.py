@@ -8,7 +8,7 @@ for i in glob.glob("commands/*.py"):
 # This folder is used to define the commands used by Nihonium.
 # Editing this file directly is not recommended.
 
-__version__ = versions.Version(2, 0, 0)     # This defines the version of the module's framework.
+__version__ = versions.Version(2, 1, 0)     # This defines the version of the module's framework.
 
 nihonium_minver = versions.Version(0)
 alt_minvers = {}
