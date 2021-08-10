@@ -8,10 +8,10 @@ class Version:
         self.tag = tag
     
     def __repr__(self):
-        return "Version(" + str(self.major) + ", " + str(self.minor) + ", " + str(self.patch) + ", " + self.tag + ")"
+        return "Version(" + str(self.major) + ", " + str(self.minor) + ", " + str(self.patch) + ", \"" + self.tag + "\")"
     
     def __str__(self):
-        return str(self.major) + "." + str(self.minor) + "." + str(self.patch) + self.tag
+        return str(self.major) + "." + str(self.minor) + (("." + str(self.patch)) if ((self.patch != 0) or self.tag != "") else "") + (self.tag if (self.tag != "") else "")
     
     def __len__(self):
         if self.tag == "":
@@ -99,4 +99,4 @@ class Version:
     def asdict(self):
         return {"major": self.major, "minor": self.minor, "patch": self.patch, "tag": self.tag}
 
-__version__ = Version(1, 1)
+__version__ = Version(1, 1, 1)

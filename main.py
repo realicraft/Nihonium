@@ -1,20 +1,23 @@
 """A basic Discord intergration of Nihonium."""
 
 import sys, math, random, os, json, datetime, traceback, re, requests # built-in modules
-try: import versions, commands # custom modules
+try: # custom modules
+    import versions, commands 
+    try: from commands import framework as fw
+    except ImportError: pass
 except ImportError:
-    raise ImportError("Flerovium requires versions.py and commands.py to run. Seek out setup.py to install it.") from None
+    raise ImportError("Flerovium is missing some important files. Seek out setup.py to install it.")
 import discord # the golden nugget
 
 print("Flerovium: A basic Discord intergration of Nihonium.")
 
 # Initialize variables
-version = versions.Version(1, 0, 0)
+version = versions.Version(1, 1, 0)
 bot_info = {"name": "Flerovium", "id": "flerovium", "prefix": "fl!"} # This identifies the bot running commands.py.
 pattern = bot_info["prefix"]+"(.+)"                                  # This defines the command pattern.
 fancy = "fancy" in sys.argv[1:]                                      # This enables fancy text. ($\alpha{}$)
 
-# These variables are for debugging only.
+# These variables are for debugging.
 verbose = "verbose" in sys.argv[1:]                                  # This increases text output.
 readOnly = "readonly" in sys.argv[1:]                                # This enables read-only mode.
 legacy = "legacy" in sys.argv[1:]                                    # This enables full Nihonium-like behaviour.
@@ -72,7 +75,7 @@ def assemble_userdata(user):
     return {"name": user.name+"#"+user.discriminator,
     "uID": user.id}
     
-logEntry("Using commands.py version "+str(commands.version))
+logEntry("Using commands.py version "+str(commands.version if "version" in dir(commands) else commands.__version__))
 
 # Get attributes
 def getAttr():
@@ -158,21 +161,28 @@ def formatToDiscord(text):
 class Flerovium(discord.Client):
     async def on_ready(self):
         logEntry('Logged on as '+str(self.user),printToScreen=True)
-        print("Flerovium is active.\n\n")
+        print("Flerovium is active."+("\n\n" if not verbose else ""))
         showStats()
+        
+    # client.change_presence(activity=game)
 
     async def on_message(self, message):
         def getFunction(match):
+            match[0] = match[0].lower()
             if "ex_commands" in dir(commands):
                 if "flerovium" in commands.ex_commands:
                     if match[0] in commands.ex_commands["flerovium"]:
-                        return commands.ex_commands["flerovium"][match[0]]
+                        funct = commands.ex_commands["flerovium"][match[0]]
+                        if "Command" in type(funct).__name__: funct = funct.command
+                        return funct
             if match[0] in commands.commands:
-                if commands.commands[match[0]].__name__ in inc_commands:
+                funct = commands.commands[match[0]]
+                if "Command" in type(funct).__name__: funct = funct.command
+                if funct.__name__ in inc_commands:
                     return lambda *a: ":no_entry_sign: The command you issued is incompatible with Flerovium."
                 else: 
-                    return commands.commands[match[0]]
-                    
+                    return funct
+            
         saveStats()
         phase = "parsing"
         try:

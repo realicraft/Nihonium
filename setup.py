@@ -31,17 +31,22 @@ for x in ("build", "install", "sdist", "upload"):
 		if input("Anyway, shall we continue the procedure? ").lower() not in ("yes", "true", 'y'): exit()
 		break
 		
-def main():
-	def download(url, file):
-		with open(file, "wb") as f: f.write(requests.get(url).content)
-			
-	url = ask("Which source should Flerovium use for its custom modules?",{"Nihonium (more up-to-date, less Discord features)":"https://raw.githubusercontent.com/realicraft/Nihonium/main/","Flerovium (more Discord features, less up-to-date)":"https://raw.githubusercontent.com/Gilbert189/Flerovium/main/","Something else":""})
-	if not url: url = input("What source should Flerovium get its modules?\nIt should have the necessary files in root.\n> ")
+def download(url, file):
+    with open(file, "wb") as f: f.write(requests.get(url).content)
+        
+# Order: (user, repo, branch)
+url = ask("Which source should Flerovium use for its custom modules?",{"Nihonium (more up-to-date, less Discord features)":("realicraft","Nihonium","main"),"Flerovium (more Discord features, less up-to-date)":("Gilbert189","Flerovium","main")})
 
-	for x in ("commands.py","versions.py"):
-		print("Downloading %s..."%x)
-		download(url + x,x)
-		
-	print("Done!")
+for x in ("versions.py",):
+    print("Downloading %s..."%(x))
+    download("https://raw.githubusercontent.com/" + "/".join(url) + "/" + x,x)
+    
+try:
+    from gitdir import gitdir
+    for x in ("commands",):
+        print("Downloading directory %s..."%x)
+        gitdir.download("https://github.com/" + url[0] + "/" + url[1] + "/tree/" + url[2] + "/" + x)
+except ImportError: print("gitdir not found, skipping directory download.\n(You should be able to install it by pip.)")
+    
+print("Done!")
 	
-main()
