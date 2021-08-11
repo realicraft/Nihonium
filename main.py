@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 10, 0)
+version = versions.Version(0, 10, 1)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -256,7 +256,8 @@ def main_loop(tID, row):
                 datafile.write(json.dumps(data))
             j += 1
         i += 1
-    post_ids[str(tID)]["recentPost"] = j + ((i-1)*25)
+    new_recent_postid = j + ((i-1)*25)
+    post_ids[str(tID)]["recentPost"] = new_recent_postid
     writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
     writeText(26, 5+(row), "  Working...  ")
     clearLine(2)
@@ -276,6 +277,7 @@ def main_loop(tID, row):
     writeText(43, 5+(row), "    OK ", 10)
     writeText(0, 2, "Posting to thread " + str(tID) + "...")
     writeText(41, 5+(row), "≈", 6)
+    post_ids[str(tID)]["recentPost"] = new_recent_postid
     with open("threadData.json", "w", encoding="utf-8") as l:
         l.write(json.dumps(post_ids, indent=4))
     if output == "":
