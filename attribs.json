@@ -1,5 +1,5 @@
 {
-	"attrs_version":1,
+	"attrs_version":2,
 	"inc_commands":["estimate","threadInfo"],
 	"replace":
 	{
