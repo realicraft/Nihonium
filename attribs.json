@@ -5,11 +5,11 @@
 	{
 		"coin": 
 		{
-			"(.+)": ":coin: \\1"
+			"^(.+)$": ":coin: \\1"
 		},
 		"dice": 
 		{
-			"(.+)": ":game_die: \\1",
+			"^(.+)$": ":game_die: \\1",
 			"(You can't)": ":no_entry_sign: \\1",
 			"(You roll no dice)": ":wind_chime: \\1",
 			"(You roll \\d+ pieces of air)": ":wind_chime: \\1",
@@ -22,15 +22,15 @@
 		},
 		"suggest": 
 		{
-			"(.+)": ":pencil: \\1"
+			"^(.+)$": ":pencil: \\1"
 		},
 		"files": 
 		{
-			"(.+)": ":file_folder: \\1"
+			"^(.+)$": ":file_folder: \\1"
 		},
 		"text": 
 		{
-			"(.+)": ":pencil: \\1"
+			"^(.+)$": ":pencil: \\1"
 		}
 	}
 }
