@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 10, 1)
+version = versions.Version(0, 10, 2)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -227,6 +227,7 @@ def main_loop(tID, row):
         pass
     i = math.ceil((post_ids[str(tID)]["recentPost"]-1)/25)-1
     need_to_parse = []
+    j = 0
     while (i < pageCount):
         bpage = getReq('https://tbgforums.com/forums/viewtopic.php?id=' + str(tID) + '&p=' + str(i+1), headers=headers, cookies=cookies)
         btree = html.fromstring(bpage.content)
