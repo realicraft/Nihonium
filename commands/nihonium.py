@@ -5,8 +5,8 @@ import random, math, datetime, json # These imports are dependent on what your c
 # This file can be used as an example of a command file.
 
 version = versions.Version(1, 7, 5)                     # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 10, 0)            # This defines the minimum version of Nihonium needed to run these commands.
-alt_minvers = {"nihonium2": versions.Version(0, 10, 0)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
+nihonium_minver = versions.Version(0, 10, 3)            # This defines the minimum version of Nihonium needed to run these commands.
+alt_minvers = {"nihonium2": versions.Version(0, 10, 3)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
 # Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
@@ -134,3 +134,7 @@ commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "b
 # This registers commands exclusive to certain bots.
 # Format: {"<id>": {"<command_name>": "<function>"}}
 ex_commandlist = {"nihonium2": {"coin2": coin2}}
+# This registers functions to be performed at the end of a parse-cycle.
+do_last = []
+# This registers functions to be performed at the beginning of a parse-cycle.
+do_first = []

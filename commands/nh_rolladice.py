@@ -2,9 +2,11 @@ import versions
 from . import framework as fw
 import random, json, datetime, math
 
-version = versions.Version(1, 7, 5)
-nihonium_minver = versions.Version(0, 10, 0)
+version = versions.Version(1, 8, 0)
+nihonium_minver = versions.Version(0, 10, 3)
 alt_minvers = {}
+
+did_roll = False
 
 def rollADice(bot_data, thread_data, user_data, action="roll"):
     with open("roll_a_dice.json", "r+", encoding="utf-8") as rollfile:
@@ -54,15 +56,15 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
                 roll_data[random.choice(list(roll_data2.keys()))]["points"] += 2
                 output += ", and gained one point, while someone random gained two."
             elif result == 9:
-                hold = (random.randint(1, random.randint(1, 60)))
+                if (random.randint(1, 3) == 1): hold = (random.randint(1, random.randint(1, 60)))
+                else: hold = 0
                 roll_data[uID]["points"] += hold
                 output += ", and gained points equal to how long you have on the 60 second rule.\n...we'll pretend that's " + str(hold) + "."
             elif result == 10:
                 roll_data[uID]["points"] += 10
-                roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=12)).timestamp())
+                roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=10)).timestamp())
                 output += ", and gained ten points! You can't roll for the next twelve hours, though."
         output += "\nYou now have " + str(roll_data[uID]["points"])+ " point" + ("s" if roll_data[uID]["points"] != 1 else "") + "."
-        roll_data["roll_last"] = int(timenow.timestamp())
         with open("roll_a_dice.json", "w", encoding="utf-8") as rollfile:
             rollfile.write(json.dumps(roll_data, indent=4))
     elif action in ["points", "score", "check"]:
@@ -78,7 +80,22 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
         output += "[/quote][i](Note: the leaderboard uses user IDs rather than usernames, as that is all that is stored.)[/i]"
     return output
 
+def updateRollLast():
+    if did_roll:
+        with open("roll_a_dice.json", "r+", encoding="utf-8") as rollfile:
+            roll_data = json.loads(rollfile.read())
+        timenow = datetime.datetime.now(tz=datetime.timezone.utc)
+        roll_data["roll_last"] = int(timenow.timestamp())
+        with open("roll_a_dice.json", "w", encoding="utf-8") as rollfile:
+                rollfile.write(json.dumps(roll_data, indent=4))
+
+def resetDidRoll():
+    global did_roll
+    did_roll = False
+
 diceCommand = fw.Command("rolladice", rollADice, [fw.CommandInput("action", "str", "roll", "What action you want to perform.")], helpShort="Roll a dice and see what happens.")
 
 commandlist = {"rolladice": diceCommand, "rolldice": diceCommand}
 ex_commandlist = {}
+do_last = [updateRollLast]
+do_first = [resetDidRoll]

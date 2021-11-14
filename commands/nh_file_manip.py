@@ -2,8 +2,8 @@ import versions
 from . import framework as fw
 import shutil, os, datetime, math, random
 
-version = versions.Version(1, 7, 5)
-nihonium_minver = versions.Version(0, 10, 0)
+version = versions.Version(1, 7, 6)
+nihonium_minver = versions.Version(0, 10, 3)
 alt_minvers = {}
 
 #from Nihonium
@@ -193,3 +193,5 @@ fileCommand = fw.Command("files", files, [fw.CommandInput("command", "str", "rea
 
 commandlist = {"text": textCommand, "files": fileCommand, "file": fileCommand}
 ex_commandlist = {}
+do_last = []
+do_first = []

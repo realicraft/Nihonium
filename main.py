@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 10, 2)
+version = versions.Version(0, 10, 3)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -340,6 +340,9 @@ async def true_main_loop():
                 await writeTextA(41, 5+i, "W", 3)
             bell()
             update_sig(motd, None, None)
+            await writeTextA(0, 2, "Performing do_first functions...")
+            for k in commands.do_first:
+                k()
             for j in range(len(thread_ids)):
                 await writeTextA(0, 2, "Running loop...")
                 logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
@@ -353,6 +356,10 @@ async def true_main_loop():
             data["parse_cycles"] += 1
             with open("data.json", "w", encoding="utf-8") as datafile:
                 datafile.write(json.dumps(data))
+            clearLine(2)
+            await writeTextA(0, 2, "Performing do_last functions...")
+            for l in commands.do_last:
+                l()
             clearLine(2)
             await writeTextA(0, 2, "Sleeping...")
             logEntry("Sleeping...")
