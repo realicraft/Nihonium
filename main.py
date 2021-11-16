@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 10, 3)
+version = versions.Version(0, 10, 4)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -142,6 +142,10 @@ def clearLine(line):
     moveCursor(0, line)
     sys.stdout.write(" "*120)
     sys.stdout.flush()
+    
+async def writeLine2(text, fcolor=None, bcolor=None):
+    clearLine(2)
+    writeText(0, 2, text, fcolor, bcolor)
 
 async def clock():
     while True:
@@ -340,7 +344,7 @@ async def true_main_loop():
                 await writeTextA(41, 5+i, "W", 3)
             bell()
             update_sig(motd, None, None)
-            await writeTextA(0, 2, "Performing do_first functions...")
+            await writeLine2("Performing do_first functions...")
             for k in commands.do_first:
                 k()
             for j in range(len(thread_ids)):
@@ -356,12 +360,10 @@ async def true_main_loop():
             data["parse_cycles"] += 1
             with open("data.json", "w", encoding="utf-8") as datafile:
                 datafile.write(json.dumps(data))
-            clearLine(2)
-            await writeTextA(0, 2, "Performing do_last functions...")
+            await writeLine2("Performing do_last functions...")
             for l in commands.do_last:
                 l()
-            clearLine(2)
-            await writeTextA(0, 2, "Sleeping...")
+            await writeLine2("Sleeping...")
             logEntry("Sleeping...")
             for l in range(5, 0, -1):
                 sleeptime = thirtyminutes - datetime.datetime.now()
@@ -370,8 +372,7 @@ async def true_main_loop():
                 for k in range(int(sleeptime/l)):
                     await writeTextA(13, 2, "(" + str(int(sleeptime-k)) + " seconds left)    ", 13)
                     await asyncio.sleep(1)
-            clearLine(2)
-            await writeTextA(0, 2, "Logging in...")
+            await writeLine2("Logging in...")
             logEntry("Logging in...")
             login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
             _ = login_req #suppress unused variable warning

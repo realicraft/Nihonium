@@ -151,6 +151,7 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
         try:
             os.rename("files/" + filename, "files/" + other[0])
             logEntry("Renamed file '" + filename + "' to '" + other[0] + "'")
+            return "Renamed file [i]" + filename + "[/i] to [i]" + other[0] + "[/i]"
         except FileNotFoundError: return "No file by the name [i]" + filename + "[/i] exists."
         except FileExistsError: return "A file by the name [i]" + other[0] + "[/i] already exists."
     elif command == "list":
@@ -163,6 +164,7 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
         try:
             with open("files/" + filename, "x", encoding="utf-8") as file: return "Successfully created [i]" + filename + "[/i]"
             logEntry("Created file '" + filename + "'")
+            return "Created file [i]" + filename + "[/i]"
         except IOError: return "A file by the name [i]" + filename + "[/i] already exists."
     elif command == "duplicate":
         if filename == "_": return "Can't duplicate _."

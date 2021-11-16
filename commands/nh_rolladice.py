@@ -63,7 +63,7 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
             elif result == 10:
                 roll_data[uID]["points"] += 10
                 roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=10)).timestamp())
-                output += ", and gained ten points! You can't roll for the next twelve hours, though."
+                output += ", and gained ten points! You can't roll for the next ten hours, though."
         output += "\nYou now have " + str(roll_data[uID]["points"])+ " point" + ("s" if roll_data[uID]["points"] != 1 else "") + "."
         with open("roll_a_dice.json", "w", encoding="utf-8") as rollfile:
             rollfile.write(json.dumps(roll_data, indent=4))
