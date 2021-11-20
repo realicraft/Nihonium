@@ -2,9 +2,20 @@ import versions
 from . import framework as fw
 import shutil, os, datetime, math, random
 
-version = versions.Version(1, 7, 6)
+version = versions.Version(1, 8, 0)
 nihonium_minver = versions.Version(0, 10, 3)
 alt_minvers = {}
+
+# codes:
+# 0 | valid
+# 1 | contains ".."
+# 2 | is bad device name
+def sanitizeFilename(fn):
+    if "../" in fn: return [False,1]
+    elif fn == "con": return [False,2]
+    elif fn == "com": return [False,2]
+    elif fn == "prn": return [False,2]
+    else: return [True,0]
 
 #from Nihonium
 def logEntry(entry: str, timestamp=None): # Used to add entries to the log files.
@@ -20,7 +31,7 @@ def text(bot_data, thread_data, user_data, command="read", filename="_", *other)
     # appendline | add a new line at the end of the file, followed by " ".join(other)
     # insert     | insert " ".join(other[1:]) after character other[0]
     # cut        | cut a section of the file, removing it (clipboard will be emptied on paste)
-    # copy       | copy a section of the file, trunciated if it ends outide the file
+    # copy       | copy a section of the file, trunciated if it ends outside the file
     # paste      | paste onto the end of the file, fails if the clipboard is empty
     # create     | create a file, fails if it exists
     # duplicate  | duplicate a file, fails if it does not exist
@@ -29,10 +40,9 @@ def text(bot_data, thread_data, user_data, command="read", filename="_", *other)
     if filename == "_":
         if command == "append": command = "write"
         if command == "insert": command = "write"
-    if "../" in filename:
-        return "No file by the name [i]" + filename + ".txt[/i] exists" + random.choice(("", "", "", "", "", ", cheater", ", Mr. Hackerman"))  + "."
-    if filename == "con":
-        return "Stop that."
+    sani = sanitizeFilename(filename)
+    if sani[0]: pass
+    else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name."][sani[1]] + "[/code]"
     if command == "read":
         try:
             with open("files/" + filename + ".txt", "r", encoding="utf-8") as file: return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
@@ -104,10 +114,9 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
     # create    | create a file, fails if it exists
     # duplicate | duplicate a file, fails if it does not exist
     # delete    | delete a file, fails if it does not exist
-    if "../" in filename:
-        return "No file by the name [i]" + filename + "[/i] exists" + random.choice(("", "", "", "", "", ", cheater", ", Mr. Hackerman"))  + "."
-    if filename.startswith("con."):
-        return "Stop that."
+    sani = sanitizeFilename(filename)
+    if sani[0]: pass
+    else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name."][sani[1]] + "[/code]"
     if command == "read":
         try:
             with open("files/" + filename, "rb") as file:
@@ -148,6 +157,9 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
                 return output
         except IOError: return "No file by the name [i]" + filename + "[/i] exists."
     elif command == "rename":
+        sani = sanitizeFilename(other[0])
+        if sani[0]: pass
+        else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name."][sani[1]] + "[/code]"
         try:
             os.rename("files/" + filename, "files/" + other[0])
             logEntry("Renamed file '" + filename + "' to '" + other[0] + "'")
@@ -162,9 +174,9 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
         return output
     elif command == "create":
         try:
-            with open("files/" + filename, "x", encoding="utf-8") as file: return "Successfully created [i]" + filename + "[/i]"
+            with open("files/" + filename, "x", encoding="utf-8") as file: pass
             logEntry("Created file '" + filename + "'")
-            return "Created file [i]" + filename + "[/i]"
+            return "Successfully created [i]" + filename + "[/i]"
         except IOError: return "A file by the name [i]" + filename + "[/i] already exists."
     elif command == "duplicate":
         if filename == "_": return "Can't duplicate _."

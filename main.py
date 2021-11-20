@@ -3,7 +3,7 @@ import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 
-version = versions.Version(0, 10, 4)
+version = versions.Version(0, 10, 5)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -90,7 +90,7 @@ def update_sig(_motd, xline, misc):
     _ = postReq("https://tbgforums.com/forums/profile.php?section=personality&id=1751", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
-    return random.choice(["beep", "a", str(version), ":)"])
+    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "FightSim 3", "Legends of Idleon", "Nickel", "Fleurovium", "Grogar"])+"!", "yo", "motd", "today's luckey number: "+str(random.randint(1, random.randint(1, 1000)))])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")

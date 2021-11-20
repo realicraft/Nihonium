@@ -7,8 +7,10 @@ nihonium_minver = versions.Version(0, 10, 3)
 alt_minvers = {}
 
 did_roll = False
+pc_len = datetime.timedelta(minutes=30)
 
 def rollADice(bot_data, thread_data, user_data, action="roll"):
+    global did_roll
     with open("roll_a_dice.json", "r+", encoding="utf-8") as rollfile:
         roll_data = json.loads(rollfile.read())
     output = ""
@@ -29,7 +31,7 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
                 output += ", and gained one point."
             elif result == 2:
                 roll_data[uID]["points"] += 2
-                roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=4)).timestamp())
+                roll_data[uID]["timer"] = int((timenow + (pc_len*8)).timestamp())
                 output += ", and gained two points. You can't roll for the next four hours."
             elif result == 3:
                 hold = math.floor((int(timenow.timestamp()) - roll_data["roll_last"])/(60*60))
@@ -62,25 +64,27 @@ def rollADice(bot_data, thread_data, user_data, action="roll"):
                 output += ", and gained points equal to how long you have on the 60 second rule.\n...we'll pretend that's " + str(hold) + "."
             elif result == 10:
                 roll_data[uID]["points"] += 10
-                roll_data[uID]["timer"] = int((timenow + datetime.timedelta(hours=10)).timestamp())
+                roll_data[uID]["timer"] = int((timenow + (pc_len*20)).timestamp())
                 output += ", and gained ten points! You can't roll for the next ten hours, though."
         output += "\nYou now have " + str(roll_data[uID]["points"])+ " point" + ("s" if roll_data[uID]["points"] != 1 else "") + "."
         with open("roll_a_dice.json", "w", encoding="utf-8") as rollfile:
             rollfile.write(json.dumps(roll_data, indent=4))
+        did_roll = True
     elif action in ["points", "score", "check"]:
         hold = roll_data[uID]["points"]
         output += "You have " + str(hold) + " point" + ("s" if hold != 1 else "") + "."
     elif action in ["scoreboard", "leaderboard", "scores"]:
-        output += "Current leaderboard:\n[quote]"
+        output += "Current leaderboard:\n[code]"
         roll_data2 = {**roll_data}
         del roll_data2["roll_last"]
         #based off of careerkarma.com/blog/python-sort-a-dictionary-by-value/
         for i in sorted(roll_data2, key=lambda x: roll_data[x]["points"]):
-            output += str(i) + ": " + str(roll_data2[i]["points"]) + " point" + ("s" if roll_data2[i]["points"] != 1 else "") + "\n"
-        output += "[/quote][i](Note: the leaderboard uses user IDs rather than usernames, as that is all that is stored.)[/i]"
+            output += str(i).rjust(4) + ": " + str(roll_data2[i]["points"]) + " point" + ("s" if roll_data2[i]["points"] != 1 else "") + "\n"
+        output += "[/code][i](Note: the leaderboard uses user IDs rather than usernames, as that is all that is stored.)[/i]"
     return output
 
 def updateRollLast():
+    global did_roll
     if did_roll:
         with open("roll_a_dice.json", "r+", encoding="utf-8") as rollfile:
             roll_data = json.loads(rollfile.read())
