@@ -4,7 +4,7 @@ import random, math, datetime, json # These imports are dependent on what your c
 
 # This file can be used as an example of a command file.
 
-version = versions.Version(1, 7, 5)                     # This defines the version of the user-added commands.
+version = versions.Version(1, 7, 6)                     # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 10, 3)            # This defines the minimum version of Nihonium needed to run these commands.
 alt_minvers = {"nihonium2": versions.Version(0, 10, 3)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
@@ -108,9 +108,9 @@ def estimate(bot_data, thread_data, user_data, tID=None):
         if len(thread_data2["estimates"]) >= 1:
             output += "\nPrevious Estimates: [quote]"
             for i in thread_data2["estimates"]:
-                output += "\n" + i
+                output += "\n(" + i[0] + ") " + i[1]
             output += "[/quote]"
-        thread_data2["estimates"].append(cdate.strftime("%b %d, %Y %I:%M:%S %p"))
+        thread_data2["estimates"].append([bdate.strftime("%b %d, %Y %I:%M:%S %p"), cdate.strftime("%b %d, %Y %I:%M:%S %p")])
         with open("threadData.json", "w", encoding="utf-8") as l:
             l.write(json.dumps(post_ids, indent=4))
     else:
