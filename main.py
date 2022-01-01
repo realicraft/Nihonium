@@ -2,8 +2,9 @@ import sys, math, random, os, time, json, requests, pause, datetime, traceback, 
 import versions, commands # custom modules
 import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
+from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 10, 6)
+version = versions.Version(0, 11, 0)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -180,10 +181,9 @@ def parse_command(command, tID):
     global post_ids
     with open("data.json", "r+", encoding="utf-8") as datafile:
         data = json.loads(datafile.read())
-    command2 = command["contents"].split("<br>")[0][6:]
-    command2 = command2.split("</p>")[0]
+    command2 = command["contents"]
     logEntry("Parsing command: " + str(command2))
-    shards = command2.split(" ")
+    shards = command2[len(bot_info["prefix"]):].split(" ")
     shards2 = shards[1:]
     for i in range(len(shards2)):
         shards2[i] = html2.unescape(shards2[i])
@@ -206,6 +206,24 @@ def parse_command(command, tID):
     with open("data.json", "w", encoding="utf-8") as datafile:
         datafile.write(json.dumps(data))
     return output
+
+def find_commands(content):
+    global data
+    content2 = content["contents"]
+    content2 = content2.replace("<p>", "\n").replace("</p>", "\n").replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
+    soup = BeautifulSoup(content2, 'html.parser') # from https://stackoverflow.com/a/15797247
+    _ = [div.extract() for div in soup.findAll('div')]
+    content2 = str(soup)
+    content3 = content2.splitlines()
+    collect = []
+    for i in range(len(content3)):
+        logEntry(content3[i])
+        if content3[i].startswith(bot_info["prefix"]):
+            collect.append({"author": content["author"], "authorID": content["authorID"], "contents": content3[i], "postID": content["postID"], "date": content["date"], "internal_postid": content["internal_postid"]})
+            data["commands_found"] += 1
+    return collect
+
+    
 
 def main_loop(tID, row):
     global cookies
@@ -253,10 +271,15 @@ def main_loop(tID, row):
             k["date"] = html.tostring(b[0]).decode("utf-8").split(">")[1][0:-3].replace("&#8201;", "")
             k["internal_postid"] = int(html.tostring(b[0]).decode("utf-8").split('"')[1].split("p")[-1])
             if k["internal_postid"] > data["recent_post"]: data["recent_post"] = k["internal_postid"]
-            if k["contents"].startswith("<p>" + bot_info["prefix"]):
-                need_to_parse.append(k)
-                data["commands_found"] += 1
-                writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
+            #if k["contents"].startswith("<p>" + bot_info["prefix"]):
+            #    need_to_parse.append(k)
+            #    data["commands_found"] += 1
+            #    writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
+            commands_found = find_commands(k)
+            if len(commands_found) != 0:
+                for n in commands_found:
+                    need_to_parse.append(n)
+            writeText(11, 5+(row), str(len(need_to_parse)).rjust(5) + " found.  ")
             with open("data.json", "w", encoding="utf-8") as datafile:
                 datafile.write(json.dumps(data))
             j += 1
