@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 11, 0)
+version = versions.Version(0, 11, 1)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -181,9 +181,9 @@ def parse_command(command, tID):
     global post_ids
     with open("data.json", "r+", encoding="utf-8") as datafile:
         data = json.loads(datafile.read())
-    command2 = command["contents"]
+    command2 = command["contents"][len(bot_info["prefix"]):]
     logEntry("Parsing command: " + str(command2))
-    shards = command2[len(bot_info["prefix"]):].split(" ")
+    shards = command2.split(" ")
     shards2 = shards[1:]
     for i in range(len(shards2)):
         shards2[i] = html2.unescape(shards2[i])
