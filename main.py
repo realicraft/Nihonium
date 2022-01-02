@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 11, 1)
+version = versions.Version(0, 11, 2)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -217,7 +217,6 @@ def find_commands(content):
     content3 = content2.splitlines()
     collect = []
     for i in range(len(content3)):
-        logEntry(content3[i])
         if content3[i].startswith(bot_info["prefix"]):
             collect.append({"author": content["author"], "authorID": content["authorID"], "contents": content3[i], "postID": content["postID"], "date": content["date"], "internal_postid": content["internal_postid"]})
             data["commands_found"] += 1
