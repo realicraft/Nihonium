@@ -1,5 +1,16 @@
 # This file provides some framwork for commands, including a class for commands.
-import typing
+# It also provides access to the logEntry() function.
+import typing, datetime
+
+# from main.py
+def logEntry(entry: str, timestamp=None):
+    if timestamp is None: timestamp = datetime.datetime.now()
+    with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a+", encoding="utf-8") as logfile:
+        logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
+        #logfile.seek(0)
+        #line_count = 0
+        #for _ in logfile: line_count += 1
+        #writeText(97, 2, str(line_count).rjust(4) + " entries in log file", 0, 7)
 
 class CommandInput:
     """A class for implementing commands inputs."""

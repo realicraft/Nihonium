@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 11, 2)
+version = versions.Version(0, 12, 0)
 bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
@@ -91,7 +91,7 @@ def update_sig(_motd, xline, misc):
     _ = postReq("https://tbgforums.com/forums/profile.php?section=personality&id=1751", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
-    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Fleurovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's luckey number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version)])
+    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Fleurovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's luckey number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes."])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")
@@ -191,11 +191,16 @@ def parse_command(command, tID):
         validCommand()
         output = "[quote=" + command["author"] + "]" + bot_info["prefix"] + command2 + "[/quote]\n"
         try:
-            if shards[0].lower() in commands.commands: output += commands.commands[shards[0].lower()].run(assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
-            else: output += commands.ex_commands[bot_info["id"]][shards[0].lower()].run(assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
-            data["commands_parsed"] += 1
+            if shards[0].lower() in commands.commands: output2 = commands.commands[shards[0].lower()].run(assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
+            else: output2 = commands.ex_commands[bot_info["id"]][shards[0].lower()].run(assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
+            if output2 == "":
+                output = ""
+            else:
+                output += output2
+                data["commands_parsed"] += 1
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
+            logEntry("Traceback: "+ traceback.format_exc())
             output += "While parsing that command, an error occured: [code]"
             output += traceback.format_exc().splitlines()[-1]
             output += "[/code]"
