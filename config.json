@@ -1,0 +1,10 @@
+{
+    "uptime": "2021-11-23T03:13:53",
+    "bot_info": {"name": "Flerovium", "id": "flerovium", "prefix": "fl!"},
+    "stats": {
+        "parse_cycles": null, 
+        "commands_parsed": 0, 
+        "commands_found": 0, 
+        "valid_commands": 0
+    }
+}

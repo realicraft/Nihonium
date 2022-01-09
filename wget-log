@@ -1,0 +1,19 @@
+--2021-11-23 15:09:24--  http://central.maven.org/maven2/com/squareup/okhttp3/okhttp/3.0.0-RC1/okhttp-3.0.0-RC1.jar
+Resolving central.maven.org (central.maven.org)... 64:ff9b::2456:3fb6, 36.86.63.182
+Connecting to central.maven.org (central.maven.org)|64:ff9b::2456:3fb6|:80... connected.
+HTTP request sent, awaiting response... Read error (Connection reset by peer) in headers.
+Retrying.
+
+--2021-11-23 15:14:29--  (try: 2)  http://central.maven.org/maven2/com/squareup/okhttp3/okhttp/3.0.0-RC1/okhttp-3.0.0-RC1.jar
+Connecting to central.maven.org (central.maven.org)|64:ff9b::2456:3fb6|:80... connected.
+HTTP request sent, awaiting response... Read error (Connection reset by peer) in headers.
+Retrying.
+
+--2021-11-23 15:19:31--  (try: 3)  http://central.maven.org/maven2/com/squareup/okhttp3/okhttp/3.0.0-RC1/okhttp-3.0.0-RC1.jar
+Connecting to central.maven.org (central.maven.org)|64:ff9b::2456:3fb6|:80... connected.
+HTTP request sent, awaiting response... Read error (Connection reset by peer) in headers.
+Retrying.
+
+--2021-11-23 15:24:37--  (try: 4)  http://central.maven.org/maven2/com/squareup/okhttp3/okhttp/3.0.0-RC1/okhttp-3.0.0-RC1.jar
+Connecting to central.maven.org (central.maven.org)|64:ff9b::2456:3fb6|:80... connected.
+HTTP request sent, awaiting response... 

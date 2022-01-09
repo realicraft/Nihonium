@@ -35,7 +35,7 @@ def download(url, file):
     with open(file, "wb") as f: f.write(requests.get(url).content)
         
 # Order: (user, repo, branch)
-url = ask("Which source should Flerovium use for its custom modules?",{"Nihonium (more up-to-date, less Discord features)":("realicraft","Nihonium","main"),"Flerovium (more Discord features, less up-to-date)":("Gilbert189","Flerovium","main")})
+url = ask("Which source should Flerovium use for its custom modules?",{"Nihonium (more up-to-date, less Discord features)":("realicraft","Nihonium","main"),"Flerovium.java (more Discord features, less up-to-date)":("tbgers","Flerovium-java","main")})
 
 for x in ("versions.py",):
     print("Downloading %s..."%(x))

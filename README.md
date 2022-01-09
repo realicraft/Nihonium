@@ -1,5 +1,8 @@
-# Flerovium
+# Flerovium: Java Edition
 A basic Discord implementation of Nihonium.
+This is the successor of [Flerovium](https://github.com/Gilbert189/Flerovium), but using [JDA](https://github.com/DV8FromTheWorld/JDA) instead of [discord.py](https://github.com/Rapptz/discord.py) (rip)
+
+Since this is literally me trying to hack a Java peg into a Python hole, don't expect all commands to work here.
 
 ### Required Files/Directories
 The bot requires two files and two directory not in the repository to run. These files are:
