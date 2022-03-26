@@ -1,8 +1,8 @@
-# This file provides some framwork for commands, including a class for commands.
+# This file provides some framework for commands, including a class for commands.
 import typing
 
 class CommandInput:
-    """A class for implementing commands inputs."""
+    """A class for implementing command inputs."""
     def __init__(self, name: str, _type: str, default: str="", desc: str=""):
         self.name = name
         self.type = _type
@@ -18,7 +18,7 @@ class CommandInput:
         return "(" + self.type + ") " + self.name + (" " + self.desc if self.hasdesc else "") + (" (Defaults to " + self.default + ")" if self.hasdefault else "")
 
 class Command:
-    """A class for implimenting commands."""
+    """A class for implementing commands."""
     def __init__(self, name: str, command: typing.Callable[..., str], inputs: typing.List[CommandInput], *, helpShort: str="", helpLong: str=""):
         self.name = name
         self.command = command

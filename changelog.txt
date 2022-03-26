@@ -31,3 +31,8 @@
 2021-08-05  Gilbert TR
     
     * main.py: more redundancy, implemented fancy text and read-only mode
+    
+2021-12-01  Gilbert TR
+
+	* migration to Java
+	* note: might not be updated anymore. 

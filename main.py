@@ -1,4 +1,6 @@
-"""A basic Discord intergration of Nihonium."""
+"""A basic Discord intergration of Nihonium.
+
+This program is here only for reference of src."""
 
 import sys, math, random, os, json, datetime, traceback, re, requests # built-in modules
 try: # custom modules
