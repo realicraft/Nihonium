@@ -4,17 +4,20 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 12, 0)
-bot_info = {"name": "Nihonium", "id": "nihonium", "prefix": "nh!"} # Info about the bot.
+version = versions.Version(0, 12, 1)
+
+with open("botInfo.json", "r", encoding="utf-8") as infofile:
+    bot_info = json.loads(infofile.read()) # Info about the bot.
+
 inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
 exc_commands = {"5893": ("rolladice", "rolldice")} # Commands exclusive to specific threads. In the format {"<threadID>": ("<command_name>")}
 
 if (commands.nihonium_minver > version):
-    raise ValueError("This Nihonium install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.nihonium_minver) + ".")
+    raise ValueError(f"This Nihonium install is of version {str(version)}, but the copy of 'commands.py' it's using requires at least version {str(commands.nihonium_minver)}.")
 
 if (bot_info["id"] != "nihonium") and (commands.alt_minvers[bot_info["id"]] > version):
-    raise ValueError("This " + bot_info["name"] + " install is of version " + str(version) + ", but the copy of 'commands.py' it's using requires at least version " + str(commands.alt_minvers[bot_info["id"]]) + ".")
+    raise ValueError(f"This {bot_info['name']} install is of version {str(version)}, but the copy of 'commands.py' it's using requires at least version {str(commands.alt_minvers[bot_info['id']])}.")
 
 with open("threadData.json", "r+", encoding="utf-8") as threadfile:
     post_ids = json.loads(threadfile.read())
@@ -42,7 +45,7 @@ cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(
 def logEntry(entry: str, timestamp=None):
     if timestamp is None: timestamp = datetime.datetime.now()
     with open("logs/" + timestamp.strftime("%Y%m%d") + ".log", "a+", encoding="utf-8") as logfile:
-        logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + entry + "\n")
+        logfile.write("[" + timestamp.strftime("%I:%M:%S.%f %p") + "] " + str(entry) + "\n")
         logfile.seek(0)
         line_count = 0
         for _ in logfile: line_count += 1
@@ -75,23 +78,23 @@ def update_sig(_motd, xline, misc):
         full_sig += _motd2
         siggy[0] = _motd2
     full_sig += "\n---------------"
-    full_sig += "\n" + bot_info["name"] + " (version " + str(version) + ")"
-    full_sig += "\n[i]A bot for the TBGs.[/i]"
+    full_sig += f"\n{bot_info['name']} (version {str(version)})"
+    full_sig += f"\n[i]{bot_info['tagline']}[/i]"
     if xline is None: xline = siggy[1]
     if xline is False:
-        full_sig += "\nCurrently offline."
+        full_sig += f"\n{bot_info['offline']}"
         siggy[1] = False
     else:
-        full_sig += "\nCurrently online. ([i]may not be guaranteed[/i])"
+        full_sig += f"\n{bot_info['online']}"
         siggy[1] = True
     full_sig += "\nThreads parsed: " + str(thread_ids)
     if misc is None: misc = siggy[2]
     else: siggy[2] = misc
     full_sig += "\n" + misc
-    _ = postReq("https://tbgforums.com/forums/profile.php?section=personality&id=1751", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
+    _ = postReq(f"https://tbgforums.com/forums/profile.php?section=personality&id={bot_info['uid']}", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
-    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Fleurovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's luckey number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes."])
+    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Flerovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's lucky number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes."])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")
@@ -201,7 +204,7 @@ def parse_command(command, tID):
         except (TypeError, ValueError, KeyError, IndexError, OverflowError, ZeroDivisionError):
             logEntry("Failed to parse command: " + str(command2))
             logEntry("Traceback: "+ traceback.format_exc())
-            output += "While parsing that command, an error occured: [code]"
+            output += f"{bot_info['onError']}[code]"
             output += traceback.format_exc().splitlines()[-1]
             output += "[/code]"
     else:
@@ -341,7 +344,7 @@ writeText(23, 1, "(Version " + str(version) + ")", 14)
 
 writeText(0, 2, "Logging in...")
 logEntry("Logging in...")
-login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
+login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": bot_info["username"], "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
 writeText(0, 2, "Logged in successfully.")
 logEntry("Logged in successfully.")
 time.sleep(1.5)
@@ -401,7 +404,7 @@ async def true_main_loop():
                     await asyncio.sleep(1)
             await writeLine2("Logging in...")
             logEntry("Logging in...")
-            login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": "Nihonium", "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
+            login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": bot_info["username"], "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
             _ = login_req #suppress unused variable warning
             await writeTextA(0, 2, "Logged in successfully.")
             logEntry("Logged in successfully.")

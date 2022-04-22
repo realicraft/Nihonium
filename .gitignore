@@ -6,6 +6,7 @@ roll_a_dice.json
 pass.txt
 log.log
 suggestions.txt
+botInfo.json
 __pycache__/
 files/
 logs/
