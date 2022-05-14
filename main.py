@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 12, 1)
+version = versions.Version(0, 12, 2)
 
 with open("botInfo.json", "r", encoding="utf-8") as infofile:
     bot_info = json.loads(infofile.read()) # Info about the bot.

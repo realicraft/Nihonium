@@ -153,6 +153,33 @@
             </ul>
             <p>Give an estimation on when a thread will be completed. Not available on some threads.</p>
         </div>
+        <div class="command">
+            <pre>nh!{rolladice|rolldice} action</pre>
+            <ul>
+                <li class="input_int"><em>action</em> (str): What action you want to perform. Defaults to "roll".</li>
+                <li class="rec_semi">When forking, it's recommended you consider whether to keep or remove this command.</li>
+            </ul>
+            <p>Roll a dice and gain (or lose, or steal) points. Exclusive to <a href="https://tbgforums.com/forums/viewtopic.php?id=5893">TGOHNRADFYASWH</a>.<br />Actions:</p>
+            <div class="command">
+                <pre>roll</pre>
+                <p>Roll a dice. Can only be used up to 5 times in one parse cycle.</p>
+            </div>
+            <div class="command">
+                <pre>{points|score|check}</pre>
+                <p>Shows you how many points you have.</p>
+            </div>
+            <div class="command">
+                <pre>{scoreboard|leaderboard|scores}</pre>
+                <p>Displays a scoreboard.</p>
+            </div>
+        </div>
+        <div class="command">
+            <pre>nh!{choose|choice} *options</pre>
+            <ul>
+                <li class="input_int"><em>*options</em> (multi_str): The options to choose from, seperated by spaces.</li>
+            </ul>
+            <p>Select from multiple choices. If you want to preserve spaces... try something other than <em>U+0020 <kbd> </kbd> SPACE</em> or <em>U+00A0 <kbd>&nbsp;</kbd> NON-BREAKING SPACE</em>?</p>
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     </body>
 </html>

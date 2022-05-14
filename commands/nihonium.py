@@ -4,7 +4,7 @@ import random, math, datetime, json # These imports are dependent on what your c
 
 # This file can be used as an example of a command file.
 
-version = versions.Version(1, 7, 6)                     # This defines the version of the user-added commands.
+version = versions.Version(1, 8, 0)                     # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 10, 3)            # This defines the minimum version of Nihonium needed to run these commands.
 alt_minvers = {"nihonium2": versions.Version(0, 10, 3)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
@@ -117,6 +117,12 @@ def estimate(bot_data, thread_data, user_data, tID=None):
         output = "Unknown thread ID: [i]" + str(tID) + "[/i]"
     return output
 
+def choose(bot_data, thread_data, user_data, *options):
+    if (len(options) == 0):
+        return "You didn't give anything for me to choose."
+    else:
+        return random.choice(["I'll go with ", "How about...", "Rolled a 1d"+str(len(options))+", and got ", "Picked randomly, and got ", "The bot chooses ", "Let's go with ", "That one, the one that says "]) + "\"" + random.choice(options) + "\"."
+
 # These turn the functions above into commands:
 coinCommand = fw.Command("coin", coin, [], helpShort="Flips a coin and gives you the result.", helpLong="Flips a coin and gives you the result.")
 diceCommand = fw.Command("dice", dice,
@@ -128,9 +134,10 @@ helpCommand = fw.Command("help", _help, [])
 suggestCommand = fw.Command("suggest", suggest, [fw.CommandInput("suggestion", "str")])
 tiCommand = fw.Command("threadInfo", threadInfo, [])
 estiCommand = fw.Command("estimate", estimate, [fw.CommandInput("tID", "int", "<current_thread>")])
+chooseCommand = fw.Command("choose", choose, [fw.CommandInput("options", "mulit_str")])
 
 # This registers the commands for use by Nihonium.
-commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "bot": botCommand, "help": helpCommand, "suggest": suggestCommand, "threadinfo": tiCommand, "estimate": estiCommand}
+commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "bot": botCommand, "help": helpCommand, "suggest": suggestCommand, "threadinfo": tiCommand, "estimate": estiCommand, "choose": chooseCommand, "choise": chooseCommand}
 # This registers commands exclusive to certain bots.
 # Format: {"<id>": {"<command_name>": "<function>"}}
 ex_commandlist = {"nihonium2": {"coin2": coin2}}
