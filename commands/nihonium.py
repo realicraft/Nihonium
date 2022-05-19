@@ -4,7 +4,7 @@ import random, math, datetime, json # These imports are dependent on what your c
 
 # This file can be used as an example of a command file.
 
-version = versions.Version(1, 8, 0)                     # This defines the version of the user-added commands.
+version = versions.Version(1, 8, 1)                     # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 10, 3)            # This defines the minimum version of Nihonium needed to run these commands.
 alt_minvers = {"nihonium2": versions.Version(0, 10, 3)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
@@ -31,6 +31,7 @@ def dice(bot_data, thread_data, user_data, num=1, size=20):
     elif (num == 0): return "You roll no dice, and get nothing."
     elif (size < 0): return "You can't roll something that doesn't exist."
     elif (size == 0): return "You roll " + str(num) + " pieces of air, and get air."
+    elif (num*size >= 1000000000): return "That's [i]way[/i] too many for me to roll." # avoid MemoryError
     elif (num > math.floor(5000/math.floor(math.log(size)))): doSanity = True 
     for _ in range(num):
         hold.append(random.randint(1, size))
