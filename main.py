@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 12, 3)
+version = versions.Version(0, 12, 4)
 
 with open("botInfo.json", "r", encoding="utf-8") as infofile:
     bot_info = json.loads(infofile.read()) # Info about the bot.
@@ -24,6 +24,9 @@ with open("threadData.json", "r+", encoding="utf-8") as threadfile:
 
 with open("data.json", "r+", encoding="utf-8") as datafile:
     data = json.loads(datafile.read())
+
+with open("filter.json", "r+", encoding="utf-8") as filterfile:
+    filterlist = json.loads(filterfile.read())
 
 with open("pass.txt", "r", encoding="utf-8") as passfile:
     password = passfile.read()
@@ -91,10 +94,11 @@ def update_sig(_motd, xline, misc):
     if misc is None: misc = siggy[2]
     else: siggy[2] = misc
     full_sig += "\n" + misc
+    logEntry(_motd2)
     _ = postReq(f"https://tbgforums.com/forums/profile.php?section=personality&id={bot_info['uid']}", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
-    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Flerovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's lucky number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes."])
+    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Flerovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's lucky number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes.", "Spy!"])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")
@@ -190,7 +194,7 @@ def parse_command(command, tID):
     shards2 = shards[1:]
     for i in range(len(shards2)):
         shards2[i] = html2.unescape(shards2[i])
-    if ((shards[0].lower() in commands.commands) or ((bot_info["id"] in commands.ex_commands) and (shards[0].lower() in commands.ex_commands[bot_info["id"]]))) and (shards[0].lower() not in inc_commands) and ((shards[0].lower() not in dis_commands) or ((str(tID) in exc_commands) and (shards[0].lower() in exc_commands[str(tID)]))):
+    if ((shards[0].lower() in commands.commands) or ((bot_info["id"] in commands.ex_commands) and (shards[0].lower() in commands.ex_commands[bot_info["id"]]))) and (shards[0].lower() not in inc_commands) and ((shards[0].lower() not in dis_commands) or ((str(tID) in exc_commands) and (shards[0].lower() in exc_commands[str(tID)]))) and (command["authorID"] not in filterlist["filter_list"]):
         validCommand()
         output = "[quote=" + command["author"] + "]" + bot_info["prefix"] + command2 + "[/quote]\n"
         try:
