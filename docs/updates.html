@@ -25,6 +25,11 @@
         <div class="command">
             <b>0.12.x</b>
             <div class="command">
+                <pre>0.12.5</pre>
+                <p>The motd is no longer printed to the log, as the motd seems to be unrelated to the crash.<br />
+                If a <em>requests.exceptions.ConnectionError</em> occurs while the bot is initially trying to scrape the thread, it will try again up to 3 times.</p>
+            </div>
+            <div class="command">
                 <pre>0.12.4</pre>
                 <p>Added a filter system to prevent specific users from using commands, meant to make it so that bots can choose not to respond to other bots.<br />
                 Made it so that, when the signature is updated, the motd is printed on the log, as an attempt to debug a random crash that can occur sometimes.</p>

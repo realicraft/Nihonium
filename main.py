@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 12, 4)
+version = versions.Version(0, 12, 5, "-alpha2")
 
 with open("botInfo.json", "r", encoding="utf-8") as infofile:
     bot_info = json.loads(infofile.read()) # Info about the bot.
@@ -94,7 +94,6 @@ def update_sig(_motd, xline, misc):
     if misc is None: misc = siggy[2]
     else: siggy[2] = misc
     full_sig += "\n" + misc
-    logEntry(_motd2)
     _ = postReq(f"https://tbgforums.com/forums/profile.php?section=personality&id={bot_info['uid']}", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
@@ -242,7 +241,14 @@ def main_loop(tID, row):
     writeText(11, 5+(row), "  Working...  ")
     writeText(26, 5+(row), "  Waiting...  ")
     writeText(43, 5+(row), "  WORK ", 11)
-    apage = getReq('https://tbgforums.com/forums/viewtopic.php?id=' + str(tID), headers=headers, cookies=cookies)
+    havepage = 0
+    while havepage <= 4:
+        try: apage = getReq('https://tbgforums.com/forums/viewtopic.php?id=' + str(tID), headers=headers, cookies=cookies)
+        except requests.exceptions.ConnectionError:
+            havepage += 1
+            if havepage == 4:
+                raise
+        else: break
     atree = html.fromstring(apage.content)
     pageCountEl = atree.xpath('//*[@id="brdmain"]/div[1]/div/div[1]/p[1]/a')
     try:
