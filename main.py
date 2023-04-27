@@ -4,7 +4,7 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 12, 5,)
+version = versions.Version(0, 12, 6)
 
 with open("botInfo.json", "r", encoding="utf-8") as infofile:
     bot_info = json.loads(infofile.read()) # Info about the bot.
@@ -28,8 +28,11 @@ with open("data.json", "r+", encoding="utf-8") as datafile:
 with open("filter.json", "r+", encoding="utf-8") as filterfile:
     filterlist = json.loads(filterfile.read())
 
-with open("pass.txt", "r", encoding="utf-8") as passfile:
-    password = passfile.read()
+try:
+    with open("pass.txt", "r", encoding="utf-8") as passfile:
+        password = passfile.read()
+except OSError:
+    password = input("Could not find pass.txt, please input password: ")
 
 thread_ids = []
 for h in post_ids:
@@ -355,8 +358,17 @@ writeText(23, 1, "(Version " + str(version) + ")", 14)
 writeText(0, 2, "Logging in...")
 logEntry("Logging in...")
 login_req = postReq("https://tbgforums.com/forums/login.php?action=in", data={"req_username": bot_info["username"], "req_password": password, "form_sent": 1, "redirect_url": "https://tbgforums.com/forums/viewforum.php?id=2", "login": "Login"}, headers=headers, cookies=cookies)
-writeText(0, 2, "Logged in successfully.")
-logEntry("Logged in successfully.")
+login_check_req = getReq('https://tbgforums.com/forums/', headers=headers, cookies=cookies)
+try:
+    if (html.fromstring(login_check_req.content).xpath('//*[@id="brdwelcome"]/p/text()')[0] == "You are not logged in."):
+        writeText(0, 2, "Failed to login; make sure your password is correct.")
+        logEntry("Failed to login.")
+        moveCursor(0, 3)
+        sys.exit()
+except IndexError: pass
+finally:
+    writeText(0, 2, "Logged in successfully.")
+    logEntry("Logged in successfully.")
 time.sleep(1.5)
 clearLine(2)
 
