@@ -4,11 +4,11 @@ import random, math, datetime, json # These imports are dependent on what your c
 
 # This file can be used as an example of a command file.
 
-version = versions.Version(1, 8, 1)                     # This defines the version of the user-added commands.
-nihonium_minver = versions.Version(0, 10, 3)            # This defines the minimum version of Nihonium needed to run these commands.
-alt_minvers = {"nihonium2": versions.Version(0, 10, 3)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
+version = versions.Version(1, 9, 0)                     # This defines the version of the user-added commands.
+nihonium_minver = versions.Version(0, 13, 0)            # This defines the minimum version of Nihonium needed to run these commands.
+alt_minvers = {"nihonium2": versions.Version(0, 13, 0)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
-# Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/Trailing newline not required.)
+# Commands can take any number of placement arguments and should return a string containing the output of the command. (Beginning/trailing newline not required.)
 # Commands can take inputs that are Integers, Floats, Strings, and Booleans. 
 # If a command raises TypeError, ValueError, KeyError, IndexError, OverflowError, or ZeroDivisionError, it will be caught by Nihonium. Other errors will not be caught.
 # The first argument a command recieves will contain information about the bot.
@@ -40,7 +40,8 @@ def dice(bot_data, thread_data, user_data, num=1, size=20):
 
 def bot(bot_data, thread_data, user_data):
     output = "Bot Statistics:"
-    output += "\n  Version: " + str(bot_data["version"])
+    output += "\n  Nihonium Version: " + str(bot_data["version"])
+    output += "\n  Fork Version: " + str(bot_data["forkversion"])
     output += "\n  Uptime: " + str(datetime.datetime.now() - bot_data["uptime"])
     output += "\n  Parse Cycles: " + str(bot_data["data"]["parse_cycles"])
     output += "\n  Commands Found: " + str(bot_data["data"]["commands_found"])
@@ -138,7 +139,7 @@ estiCommand = fw.Command("estimate", estimate, [fw.CommandInput("tID", "int", "<
 chooseCommand = fw.Command("choose", choose, [fw.CommandInput("options", "mulit_str")])
 
 # This registers the commands for use by Nihonium.
-commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "bot": botCommand, "help": helpCommand, "suggest": suggestCommand, "threadinfo": tiCommand, "estimate": estiCommand, "choose": chooseCommand, "choise": chooseCommand}
+commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "bot": botCommand, "botinfo": botCommand, "help": helpCommand, "suggest": suggestCommand, "threadinfo": tiCommand, "estimate": estiCommand, "choose": chooseCommand, "choise": chooseCommand}
 # This registers commands exclusive to certain bots.
 # Format: {"<id>": {"<command_name>": "<function>"}}
 ex_commandlist = {"nihonium2": {"coin2": coin2}}

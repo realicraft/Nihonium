@@ -4,7 +4,8 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-version = versions.Version(0, 12, 6)
+nihoniumVersion = versions.Version(0, 13, 0) # the version of the base nihonium install; try not to modify this
+forkVersion = versions.Version(0, 13, 0) # the version of the current fork
 
 with open("botInfo.json", "r", encoding="utf-8") as infofile:
     bot_info = json.loads(infofile.read()) # Info about the bot.
@@ -13,11 +14,11 @@ inc_commands = () # Commands this copy is incompatible with.
 dis_commands = ("rolladice", "rolldice") # Commands disabled in this copy. Overridden by exc_commands.
 exc_commands = {"5893": ("rolladice", "rolldice")} # Commands exclusive to specific threads. In the format {"<threadID>": ("<command_name>")}
 
-if (commands.nihonium_minver > version):
-    raise ValueError(f"This Nihonium install is of version {str(version)}, but the copy of 'commands.py' it's using requires at least version {str(commands.nihonium_minver)}.")
+if (commands.nihonium_minver > nihoniumVersion):
+    raise ValueError(f"This Nihonium install is of version {str(nihoniumVersion)}, but the copy of 'commands.py' it's using requires at least version {str(commands.nihonium_minver)}.")
 
-if (bot_info["id"] != "nihonium") and (commands.alt_minvers[bot_info["id"]] > version):
-    raise ValueError(f"This {bot_info['name']} install is of version {str(version)}, but the copy of 'commands.py' it's using requires at least version {str(commands.alt_minvers[bot_info['id']])}.")
+if (bot_info["id"] != "nihonium") and (bot_info["id"] in commands.alt_minvers) and (commands.alt_minvers[bot_info["id"]] > forkVersion):
+    raise ValueError(f"This {bot_info['name']} install is of version {str(forkVersion)}, but the copy of 'commands.py' it's using requires at least version {str(commands.alt_minvers[bot_info['id']])}.")
 
 with open("threadData.json", "r+", encoding="utf-8") as threadfile:
     post_ids = json.loads(threadfile.read())
@@ -84,7 +85,7 @@ def update_sig(_motd, xline, misc):
         full_sig += _motd2
         siggy[0] = _motd2
     full_sig += "\n---------------"
-    full_sig += f"\n{bot_info['name']} (version {str(version)})"
+    full_sig += f"\n{bot_info['name']} (version {str(forkVersion)})"
     full_sig += f"\n[i]{bot_info['tagline']}[/i]"
     if xline is None: xline = siggy[1]
     if xline is False:
@@ -100,7 +101,7 @@ def update_sig(_motd, xline, misc):
     _ = postReq(f"https://tbgforums.com/forums/profile.php?section=personality&id={bot_info['uid']}", data={"signature": full_sig, "form_sent": 1}, headers=headers, cookies=cookies)
 
 def motd():
-    return random.choice(["beep", "a", str(version), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Flerovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's lucky number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(version), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes.", "Spy!"])
+    return random.choice(["beep", "a", str(forkVersion), ":)", "boop", ":(", ":|", str(loopNo), "Also try "+random.choice(["Minecraft", "Terraria", "Fighting Simulator 3", "Legends of Idleon", "Nickel", "Flerovium", "Grogar", "We Play Cards", "Shef Kerbi News Network"])+"!", "yo", "motd", "today's lucky number: "+str(random.randint(1, random.randint(1, 1000))), "", "lorem ipsum", "so how's your day been", "happy current holiday", repr(forkVersion), "You can't roll right now, you can roll again in about 600 minutes.", "You can't roll right now, you can roll again in about 240 minutes.", "Spy!"])
 
 def moveCursor(x, y):
     sys.stdout.write("\033[" + str(y) + ";" + str(x) + "H")
@@ -175,7 +176,8 @@ def assemble_botdata():
     "cookies": cookies,
     "session": mainSession,
     "headers": headers,
-    "version": version,
+    "version": nihoniumVersion,
+    "forkversion": forkVersion,
     "bot_info": bot_info}
 
 def assemble_threaddata(tID):
@@ -347,13 +349,13 @@ def main_loop(tID, row):
 os.system('cls' if os.name == 'nt' else 'clear')
 #from https://stackoverflow.com/a/2330596
 if os.name == "nt":
-    os.system("title " + bot_info["name"] + " (Version " + str(version) + ")")
+    os.system("title " + bot_info["name"] + " (Version " + str(forkVersion) + ")")
 else:
-    sys.stdout.write("\x1b]2;" + bot_info["name"] + " (Version " + str(version) + ")\x07")
+    sys.stdout.write("\x1b]2;" + bot_info["name"] + " (Version " + str(forkVersion) + ")\x07")
 
 logEntry("Starting up...")
 writeText(0, 1, "" + bot_info["name"] + " - A TBGs Bot")
-writeText(23, 1, "(Version " + str(version) + ")", 14)
+writeText(23, 1, "(Version " + str(forkVersion) + ")", 14)
 
 writeText(0, 2, "Logging in...")
 logEntry("Logging in...")
