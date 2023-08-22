@@ -20,14 +20,14 @@ div.command pre {
 }
 div.command ul {
     padding: 0px;
+    padding-left: 35px;
 }
 div.command li {
-    /*padding-left: 40px;*/
-    /*list-style: none;*/
     margin: 0;
     min-height: 20px;
     vertical-align: top;
     line-height: 20px;
+
 }
 div#header {
     margin-top: 15px;
@@ -81,69 +81,69 @@ kbd {
     padding-right: 3px;
 }
 li.input_int {
-    list-style: url("input_types/tile000.png") inside;
+    list-style: url("input_types/tile000.png") outside;
 }
 li.input_float {
-    list-style: url("input_types/tile003.png") inside;
+    list-style: url("input_types/tile003.png") outside;
 }
 li.input_str {
-    list-style: url("input_types/tile002.png") inside;
+    list-style: url("input_types/tile002.png") outside;
 }
 li.input_bool {
-    list-style: url("input_types/tile001.png") inside;
+    list-style: url("input_types/tile001.png") outside;
 }
 li.input_b64 {
-    list-style: url("input_types/tile004.png") inside;
+    list-style: url("input_types/tile004.png") outside;
 }
 li.input_img {
-    list-style: url("input_types/tile005.png") inside;
+    list-style: url("input_types/tile005.png") outside;
 }
 li.input_fn {
-    list-style: url("input_types/tile006.png") inside;
+    list-style: url("input_types/tile006.png") outside;
 }
 li.input_vary {
-    list-style: url("input_types/tile007.png") inside;
+    list-style: url("input_types/tile007.png") outside;
 }
 li.input_time {
-    list-style: url("input_types/tile008.png") inside;
+    list-style: url("input_types/tile008.png") outside;
 }
 li.input_func {
-    list-style: url("input_types/tile009.png") inside;
+    list-style: url("input_types/tile009.png") outside;
 }
 li.input_list {
-    list-style: url("input_types/tile010.png") inside;
+    list-style: url("input_types/tile010.png") outside;
 }
 li.input_array {
-    list-style: url("input_types/tile011.png") inside;
+    list-style: url("input_types/tile011.png") outside;
 }
 li.input_dict {
-    list-style: url("input_types/tile012.png") inside;
+    list-style: url("input_types/tile012.png") outside;
 }
 li.input_obj {
-    list-style: url("input_types/tile013.png") inside;
+    list-style: url("input_types/tile013.png") outside;
 }
 li.compat_very {
-    list-style: url("input_types/tile029.png") inside;
+    list-style: url("input_types/tile029.png") outside;
     color: #007f00;
 }
 li.compat_semi {
-    list-style: url("input_types/tile030.png") inside;
+    list-style: url("input_types/tile030.png") outside;
     color: #7f7f00;
 }
 li.compat_not {
-    list-style: url("input_types/tile031.png") inside;
+    list-style: url("input_types/tile031.png") outside;
     color: #7f0000;
 }
 li.rec_very {
-    list-style: url("input_types/tile026.png") inside;
+    list-style: url("input_types/tile026.png") outside;
     color: #007f00;
 }
 li.rec_semi {
-    list-style: url("input_types/tile027.png") inside;
+    list-style: url("input_types/tile027.png") outside;
     color: #7f7f00;
 }
 li.rec_not {
-    list-style: url("input_types/tile028.png") inside;
+    list-style: url("input_types/tile028.png") outside;
     color: #7f0000;
 }
 li.compat_very, li.compat_semi, li.compat_not, li.rec_very, li.rec_semi, li.rec_not {

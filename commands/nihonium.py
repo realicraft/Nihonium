@@ -4,7 +4,7 @@ import random, math, datetime, json # These imports are dependent on what your c
 
 # This file can be used as an example of a command file.
 
-version = versions.Version(1, 9, 0)                     # This defines the version of the user-added commands.
+version = versions.Version(1, 9, 1)                     # This defines the version of the user-added commands.
 nihonium_minver = versions.Version(0, 13, 0)            # This defines the minimum version of Nihonium needed to run these commands.
 alt_minvers = {"nihonium2": versions.Version(0, 13, 0)} # Used to define minimum versions for other bots. Format: {"<id>": versions.Version(<version>)}
 
@@ -61,6 +61,8 @@ def _help(bot_data, thread_data, user_data):
     output += "\n[quote]  nh!text command;str;no_spaces;'read' filename;str;no_spaces;'_' other;varies\n    Text file modificaton.[/quote]"
     output += "\n[quote]  nh!{file|files} command;str;no_spaces;'read' filename;str;no_spaces;'_.txt' other;varies\n    File modificaton.[/quote]"
     output += "\n[quote]  nh!estimate tID;int;<current_thread>\n    Estimates when a thread will be completed.[/quote]"
+    output += "\n[quote]  nh!choose options;multi_str;no_spaces\n    Picks one of the given options.[/quote]"
+    output += "\n[quote]  nh!estimate action;str;no_spaces;'roll'\n    Used for [topic=5893]TGOHNRADFYASWH[/topic].[/quote]"
     output += "\nArguments are in the form \"name;type;spaces;default\". Arguments with no default are required, [i]spaces[/i] is only present for strings."
     output += "\nFor more information (updated quicker), visit [url=https://realicraft.github.io/Nihonium/index.html]the webpage[/url]."
     output += "\n(Note: I plan on adding a system to auto-generate the results of this command. It hasn't been added yet, though.)"
@@ -94,6 +96,7 @@ def threadInfo(bot_data, thread_data, user_data):
     return output
 
 def estimate(bot_data, thread_data, user_data, tID=None):
+    # fix allowing you to estimate non-tracked threads
     if tID is None:
         tID = thread_data["thread_id"]
     with open("threadData.json", "r+", encoding="utf-8") as threadfile:
@@ -108,10 +111,10 @@ def estimate(bot_data, thread_data, user_data, tID=None):
         cdate = adate + datetime.timedelta(days=until)
         output = "Est. Completion Date: " + cdate.strftime("%b %d, %Y %I:%M:%S %p")
         if len(thread_data2["estimates"]) >= 1:
-            output += "\nPrevious Estimates: [quote]"
+            output += "\nPrevious Estimates: [code]"
             for i in thread_data2["estimates"]:
                 output += "\n(" + i[0] + ") " + i[1]
-            output += "[/quote]"
+            output += "[/code]"
         thread_data2["estimates"].append([bdate.strftime("%b %d, %Y %I:%M:%S %p"), cdate.strftime("%b %d, %Y %I:%M:%S %p")])
         with open("threadData.json", "w", encoding="utf-8") as l:
             l.write(json.dumps(post_ids, indent=4))
@@ -136,7 +139,7 @@ helpCommand = fw.Command("help", _help, [])
 suggestCommand = fw.Command("suggest", suggest, [fw.CommandInput("suggestion", "str")])
 tiCommand = fw.Command("threadInfo", threadInfo, [])
 estiCommand = fw.Command("estimate", estimate, [fw.CommandInput("tID", "int", "<current_thread>")])
-chooseCommand = fw.Command("choose", choose, [fw.CommandInput("options", "mulit_str")])
+chooseCommand = fw.Command("choose", choose, [fw.CommandInput("options", "multi_str")])
 
 # This registers the commands for use by Nihonium.
 commandlist = {"coin": coinCommand, "dice": diceCommand, "roll": diceCommand, "bot": botCommand, "botinfo": botCommand, "help": helpCommand, "suggest": suggestCommand, "threadinfo": tiCommand, "estimate": estiCommand, "choose": chooseCommand, "choise": chooseCommand}

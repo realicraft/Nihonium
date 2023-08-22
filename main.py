@@ -4,8 +4,8 @@ import html as html2 # disambiguate from lxml.html
 from lxml import html # from import
 from bs4 import BeautifulSoup # used once
 
-nihoniumVersion = versions.Version(0, 13, 0) # the version of the base nihonium install; try not to modify this
-forkVersion = versions.Version(0, 13, 0) # the version of the current fork
+nihoniumVersion = versions.Version(0, 14, 0) # the version of the base nihonium install; try not to modify this
+forkVersion = versions.Version(0, 14, 0) # the version of the current fork
 
 with open("botInfo.json", "r", encoding="utf-8") as infofile:
     bot_info = json.loads(infofile.read()) # Info about the bot.
@@ -206,6 +206,11 @@ def parse_command(command, tID):
             else: output2 = commands.ex_commands[bot_info["id"]][shards[0].lower()].run(assemble_botdata(), assemble_threaddata(tID), assemble_userdata(command), *shards2)
             if output2 == "":
                 output = ""
+            elif output2 is None:
+                logEntry("Command provided no output: " + str(command2))
+                output += f"{bot_info['onError']}[code]"
+                output += bot_info['noOutput']
+                output += "[/code]"
             else:
                 output += output2
                 data["commands_parsed"] += 1
@@ -386,7 +391,7 @@ async def true_main_loop():
     try: #ugh
         while True:
             loopNo += 1
-            thirtyminutes = datetime.datetime.now() + datetime.timedelta(minutes=30)
+            nextcyclestart = datetime.datetime.now() + datetime.timedelta(seconds=bot_info["cycleDelay"])
             clearLine(2)
             writeText(0, 2, "Running loop...")
             logEntry("Running parse cycle " + str(loopNo) + "...")
@@ -405,7 +410,7 @@ async def true_main_loop():
                 await writeTextA(0, 2, "Running loop...")
                 logEntry("Parsing thread #" + str(thread_ids[j]) + "...")
                 do_sixsec = main_loop(thread_ids[j], j)
-                sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=62)
+                sixtyseconds = datetime.datetime.now() + datetime.timedelta(seconds=61)
                 if (j+1 == len(thread_ids)) or (do_sixsec == False):
                     pass
                 else:
@@ -420,7 +425,7 @@ async def true_main_loop():
             await writeLine2("Sleeping...")
             logEntry("Sleeping...")
             for l in range(5, 0, -1):
-                sleeptime = thirtyminutes - datetime.datetime.now()
+                sleeptime = nextcyclestart - datetime.datetime.now()
                 sleeptime = sleeptime.total_seconds()
                 logEntry("Re-aligned sleep time (" + str(sleeptime) + " seconds)")
                 for k in range(int(sleeptime/l)):

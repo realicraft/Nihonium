@@ -23,26 +23,47 @@
         <h3><em>A bot for the TBGs</em></h3>
         <br><br>
         <div class="command">
+            <b>0.14.x</b>
+            <div class="command">
+                <pre>0.14.0</pre>
+                <p>The time between parse-cycles can now be changed.<br />
+                Changed the timing for the sixty-second rule from 62 seconds to 61.<br />
+                <i>nh!estimate</i> now uses <i>code</i> instead of <i>quote</i>.<br />
+                Updated <i>nh!help</i> to include <i>nh!rolladice</i> and <i>nh!choose</i>.<br />
+                Fixed an issue where <i>nh!text</i>'s <i>read</i> and <i>create</i> subcommands failed to make log entries.<br />
+                <i>nh!text</i> and <i>nh!files</i> now check for invalid characters in filenames.<br />
+                Fixed an issue where <i>nh!text insert</i> didn't work.<br />
+                If a command does not provide any output at all, a proper error message will be generated, rather than giving a string concatenation error.<br />
+                Renamed <i>roll_a_dice.json</i> to <i>user_data.json</i>, in preperation for additional storing of user data.<br />
+                Updated <i>nh!rolladice</i> to account for changes in the formatting of <i>user_data.json</i>.<br />
+                The delays for rolling 2 and 10 in <i>nh!rolladice</i> are now measured in parse-cycle lengths, not hours.<br />
+                Updated <i>commands.nihonium</i> to 1.9.1<br />
+                Updated <i>commands.nh_rolladice</i> to 1.10.0<br />
+                Updated <i>commands.nh_file_manip</i> to 1.9.0<br />
+                Updated the Suggestions page.</p>
+            </div>
+        </div>
+        <div class="command">
             <b>0.13.x</b>
             <div class="command">
                 <pre>0.13.0</pre>
                 <p>The bot now has two version numbers; one for the original Nihonium install, and one for the current fork, if any.<br />
                 Both version numbers are passed to commands, with the fork version number using "forkversion".<br />
-                The fork version number is now used in most places where the Nihonium version number was used before.
-                Updated <em>commands.nihonium</em> to 1.9.0</p>
+                The fork version number is now used in most places where the Nihonium version number was used before.<br />
+                Updated <i>commands.nihonium</i> to 1.9.0</p>
             </div>
         </div>
         <div class="command">
             <b>0.12.x</b>
             <div class="command">
                 <pre>0.12.6</pre>
-                <p>If <em>pass.txt</em> doesn't exist, the bot will ask for a password.<br />
+                <p>If <i>pass.txt</i> doesn't exist, the bot will ask for a password.<br />
                 If the bot fails to log in, it will now gracefully exit instead of crashing, while also telling the user to check the password.</p>
             </div>
             <div class="command">
                 <pre>0.12.5</pre>
                 <p>The motd is no longer printed to the log, as the motd seems to be unrelated to the crash.<br />
-                If a <em>requests.exceptions.ConnectionError</em> occurs while the bot is initially trying to scrape the thread, it will try again up to 3 times.</p>
+                If a <i>requests.exceptions.ConnectionError</i> occurs while the bot is initially trying to scrape the thread, it will try again up to 3 times.</p>
             </div>
             <div class="command">
                 <pre>0.12.4</pre>
@@ -51,28 +72,28 @@
             </div>
             <div class="command">
                 <pre>0.12.3</pre>
-                <p>Fixed an issue with <em>nh!dice</em> where a user could cause a <em>MemoryError</em> by supplying a large quantity of large-sized dice to roll.<br />
-                Updated <em>commands.nihonium</em> to 1.8.1</p>
+                <p>Fixed an issue with <i>nh!dice</i> where a user could cause a <i>MemoryError</i> by supplying a large quantity of large-sized dice to roll.<br />
+                Updated <i>commands.nihonium</i> to 1.8.1</p>
             </div>
             <div class="command">
                 <pre>0.12.2</pre>
-                <p>Updated <em>README.json</em>.<br />
-                Added <em>nh!choose</em>.<br />
-                Updated <em>commands.nihonium</em> to 1.8.0<br />
+                <p>Updated <i>README.json</i>.<br />
+                Added <i>nh!choose</i>.<br />
+                Updated <i>commands.nihonium</i> to 1.8.0<br />
                 Updated the Commands page.</p>
             </div>
             <div class="command">
                 <pre>0.12.1</pre>
-                <p><em>logEntry()</em> now casts input to <em>str</em>.<br />
-                Moved several strings to an external file (<em>botinfo.json</em>), for ease of customizability.</p>
+                <p><i>logEntry()</i> now casts input to <i>str</i>.<br />
+                Moved several strings to an external file (<i>botinfo.json</i>), for ease of customizability.</p>
             </div>
             <div class="command">
                 <pre>0.12.0</pre>
                 <p>Commands can now return the empty string to act as if they were invalid.<br />
                 Commands can now make log entries.<br />
-                Updated <em>commands.nh_rolladice</em> to 1.9.0<br />
+                Updated <i>commands.nh_rolladice</i> to 1.9.0<br />
                 When an exception occurs during a command, the traceback is now printed in the log.<br />
-                Made it so that you can no longer make more than five rolls using <em>nh!rolladice</em> in one parse-cycle.</p>
+                Made it so that you can no longer make more than five rolls using <i>nh!rolladice</i> in one parse-cycle.</p>
             </div>
         </div>
         <div class="command">
@@ -95,24 +116,24 @@
             <b>0.10.x</b>
             <div class="command">
                 <pre>0.10.6</pre>
-                <p>Updated <em>commands.nihonium</em> to 1.7.6<br />
-                Added time of estimation timestamps to <em>nh!estimate</em></p>
+                <p>Updated <i>commands.nihonium</i> to 1.7.6<br />
+                Added time of estimation timestamps to <i>nh!estimate</i></p>
             </div>
             <div class="command">
                 <pre>0.10.5</pre>
-                <p>Improved the filename sanitizing used by <em>nh!text</em> and <em>nh!files</em>.<br />
-                Fixed an issue where <em>nh!files</em> failed to produce logging information.<br />
-                Fixed an issue where, in <em>nh!rolladice</em>, the points given by 3 were not reset.</p>
+                <p>Improved the filename sanitizing used by <i>nh!text</i> and <i>nh!files</i>.<br />
+                Fixed an issue where <i>nh!files</i> failed to produce logging information.<br />
+                Fixed an issue where, in <i>nh!rolladice</i>, the points given by 3 were not reset.</p>
             </div>
             <div class="command">
                 <pre>0.10.4</pre>
-                <p>Fixed an issue where some <em>nh!files</em> subcommands failed to return an output.</p>
+                <p>Fixed an issue where some <i>nh!files</i> subcommands failed to return an output.</p>
             </div>
             <div class="command">
                 <pre>0.10.3</pre>
-                <p>Updated <em>commands</em> to 2.2.0<br/>
-                Updated <em>commands.nh_rolladice</em> to 1.80<br />
-                Adjusted some outcomes of <em>nh!rolladice</em></p>
+                <p>Updated <i>commands</i> to 2.2.0<br/>
+                Updated <i>commands.nh_rolladice</i> to 1.80<br />
+                Adjusted some outcomes of <i>nh!rolladice</i></p>
             </div>
             <div class="command">
                 <pre>0.10.2</pre>
@@ -131,33 +152,33 @@
             <b>0.9.x</b>
             <div class="command">
                 <pre>0.9.5</pre>
-                <p>Fixed issue where ".." was allowed in <em>nh!files</em> and <em>nh!text</em>, allowing users to view files outside of the <em>files</em> folder, along with editing text files.<br />
-                Fixed issue where "con" was allowed in <em>nh!files</em> and <em>nh!text</em>, which would allow a user to freeze the bot by requesting the contents of <em>con</em>.<br />
+                <p>Fixed issue where ".." was allowed in <i>nh!files</i> and <i>nh!text</i>, allowing users to view files outside of the <i>files</i> folder, along with editing text files.<br />
+                Fixed issue where "con" was allowed in <i>nh!files</i> and <i>nh!text</i>, which would allow a user to freeze the bot by requesting the contents of <i>con</i>.<br />
                 Fixed issue preventing commands from being used unless they were in lowercase (not including arguments/subcommands).</p>
             </div>
             <div class="command">
                 <pre>0.9.4</pre>
-                <p>Fixed a crash caused by confusion between "\" and "/", along with missing imports.<br />Updated <em>commands</em> to 2.0<br />
+                <p>Fixed a crash caused by confusion between "\" and "/", along with missing imports.<br />Updated <i>commands</i> to 2.0<br />
                 Fixed issue where, if the bot failed to parse a thread due to the number of pages being smaller than it expects, it would wait for the sixty-second
                 rule, even though it never posted.</p>
             </div>
             <div class="command">
                 <pre>0.9.3</pre>
-                <p>Fixed a crash that would occur if you added a new thread to <em>threadData.json</em> while Nihonium was running.<br />
-                Updated <em>versions.py</em> to 1.1.1<br />The <em>commands</em> module is now in seperate files, rather than all being in <em>commands.py</em>.<br />
-                Updated <em>commands</em> to 2.0.0-alpha2</p>
+                <p>Fixed a crash that would occur if you added a new thread to <i>threadData.json</i> while Nihonium was running.<br />
+                Updated <i>versions.py</i> to 1.1.1<br />The <i>commands</i> module is now in seperate files, rather than all being in <i>commands.py</i>.<br />
+                Updated <i>commands</i> to 2.0.0-alpha2</p>
             </div>
             <div class="command">
                 <pre>0.9.2</pre>
-                <p>Fixed a bug with checking to see if a command is in <em>commands.py</em>'s exclusive commands list.</p>
+                <p>Fixed a bug with checking to see if a command is in <i>commands.py</i>'s exclusive commands list.</p>
             </div>
             <div class="command">
                 <pre>0.9.1</pre>
-                <p>Fixed a crash caused by a typo.<br />Added subcommands to <em>nh!rolladice</em>: <em>roll</em>, <em>points</em>, and <em>leaderboard</em>.</p>
+                <p>Fixed a crash caused by a typo.<br />Added subcommands to <i>nh!rolladice</i>: <i>roll</i>, <i>points</i>, and <i>leaderboard</i>.</p>
             </div>
             <div class="command">
                 <pre>0.9.0</pre>
-                <p>Commands now recieve a small amount of information about the user who called them.<br />Added <em>nh!rolladice</em>.</p>
+                <p>Commands now recieve a small amount of information about the user who called them.<br />Added <i>nh!rolladice</i>.</p>
             </div>
         </div>
         <div class="command">
@@ -172,7 +193,7 @@
             </div>
             <div class="command">
                 <pre>0.8.3</pre>
-                <p>Updated <em>versions.py</em> to 1.1<br />Commands are now case-insensitive.<br />The bot's name is now no longer hardcoded in several places.<br />
+                <p>Updated <i>versions.py</i> to 1.1<br />Commands are now case-insensitive.<br />The bot's name is now no longer hardcoded in several places.<br />
                 You can now specify commands exclusive to certain forks, along with minimum supported versions for those forks.<br/>
                 Added better support for forks.</p>
             </div>
@@ -186,7 +207,7 @@
             </div>
             <div class="command">
                 <pre>0.8.0</pre>
-                <p>You can now run Nihonium on Linux machines.<br />Added <em>asyncio</em>.</p>
+                <p>You can now run Nihonium on Linux machines.<br />Added <i>asyncio</i>.</p>
             </div>
         </div>
         <div class="command">
@@ -197,48 +218,48 @@
             </div>
             <div class="command">
                 <pre>0.7.0</pre>
-                <p>Added four new subcommands to <em>nh!files</em>: <em>rename</em>, <em>create</em>, <em>duplicate</em>, and <em>delete</em>.</p>
+                <p>Added four new subcommands to <i>nh!files</i>: <i>rename</i>, <i>create</i>, <i>duplicate</i>, and <i>delete</i>.</p>
             </div>
         </div>
         <div class="command">
             <b>0.6.x</b>
             <div class="command">
                 <pre>0.6.7</pre>
-                <p>Fixed issue where the bot would repeat commands.<br />Added a sanity check to <em>nh!dice</em> to keep the output from getting too large.<br/>
-                <em>nh!estimate</em> now defaults to the thread it is used in.<br /><em>nh!bot</em> now reports the version number.</p>
+                <p>Fixed issue where the bot would repeat commands.<br />Added a sanity check to <i>nh!dice</i> to keep the output from getting too large.<br/>
+                <i>nh!estimate</i> now defaults to the thread it is used in.<br /><i>nh!bot</i> now reports the version number.</p>
             </div>
             <div class="command">
                 <pre>0.6.6</pre>
-                <p>Fixed issue where <em>nh!text appendline</em> would fail.<br />Added <em>nh!estimate</em>.<br />The bot now reloads <em>threadData.json</em> after each parse-cycle.</p>
+                <p>Fixed issue where <i>nh!text appendline</i> would fail.<br />Added <i>nh!estimate</i>.<br />The bot now reloads <i>threadData.json</i> after each parse-cycle.</p>
             </div>
             <div class="command">
                 <pre>0.6.5</pre>
-                <p>Fixed issue with <em>nh!text delete</em> not returning an output.<br />Fixed issue with non-ASCII characters failing to be saved to files.</p>
+                <p>Fixed issue with <i>nh!text delete</i> not returning an output.<br />Fixed issue with non-ASCII characters failing to be saved to files.</p>
             </div>
             <div class="command">
                 <pre>0.6.4</pre>
-                <p>Fixed a spacing issue with <em>nh!files read</em>.<br />Added a special character for space.<br />
-                The replacement characters used in <em>nh!files read</em> have been changed to ones present in <span style="font-family: Consolas;">Consolas</span>.<br />
-                All HTML escape codes are now unescaped, not just <em>&amp;lt;</em>, <em>&amp;gt;</em>, and <em>&amp;amp;</em>.</p>
+                <p>Fixed a spacing issue with <i>nh!files read</i>.<br />Added a special character for space.<br />
+                The replacement characters used in <i>nh!files read</i> have been changed to ones present in <span style="font-family: Consolas;">Consolas</span>.<br />
+                All HTML escape codes are now unescaped, not just <i>&amp;lt;</i>, <i>&amp;gt;</i>, and <i>&amp;amp;</i>.</p>
             </div>
             <div class="command">
                 <pre>0.6.3</pre>
-                <p>Added <em>nh!text appendline</em>.<br /><em>nh!files read</em> now has a text viewer.</p>
+                <p>Added <i>nh!text appendline</i>.<br /><i>nh!files read</i> now has a text viewer.</p>
             </div>
             <div class="command">
                 <pre>0.6.2</pre>
-                <p>Added <em>nh!text duplicate</em>.<br />Fixed a crash bug.<br />Fixed issue with <em>nh!text duplicate</em> not returning an output.<br />
-                The console now makes a sound at the start of a parse-cycle.<br />Added <em>nh!files</em> with two subcommands (<em>read</em>, <em>list</em>.)<br />
-                <em>nh!text</em> now has its arguments in the order (subcommand, filename.)</p>
+                <p>Added <i>nh!text duplicate</i>.<br />Fixed a crash bug.<br />Fixed issue with <i>nh!text duplicate</i> not returning an output.<br />
+                The console now makes a sound at the start of a parse-cycle.<br />Added <i>nh!files</i> with two subcommands (<i>read</i>, <i>list</i>.)<br />
+                <i>nh!text</i> now has its arguments in the order (subcommand, filename.)</p>
             </div>
             <div class="command">
                 <pre>0.6.1</pre>
-                <p>&lt;, &gt;, and &amp; are now unescaped in <em>main.py</em>, not <em>commands.py</em>.<br />Fixed a crash bug.</p>
+                <p>&lt;, &gt;, and &amp; are now unescaped in <i>main.py</i>, not <i>commands.py</i>.<br />Fixed a crash bug.</p>
             </div>
             <div class="command">
                 <pre>0.6.0</pre>
-                <p>Fixed bug causing <em>nh!suggest</em> to fail if any escaped characters were present.<br />
-                Added <em>nh!text</em> and its subcommands (<em>read</em>, <em>write</em>, <em>append</em>, <em>insert</em>, <em>create</em>, <em>delete</em>.)<br />
+                <p>Fixed bug causing <i>nh!suggest</i> to fail if any escaped characters were present.<br />
+                Added <i>nh!text</i> and its subcommands (<i>read</i>, <i>write</i>, <i>append</i>, <i>insert</i>, <i>create</i>, <i>delete</i>.)<br />
                 The list of thread IDs is now updated at the end of a parse-cycle.<br />More information about a post is gathered.<br />Commands can now create log entries.<br />
                 Added an indicator for the size of the log file.</p>
             </div>
@@ -247,7 +268,7 @@
             <b>0.5.x</b>
             <div class="command">
                 <pre>0.5.5</pre>
-                <p>Logs are now in a directory, split by date, rather than in a single file.<br /><em>nh!suggest</em> now unescapes &lt;, &gt;, and &amp;.</p>
+                <p>Logs are now in a directory, split by date, rather than in a single file.<br /><i>nh!suggest</i> now unescapes &lt;, &gt;, and &amp;.</p>
             </div>
             <div class="command">
                 <pre>0.5.4</pre>
@@ -255,17 +276,17 @@
             </div>
             <div class="command">
                 <pre>0.5.3</pre>
-                <p>Fixed bug that prevented <em>nh!threadInfo</em> from functioning.<br />Made <em>nh!threadInfo</em> only give estimated completion date for threads with the postID type.<br />
-                Fixed issue that caused the est. completion date to have the same time as the first post.<br />Added <em>nh!threadinfo</em> as an alias for <em>nh!threadInfo</em>.<br />
-                <em>nh!threadInfo</em> now includes the date, posts per day, and posts per hour of a thread.</p>
+                <p>Fixed bug that prevented <i>nh!threadInfo</i> from functioning.<br />Made <i>nh!threadInfo</i> only give estimated completion date for threads with the postID type.<br />
+                Fixed issue that caused the est. completion date to have the same time as the first post.<br />Added <i>nh!threadinfo</i> as an alias for <i>nh!threadInfo</i>.<br />
+                <i>nh!threadInfo</i> now includes the date, posts per day, and posts per hour of a thread.</p>
             </div>
             <div class="command">
                 <pre>0.5.2</pre>
-                <p><em>nh!threadInfo</em> now gives estimated completion date & time.<br />Added the date of a threads first post to <em>threadData.json</em></p>
+                <p><i>nh!threadInfo</i> now gives estimated completion date & time.<br />Added the date of a threads first post to <i>threadData.json</i></p>
             </div>
             <div class="command">
                 <pre>0.5.1</pre>
-                <p>Fixed a crash bug.<br />Fixed bug that prevented <em>nh!threadInfo</em> from functioning.<br />Adjusted console output.</p>
+                <p>Fixed a crash bug.<br />Fixed bug that prevented <i>nh!threadInfo</i> from functioning.<br />Adjusted console output.</p>
             </div>
             <div class="command">
                 <pre>0.5.0</pre>
@@ -276,7 +297,7 @@
             <b>0.4.x</b>
             <div class="command">
                 <pre>0.4.3</pre>
-                <p>Added additional thread information to <em>postIDs.json</em> (renamed to <em>threadData.json</em>)</p>
+                <p>Added additional thread information to <i>postIDs.json</i> (renamed to <i>threadData.json</i>)</p>
             </div>
             <div class="command">
                 <pre>0.4.2</pre>
@@ -284,7 +305,7 @@
             </div>
             <div class="command">
                 <pre>0.4.1</pre>
-                <p>Fixed bugs that prevented <em>nh!dice</em> and <em>nh!bot</em> from functioning.<br />Added a log file.<br />Added a help command.</p>
+                <p>Fixed bugs that prevented <i>nh!dice</i> and <i>nh!bot</i> from functioning.<br />Added a log file.<br />Added a help command.</p>
             </div>
             <div class="command">
                 <pre>0.4.0</pre>
@@ -300,7 +321,7 @@
             </div>
             <div class="command">
                 <pre>0.3.3</pre>
-                <p>Added an unused bell function.<br />Fixed a crash bug caused by a post having multiple paragraphs.<br /><em>postIDs.json</em> is now updated at the end of parsing a thread.</p>
+                <p>Added an unused bell function.<br />Fixed a crash bug caused by a post having multiple paragraphs.<br /><i>postIDs.json</i> is now updated at the end of parsing a thread.</p>
             </div>
             <div class="command">
                 <pre>0.3.2</pre>
@@ -312,18 +333,18 @@
             </div>
             <div class="command">
                 <pre>0.3.0</pre>
-                <p><em>nh!bot</em> was updated with additional information.<br />Fixed a crash bug.</p>
+                <p><i>nh!bot</i> was updated with additional information.<br />Fixed a crash bug.</p>
             </div>
         </div>
         <div class="command">
             <b>0.2.x</b>
             <div class="command">
                 <pre>0.2.4</pre>
-                <p><em>nh!dice</em> gained <em>nh!roll</em> as an alias.</p>
+                <p><i>nh!dice</i> gained <i>nh!roll</i> as an alias.</p>
             </div>
             <div class="command">
                 <pre>0.2.3</pre>
-                <p>Added <em>nh!bot.</em><br />Adjusted console output.<br />0.2.2 is not present in the repository, and either never existed or has been lost to the sands of time.</p>
+                <p>Added <i>nh!bot.</i><br />Adjusted console output.<br />0.2.2 is not present in the repository, and either never existed or has been lost to the sands of time.</p>
             </div>
             <div class="command">
                 <pre>0.2.1</pre>

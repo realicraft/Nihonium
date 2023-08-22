@@ -2,7 +2,7 @@ import versions
 from . import framework as fw
 import shutil, os, datetime, math, random
 
-version = versions.Version(1, 8, 0)
+version = versions.Version(1, 9, 0)
 nihonium_minver = versions.Version(0, 10, 3)
 alt_minvers = {}
 
@@ -10,11 +10,13 @@ alt_minvers = {}
 # 0 | valid
 # 1 | contains ".."
 # 2 | is bad device name
+# 3 | contains invalid character ( < > : " \ | ? *)
 def sanitizeFilename(fn):
     if "../" in fn: return [False,1]
     elif fn == "con": return [False,2]
     elif fn == "com": return [False,2]
     elif fn == "prn": return [False,2]
+    elif any(x in fn for x in ('<', '>', ':', '"', '\\', '|', '?', '*')): return [False,3] # https://stackoverflow.com/a/21406748
     else: return [True,0]
 
 #from Nihonium
@@ -42,11 +44,12 @@ def text(bot_data, thread_data, user_data, command="read", filename="_", *other)
         if command == "insert": command = "write"
     sani = sanitizeFilename(filename)
     if sani[0]: pass
-    else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name."][sani[1]] + "[/code]"
+    else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name.", "Contains a forbidden character."][sani[1]] + "[/code]"
     if command == "read":
         try:
-            with open("files/" + filename + ".txt", "r", encoding="utf-8") as file: return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
-            logEntry("Read file '" + filename + ".txt'")
+            with open("files/" + filename + ".txt", "r", encoding="utf-8") as file:
+                logEntry("Read file '" + filename + ".txt'")
+                return "Contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "write":
         try:
@@ -74,15 +77,20 @@ def text(bot_data, thread_data, user_data, command="read", filename="_", *other)
                 return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "insert":
+        index = int(other[0])
         try:
             with open("files/" + filename + ".txt", "r", encoding="utf-8") as file: temp = file.read()
-            with open("files/" + filename + ".txt", "w+", encoding="utf-8") as file: file.write(temp[:other[0]] + " ".join(other[1:]) + temp[other[0]:])
-            logEntry("Wrote to file '" + filename + ".txt'")
+            with open("files/" + filename + ".txt", "w+", encoding="utf-8") as file:
+                file.write(temp[:index] + " ".join(other[1:]) + temp[index:])
+                file.seek(0)
+                logEntry("Wrote to file '" + filename + ".txt'")
+                return "New contents of [i]" + filename + ".txt[/i]: \n" + file.read()
         except IOError: return "No file by the name [i]" + filename + ".txt[/i] exists."
     elif command == "create":
         try:
-            with open("files/" + filename + ".txt", "x", encoding="utf-8") as file: return "Successfully created [i]" + filename + ".txt[/i]"
-            logEntry("Created file '" + filename + ".txt'")
+            with open("files/" + filename + ".txt", "x", encoding="utf-8") as file:
+                logEntry("Created file '" + filename + ".txt'")
+                return "Successfully created [i]" + filename + ".txt[/i]"
         except IOError: return "A file by the name [i]" + filename + ".txt[/i] already exists."
     elif command == "duplicate":
         if filename == "_": return "Can't duplicate _."
@@ -116,7 +124,7 @@ def files(bot_data, thread_data, user_data, command="read", filename="_.txt", *o
     # delete    | delete a file, fails if it does not exist
     sani = sanitizeFilename(filename)
     if sani[0]: pass
-    else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name."][sani[1]] + "[/code]"
+    else: return "It seems like somethings wrong with that filename.[code]" + ["Wait, no, this is a bug.", "Cannot go up a folder.", "Invalid device name.", "Contains a forbidden character."][sani[1]] + "[/code]"
     if command == "read":
         try:
             with open("files/" + filename, "rb") as file:
